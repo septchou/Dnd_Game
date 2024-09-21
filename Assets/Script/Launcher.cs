@@ -41,7 +41,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager.Instance.OpenMenu("Title");
         Debug.Log("Joined Lobby");
-        PhotonNetwork.NickName = "Player" + Random.Range(0, 1000).ToString("0000");
     }
 
     public void CreateRoom()
@@ -50,9 +49,17 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             return;
         }
-        PhotonNetwork.CreateRoom(roomNameInputField.text);
+        
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.IsVisible = true;
+        roomOptions.IsOpen = true;
+        roomOptions.MaxPlayers = 4;
+
+        PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);
+
         MenuManager.Instance.OpenMenu("loading");
     }
+
 
     public override void OnJoinedRoom()
     {
@@ -108,6 +115,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             if (roomList[i].RemovedFromList)
                 continue;
+
+            // Skip the room if it already has the max number of players (4 in this case)
+            if (roomList[i].PlayerCount >= roomList[i].MaxPlayers)
+                continue;
+
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
     }
