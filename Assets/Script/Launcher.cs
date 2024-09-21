@@ -5,6 +5,7 @@ using TMPro;
 using Photon.Realtime;
 using System.Linq;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -17,6 +18,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject roomListItemPrefab;
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
+    [SerializeField] GameObject startGameButton;
+    [SerializeField] GameObject readyButton;
+    [SerializeField] TMP_Text readyButtonText;
 
     void Awake()
     {
@@ -34,6 +38,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to Photon Master Server");
         PhotonNetwork.JoinLobby();  // Joins the default lobby
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.EnableCloseConnection = true;
     }
 
     // Callback when joined the lobby
@@ -79,6 +85,31 @@ public class Launcher : MonoBehaviourPunCallbacks
             Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
         }
 
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            readyButton.SetActive(true);
+            startGameButton.SetActive(false);;
+        }
+        else {
+            startGameButton.SetActive(true);
+            readyButton.SetActive(false);
+        }
+        
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            readyButton.SetActive(true);
+            startGameButton.SetActive(false);
+        }
+        else
+        {
+            startGameButton.SetActive(true);
+            readyButton.SetActive(false);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -129,4 +160,73 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
 
+    public void OnReadyButtonClicked()
+    {
+        bool isReady = false;
+
+        // Check the current ready status and toggle it
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("isReady"))
+        {
+            isReady = (bool)PhotonNetwork.LocalPlayer.CustomProperties["isReady"];
+        }
+
+        // Toggle ready state
+        isReady = !isReady;
+        readyButtonText.text = isReady ? "Ready" : "Not Ready";
+
+        // Update the player's custom property for ready status
+        Hashtable props = new Hashtable
+        {
+            { "isReady", isReady }
+        };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+    }
+
+    public void StartGame()
+    {
+        if (AreAllPlayersReady())
+        {
+            PhotonNetwork.LoadLevel(1);
+        }
+    }
+
+    private bool AreAllPlayersReady()
+    {
+        bool allReady = true; // Assume all players are ready initially
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            // Skip the Master Client since they are always considered ready
+            if (player.IsMasterClient)
+            {
+                continue;
+            }
+
+            if (player.CustomProperties.ContainsKey("isReady"))
+            {
+                bool isReady = (bool)player.CustomProperties["isReady"];
+                if (!isReady)
+                {
+                    allReady = false; // Found a player not ready
+                    Debug.Log(player.NickName + " is not ready."); // Log the name of the player not ready
+                }
+            }
+            else
+            {
+                allReady = false; // Player doesn't have the property, so they are not ready
+                Debug.Log(player.NickName + " is not ready."); // Log the name of the player not ready
+            }
+        }
+
+        return allReady; // Return true only if all non-master players are ready
+    }
+
+    public void KickPlayer(Player playerToKick)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CloseConnection(playerToKick);
+            Debug.Log(playerToKick.NickName + " has been kicked from the room.");
+        }
+    }
 }
