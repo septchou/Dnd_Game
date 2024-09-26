@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|d:\\kmutt\\cpe\\cpe334_softwareengineer\\project\\unityproject\\dnd_game\\assets\\script\\playernamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\playernamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\assets\\script\\roomlistitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\roomlistitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\assets\\script\\playerlistitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\playerlistitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\assets\\script\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\assets\\script\\menumanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\menumanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\assets\\script\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{619F6764-C074-AD06-0239-77D647B036DF}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\launcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerNameManager.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\PlayerNameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PlayerNameManager.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\PlayerNameManager.cs",
+              "RelativeToolTip": "Assets\\Script\\PlayerNameManager.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T19:05:04.822Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RoomListItem.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\RoomListItem.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\RoomListItem.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\RoomListItem.cs",
+              "RelativeToolTip": "Assets\\Script\\RoomListItem.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAiwBIAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:38:53.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlayerListItem.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\PlayerListItem.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PlayerListItem.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\PlayerListItem.cs",
+              "RelativeToolTip": "Assets\\Script\\PlayerListItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:42:31.268Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Menu.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\Menu.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Menu.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\Menu.cs",
+              "RelativeToolTip": "Assets\\Script\\Menu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:36:34.561Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MenuManager.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\MenuManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\MenuManager.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\MenuManager.cs",
+              "RelativeToolTip": "Assets\\Script\\MenuManager.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA1wAQAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:36:00.753Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Launcher.cs",
+              "DocumentMoniker": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\Launcher.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Launcher.cs",
+              "ToolTip": "D:\\KMUTT\\CPE\\CPE334_SoftwareEngineer\\Project\\UnityProject\\Dnd_Game\\Assets\\Script\\Launcher.cs",
+              "RelativeToolTip": "Assets\\Script\\Launcher.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAA5wCoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T10:32:13.989Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
