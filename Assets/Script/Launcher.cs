@@ -60,6 +60,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomOptions.IsVisible = true;
         roomOptions.IsOpen = true;
         roomOptions.MaxPlayers = 4;
+        roomOptions.CleanupCacheOnLeave = true;
 
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);
 
@@ -102,14 +103,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            readyButton.SetActive(true);
-            startGameButton.SetActive(false);
+
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+
         }
-        else
-        {
-            startGameButton.SetActive(true);
-            readyButton.SetActive(false);
-        }
+
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -159,6 +160,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instantiate(PlayerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
+
 
     public void OnReadyButtonClicked()
     {
