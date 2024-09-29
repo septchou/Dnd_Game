@@ -10,7 +10,6 @@ Library: D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\Unit
 --linker-options=PdbAltPath="My project_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\Burst
---debug=Full
 --key-folder=D:/ProgrameFile/UnityFR/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Library\Burst
 --output=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
@@ -58,7 +57,6 @@ Library: D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\Unit
 --linker-options=PdbAltPath="My project_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\Burst
---debug=Full
 --key-folder=D:/ProgrameFile/UnityFR/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Library\Burst
 --output=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
