@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Auth;
 using Firebase;
+using TMPro;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -15,16 +16,16 @@ public class FirebaseAuthManager : MonoBehaviour
     // Login Variables
     [Space]
     [Header("Login")]
-    public InputField emailLoginField;
-    public InputField passwordLoginField;
+    public TMP_InputField emailLoginField;
+    public TMP_InputField passwordLoginField;
 
     // Registration Variables
     [Space]
     [Header("Registration")]
-    public InputField nameRegisterField;
-    public InputField emailRegisterField;
-    public InputField passwordRegisterField;
-    public InputField confirmPasswordRegisterField;
+    public TMP_InputField nameRegisterField;
+    public TMP_InputField emailRegisterField;
+    public TMP_InputField passwordRegisterField;
+    public TMP_InputField confirmPasswordRegisterField;
 
     private void Awake()
     {

@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 61627717}
   - component: {fileID: 61627716}
   m_Layer: 5
-  m_Name: InputField (TMP) (3)
+  m_Name: Confirm_Password_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,7 +307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 67993555}
   m_Layer: 0
-  m_Name: Passworld Field
+  m_Name: Password Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -474,7 +474,7 @@ GameObject:
   m_Component:
   - component: {fileID: 123274411}
   m_Layer: 0
-  m_Name: User Name Field
+  m_Name: Email Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -527,12 +527,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dependencyStatus: 0
-  emailLoginField: {fileID: 0}
-  passwordLoginField: {fileID: 0}
-  nameRegisterField: {fileID: 0}
-  emailRegisterField: {fileID: 0}
-  passwordRegisterField: {fileID: 0}
-  confirmPasswordRegisterField: {fileID: 0}
+  emailLoginField: {fileID: 1780014850}
+  passwordLoginField: {fileID: 1084395166}
+  nameRegisterField: {fileID: 673026757}
+  emailRegisterField: {fileID: 785532611}
+  passwordRegisterField: {fileID: 946917895}
+  confirmPasswordRegisterField: {fileID: 61627716}
 --- !u!4 &289948078
 Transform:
   m_ObjectHideFlags: 0
@@ -1499,7 +1499,7 @@ GameObject:
   - component: {fileID: 673026758}
   - component: {fileID: 673026757}
   m_Layer: 5
-  m_Name: InputField (TMP) (2)
+  m_Name: Username_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2149,7 +2149,7 @@ GameObject:
   - component: {fileID: 785532612}
   - component: {fileID: 785532611}
   m_Layer: 5
-  m_Name: InputField (TMP) (1)
+  m_Name: Email_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2393,7 +2393,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 791250715}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 289948077}
+        m_TargetAssemblyTypeName: FirebaseAuthManager, Assembly-CSharp
+        m_MethodName: Login
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &791250715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,7 +2457,7 @@ GameObject:
   - component: {fileID: 946917896}
   - component: {fileID: 946917895}
   m_Layer: 5
-  m_Name: InputField (TMP) (2)
+  m_Name: Password_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2622,7 +2634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1018745104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3023,7 +3035,7 @@ GameObject:
   - component: {fileID: 1084395167}
   - component: {fileID: 1084395166}
   m_Layer: 5
-  m_Name: InputField (TMP) (2)
+  m_Name: Password_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4023,7 +4035,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: User Name
+  m_text: 'User Email
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4425,7 +4439,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 'Register
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4580,7 +4596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1577997153}
   m_Layer: 0
-  m_Name: Passworld Field
+  m_Name: Password Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4856,7 +4872,7 @@ GameObject:
   - component: {fileID: 1780014851}
   - component: {fileID: 1780014850}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: Email_InputField (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5100,7 +5116,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1873900216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 289948077}
+        m_TargetAssemblyTypeName: FirebaseAuthManager, Assembly-CSharp
+        m_MethodName: Register
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1873900216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5196,7 +5224,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Sign in
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
