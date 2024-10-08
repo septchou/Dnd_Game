@@ -1,6 +1,7 @@
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
+using System;
 using UnityEngine;
 
 public class FirebaseDatabaseManager : MonoBehaviour
@@ -9,17 +10,11 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
     void Start()
     {
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
-            if (task.Result == DependencyStatus.Available)
-            {
-                // ??????? URL ??? Realtime Database
-                reference = FirebaseDatabase.DefaultInstance.RootReference;
-            }
-            else
-            {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
-            }
-        });
+        // Set the Database URL for Realtime Database
+        FirebaseApp.DefaultInstance.Options.DatabaseUrl = new Uri("https://dnd-game-518f0-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
+        // Access the root reference after setting the URL
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     public void WriteData(string path, string json)
@@ -29,7 +24,8 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
     public void ReadData(string path)
     {
-        reference.Child(path).GetValueAsync().ContinueWithOnMainThread(task => {
+        reference.Child(path).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsFaulted)
             {
                 Debug.LogError("Error reading data: " + task.Exception.ToString());

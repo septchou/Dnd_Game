@@ -121,6 +121,10 @@ public class FirebaseAuthManager : MonoBehaviour
             user = loginTask.Result.User; // Fix: Access the User property of AuthResult
 
             Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
+
+            //After login success, change scene to the game scene
+            References.username = user.DisplayName;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Lobby");
         }
     }
 
