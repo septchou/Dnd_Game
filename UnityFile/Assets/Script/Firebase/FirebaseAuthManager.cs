@@ -64,6 +64,7 @@ public class FirebaseAuthManager : MonoBehaviour
             if (!signedIn && user != null)
             {
                 Debug.Log("Signed out " + user.UserId);
+                UIManager.Instance.OpenLoginPanel();
             }
 
             user = auth.CurrentUser;
@@ -78,6 +79,15 @@ public class FirebaseAuthManager : MonoBehaviour
     public void Login()
     {
         StartCoroutine(LoginAsync(emailLoginField.text, passwordLoginField.text));
+    }
+
+    // Sign out function
+    public void SignOut()
+    {
+        auth.SignOut();
+        Debug.Log("User signed out.");
+        user = null; // Clear the user reference
+        // Optionally, you can redirect to a login screen or show a login panel here
     }
 
     private IEnumerator LoginAsync(string email, string password)
@@ -233,5 +243,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
             }
         }
+
+
     }
 }
