@@ -48,4 +48,9 @@ using Firebase.Database;
 ```
 
 ### 6.Additional Notes
-- Ensure that you have added Assets/Firebase and Assets/Editor Default Resources/Firebase to your .gitignore to keep Firebase files secure.
+- Ensure that you have added
+  ```
+  Assets/Firebase
+  Assets/Editor Default Resources/Firebase
+  ```
+  to your .gitignore to keep Firebase files secure.
