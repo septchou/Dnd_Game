@@ -84,10 +84,10 @@ public class FirebaseAuthManager : MonoBehaviour
     // Sign out function
     public void SignOut()
     {
-        auth.SignOut();
-        Debug.Log("User signed out.");
-        user = null; // Clear the user reference
-        // Optionally, you can redirect to a login screen or show a login panel here
+        if(auth != null && user != null)
+        {
+            auth.SignOut();
+        }
     }
 
     private IEnumerator LoginAsync(string email, string password)
