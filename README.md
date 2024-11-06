@@ -45,3 +45,7 @@ To use Firebase Authentication and Database in your scripts, include the followi
 ```csharp
 using Firebase.Auth;
 using Firebase.Database;
+```
+
+### 6.Additional Notes
+- Ensure that you have added Assets/Firebase and Assets/Editor Default Resources/Firebase to your .gitignore to keep Firebase files secure.
