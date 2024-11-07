@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Xml.Serialization;
 using static Character;
-using UnityEditor.Playables;
 using System;
 
 public class CharacterCreation : MonoBehaviour
@@ -46,8 +45,9 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] List<Race> availableRaces;  // List of available races 
     [SerializeField] List<CharacterClass> availableClasses;  // List of available classes 
 
-    //CharacterList
+    //CharacterSelection
     [SerializeField] TMP_Dropdown characterDropdown;
+    [SerializeField] GameObject createButton, saveButton;
 
     private void Start()
     {
@@ -433,7 +433,11 @@ public class CharacterCreation : MonoBehaviour
                 abilityScorePointText.text = $"Ability point : {selectedAbilityPoint}";
                 CalculateHP();
             }
-            else InitialUI(0);
+            else
+            {
+                InitialUI(0);
+            }
+             
         }
         else
         {

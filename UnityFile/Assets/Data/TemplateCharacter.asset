@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cea89711adb0b458bb1a85add26d4a, type: 3}
   m_Name: TemplateCharacter
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: New character
   race: {fileID: 11400000, guid: f7c3c0f4511db194296df11e277760e5, type: 2}
   characterClass: {fileID: 11400000, guid: 2cc84922aaca48546b323e71a32bc958, type: 2}
   level: 5
@@ -21,13 +21,13 @@ MonoBehaviour:
   abilityScorepoints:
   - abilityScore: {fileID: 11400000, guid: 9cc6a897a693316469df0267a974219b, type: 2}
     abilityScorePoint: 10
-    ablityModifierBonus: 1
+    ablityModifierBonus: 0
   - abilityScore: {fileID: 11400000, guid: 1d0f417e7c1d95247a8b7336ba1c0b4a, type: 2}
     abilityScorePoint: 10
     ablityModifierBonus: 0
   - abilityScore: {fileID: 11400000, guid: 893ac1a685ac6584bb3133db00ecabbf, type: 2}
     abilityScorePoint: 10
-    ablityModifierBonus: 2
+    ablityModifierBonus: 0
   - abilityScore: {fileID: 11400000, guid: a9de956f3fd6f864b93a309e5d64577d, type: 2}
     abilityScorePoint: 10
     ablityModifierBonus: 0
