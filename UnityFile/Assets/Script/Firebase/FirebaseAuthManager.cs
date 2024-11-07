@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Firebase.Auth;
 using Firebase;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
