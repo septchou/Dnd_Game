@@ -63,7 +63,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomOptions.CleanupCacheOnLeave = true;
 
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);
-
+        Debug.Log("Created room success");
         MenuManager.Instance.OpenMenu("loading");
     }
 
@@ -149,6 +149,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
+
+        Debug.Log("Found " + (roomList.Count) + " Room" );
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -225,5 +227,10 @@ public class Launcher : MonoBehaviourPunCallbacks
             PhotonNetwork.CloseConnection(playerToKick);
             Debug.Log(playerToKick.NickName + " has been kicked from the room.");
         }
+    }
+
+    public void SelectCharacter()
+    {
+        MenuManager.Instance.OpenMenu("CharacterSelection");
     }
 }
