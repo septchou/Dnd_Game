@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using static Race;
 
 [CreateAssetMenu(fileName = "NewCharacter", menuName = "Character Creation/Character")]
-[System.Serializable]
 public class Character : ScriptableObject
 {
     public string characterName;

@@ -150,7 +150,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
 
-        //Debug.Log("Found " + (roomList.Count) + " Room" );
+        Debug.Log("Found " + (roomList.Count) + " Room" );
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)

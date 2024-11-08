@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -36,7 +35,5 @@ public class CharacterManager : MonoBehaviour
         return characterList;
     }
 
-
-    
 
 }

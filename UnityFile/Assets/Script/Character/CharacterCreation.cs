@@ -2,13 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.IO;
 using System.Xml.Serialization;
 using static Character;
 using System;
-using UnityEngine.TextCore.Text;
-using Unity.VisualScripting;
-
 
 public class CharacterCreation : MonoBehaviour
 {
@@ -21,9 +17,8 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] TMP_Dropdown raceDropdown;
     [SerializeField] Button levelUpButton;
     [SerializeField] Button levelDownButton;
-    [SerializeField] Button resetPointButton;
-    [SerializeField] GameObject resetButton;
-    [SerializeField] Button createCharacterButton, saveCharacterButton, deleteCharacterButton;
+    [SerializeField] Button resetButton;
+    [SerializeField] Button createCharacterButton;
     [SerializeField] TMP_Text abilityScorePointText;
     [SerializeField] TMP_Text levelText;
     [SerializeField] TMP_Text hpText;
@@ -52,23 +47,19 @@ public class CharacterCreation : MonoBehaviour
 
     //CharacterSelection
     [SerializeField] TMP_Dropdown characterDropdown;
-    [SerializeField] GameObject createButton, saveButton, deleteButton;
-    private static string SaveDirectory => Application.persistentDataPath + "/Saves/";
+    [SerializeField] GameObject createButton, saveButton;
 
     private void Start()
     {
         InitializeDropdowns();
         InitialUI(0);
-        LoadAllCharacters();
         PopulateCharacterDropdown();
 
         // Button
         createCharacterButton.onClick.AddListener(CreateCharacter);
-        saveCharacterButton.onClick.AddListener(EditCharacter);
-        deleteCharacterButton.onClick.AddListener(DeleteCharacter);
         levelUpButton.onClick.AddListener(LevelUP);
         levelDownButton.onClick.AddListener(LevelDOWN);
-        resetPointButton.onClick.AddListener(ResetAbilityPoints);
+        resetButton.onClick.AddListener(ResetAbilityPoints);
         raceDropdown.onValueChanged.AddListener(OnRaceChange);
         characterDropdown.onValueChanged.AddListener(SelectCharacter);
 
@@ -156,7 +147,7 @@ public class CharacterCreation : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"Ability '{abilityUI.ability.abilityName}' not found in  {defaultCharacter.characterName}");
+                Debug.LogWarning($"Ability '{abilityUI.ability.abilityName}' not found in default character.");
             }
         }
 
@@ -316,71 +307,59 @@ public class CharacterCreation : MonoBehaviour
 
     private void CreateCharacter()
     {
-        if (nameInputField.text != "New character")
+        //  a new Character instance
+        Character newCharacter = ScriptableObject.CreateInstance<Character>();
+
+        // Assign the character's name from the input field
+        newCharacter.characterName = nameInputField.text;
+
+        // Assign the selected race and class
+        int selectedRaceIndex = raceDropdown.value;
+        newCharacter.race = availableRaces[selectedRaceIndex];
+
+        int selectedClassIndex = classDropdown.value;
+        newCharacter.characterClass = availableClasses[selectedClassIndex];
+
+        // Assign ability scores and modifiers
+        List<Character.AbilityScorePoints> abilityScoresList = new List<Character.AbilityScorePoints>();
+
+        foreach (var abilityUI in abilityScores)
         {
-            //  a new Character instance
-            Character newCharacter = ScriptableObject.CreateInstance<Character>();
-
-            // Assign the character's name from the input field
-            newCharacter.characterName = nameInputField.text;
-
-            // Assign the selected race and class
-            int selectedRaceIndex = raceDropdown.value;
-            newCharacter.race = availableRaces[selectedRaceIndex];
-
-            int selectedClassIndex = classDropdown.value;
-            newCharacter.characterClass = availableClasses[selectedClassIndex];
-            newCharacter.skills = new List<Skill>(newCharacter.characterClass.classSkills);
-
-            // Assign ability scores and modifiers
-            List<Character.AbilityScorePoints> abilityScoresList = new List<Character.AbilityScorePoints>();
-
-            foreach (var abilityUI in abilityScores)
+            // Create a new AbilityScorePoints object for each ability score UI element
+            Character.AbilityScorePoints newAbilityScorePoint = new Character.AbilityScorePoints
             {
-                // Create a new AbilityScorePoints object for each ability score UI element
-                Character.AbilityScorePoints newAbilityScorePoint = new Character.AbilityScorePoints
-                {
-                    abilityScore = abilityUI.ability,  // Assign the AbilityScore ScriptableObject
-                    abilityScorePoint = abilityUI.abilityPoint,  // Assign the points
-                    ablityModifierBonus = abilityUI.abilityModifierBonus  // Assign the modifier bonus (from race, etc.)
-                };
+                abilityScore = abilityUI.ability,  // Assign the AbilityScore ScriptableObject
+                abilityScorePoint = abilityUI.abilityPoint,  // Assign the points
+                ablityModifierBonus = abilityUI.abilityModifierBonus  // Assign the modifier bonus (from race, etc.)
+            };
 
-                abilityScoresList.Add(newAbilityScorePoint);
-            }
-
-            newCharacter.abilityScorepoints = abilityScoresList;
-
-            // Assign the character's level and ability points
-            newCharacter.level = selectedLevel;
-            newCharacter.abilityPoint = selectedAbilityPoint;
-
-            // Calculate HP based on class and Constitution modifier
-            int baseHP = newCharacter.characterClass.baseHP;
-            var constitutionAbility = abilityScores.Find(a => a.ability.abilityName == "Constitution");
-            int constitutionModifier = constitutionAbility.abilityModifier + constitutionAbility.abilityModifierBonus;
-
-            // Apply Constitution modifier and level-based HP calculation
-            newCharacter.HP = baseHP + (4 * newCharacter.level) + (constitutionModifier * newCharacter.level);
-
-            CharacterManager.Instance.AddCharacter(newCharacter);
-            PopulateCharacterDropdown();
-
-            int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(newCharacter);
-
-            // Change selection character dropdown into new created one
-            if (characterIndex >= 0)
-            {
-                characterDropdown.value = characterIndex;
-            }
-
-            SaveCharacterToFile(newCharacter);
-            Debug.Log("Character Created: " + newCharacter.characterName);
+            abilityScoresList.Add(newAbilityScorePoint);
         }
 
-        else
+        newCharacter.abilityScorepoints = abilityScoresList;
+
+        // Assign the character's level and ability points
+        newCharacter.level = selectedLevel;
+        newCharacter.abilityPoint = selectedAbilityPoint;
+
+        // Calculate HP based on class and Constitution modifier
+        int baseHP = newCharacter.characterClass.baseHP;
+        var constitutionAbility = abilityScores.Find(a => a.ability.abilityName == "Constitution");
+        int constitutionModifier = constitutionAbility.abilityModifier + constitutionAbility.abilityModifierBonus;
+
+        // Apply Constitution modifier and level-based HP calculation
+        newCharacter.HP = baseHP + (4 * newCharacter.level) + (constitutionModifier * newCharacter.level);
+
+        CharacterManager.Instance.AddCharacter(newCharacter);
+        PopulateCharacterDropdown();
+
+        int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(newCharacter);
+        if (characterIndex >= 0)
         {
-            Debug.LogWarning("Character not created please change the character name");
+            characterDropdown.value = characterIndex;
         }
+
+        Debug.Log("Character Created: " + newCharacter.characterName);
     }
 
     private void PopulateCharacterDropdown()
@@ -403,7 +382,6 @@ public class CharacterCreation : MonoBehaviour
 
     private void SelectCharacter(int characterIndex)
     {
-        
         // Retrieve the list of characters from the CharacterManager singleton
         List<Character> characterList = CharacterManager.Instance.GetCharacterList();
 
@@ -422,12 +400,6 @@ public class CharacterCreation : MonoBehaviour
 
             if (characterIndex != 0)
             {
-                //change to edit mode
-                saveButton.SetActive(true);
-                createButton.SetActive(false);
-                resetButton.SetActive(false);
-                deleteButton.SetActive(true);
-
                 InitialUI(1);  // Initialize the UI without reapplying race bonuses
 
                 // Apply the selected character’s ability scores to the UI
@@ -452,7 +424,7 @@ public class CharacterCreation : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning($"Ability '{abilityUI.ability.abilityName}' not found in {defaultCharacter.characterName}");
+                        Debug.LogWarning($"Ability '{abilityUI.ability.abilityName}' not found in selected character.");
                     }
                 }
 
@@ -463,11 +435,6 @@ public class CharacterCreation : MonoBehaviour
             }
             else
             {
-                //change to create mode
-                saveButton.SetActive(false);
-                createButton.SetActive(true);
-                resetButton.SetActive(true);
-                deleteButton.SetActive(false);
                 InitialUI(0);
             }
              
@@ -478,269 +445,5 @@ public class CharacterCreation : MonoBehaviour
         }
     }
 
-    private void EditCharacter()
-    {
-        Character existingCharacter = CharacterManager.Instance.GetCharacterList()[characterDropdown.value];
-
-        existingCharacter.characterName = nameInputField.text;
-        existingCharacter.race = availableRaces[raceDropdown.value];
-        existingCharacter.characterClass = availableClasses[classDropdown.value];
-        existingCharacter.level = selectedLevel;
-        existingCharacter.abilityPoint = selectedAbilityPoint;
-
-        // Set ability scores
-        existingCharacter.abilityScorepoints = new List<Character.AbilityScorePoints>();
-        foreach (var abilityUI in abilityScores)
-        {
-            Character.AbilityScorePoints abilityScorePoints = new Character.AbilityScorePoints
-            {
-                abilityScore = abilityUI.ability,
-                abilityScorePoint = abilityUI.abilityPoint,
-                ablityModifierBonus = abilityUI.abilityModifierBonus
-            };
-            existingCharacter.abilityScorepoints.Add(abilityScorePoints);
-        }
-
-        // Calculate HP
-        int baseHP = existingCharacter.characterClass.baseHP;
-        var constitutionAbility = abilityScores.Find(a => a.ability.abilityName == "Constitution");
-        int constitutionModifier = constitutionAbility.abilityModifier + constitutionAbility.abilityModifierBonus;
-        existingCharacter.HP = baseHP + (4 * existingCharacter.level) + (constitutionModifier * existingCharacter.level);
-
-        //SelectCharacter(characterDropdown.value);
-
-        int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(existingCharacter);
-
-        // Change selection character dropdown into new created one
-        if (characterIndex >= 0)
-        {
-            characterDropdown.value = characterIndex;
-        }
-
-        SaveCharacterToFile(existingCharacter);
-
-        Debug.Log("Character Edited: " + existingCharacter.characterName);
-        
-    }
-    private static string GetCharacterFilePath(string characterName)
-    {
-        return SaveDirectory + characterName + ".json";
-    }
-
-    private void DeleteCharacter()
-    {
-        // Delete the corresponding character file from disk
-        string filePath = GetCharacterFilePath(defaultCharacter.characterName);
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-            Debug.Log($"Character file {defaultCharacter.characterName}.json has been deleted.");
-        }
-        else
-        {
-            Debug.LogWarning($"Character file {defaultCharacter.characterName}.json not found to delete.");
-        }
-
-        List<Character> characterList = CharacterManager.Instance.GetCharacterList();
-        defaultCharacter = characterList[0];
-        characterDropdown.value = 0;
-        PopulateCharacterDropdown();
-    }
-    public void SaveCharacterToFile(Character character)
-    {
-        if (character == null)
-        {
-            Debug.LogError("Character is null in SaveCharacterToFile!");
-            return;
-        }
-
-        string filePath = GetCharacterFilePath(character.characterName);
-
-        // Convert Character to CharacterData
-        CharacterData characterData = ConvertCharacterToData(character);
-
-        // Serialize the CharacterData to JSON
-        string json = JsonUtility.ToJson(characterData, true);  // 'true' adds indentation for readability
-
-        // Write JSON string to the file
-        File.WriteAllText(filePath, json);
-
-        Debug.Log("Character saved as JSON to: " + filePath);
-    }
-
-    private CharacterData ConvertCharacterToData(Character character)
-    {
-
-        CharacterData data = new CharacterData
-        {
-            characterName = character.characterName,
-            raceName = character.race != null ? character.race.name : "",
-            characterClassName = character.characterClass != null ? character.characterClass.className : "",
-            level = character.level,
-            HP = character.HP,
-            abilityPoint = character.abilityPoint,
-            abilityScorePoints = new List<CharacterData.AbilityScorePointsData>(),
-            skillData = new List<CharacterData.SkillData>()
-        };
-
-        // Convert ability score points
-        if (character.abilityScorepoints != null) 
-        {
-            foreach (var abilityScorePoint in character.abilityScorepoints)
-            {
-                CharacterData.AbilityScorePointsData abilityData = new CharacterData.AbilityScorePointsData
-                {
-                    abilityScoreName = abilityScorePoint.abilityScore != null ? abilityScorePoint.abilityScore.abilityName : "",
-                    abilityScorePoint = abilityScorePoint.abilityScorePoint,
-                    ablityModifierBonus = abilityScorePoint.ablityModifierBonus
-                };
-                data.abilityScorePoints.Add(abilityData);
-            }
-        }
-
-        // Convert skills
-        if (character.skills != null) 
-        {
-            foreach (var skill in character.skills)
-            {
-                CharacterData.SkillData skillData = new CharacterData.SkillData
-                {
-                    skillName = skill.skillName,
-                    skillType = skill.skillType.ToString()
-                };
-                data.skillData.Add(skillData);
-            }
-        }
-
-        return data;
-    }
-
-    // Load all characters from the Saves directory
-    private void LoadAllCharacters()
-    {
-        if (!Directory.Exists(SaveDirectory))
-        {
-            Debug.LogWarning("Save directory does not exist.");
-            return;
-        }
-
-        string[] files = Directory.GetFiles(SaveDirectory, "*.json");
-        if (files.Length == 0)
-        {
-            Debug.Log("No character files found in the save directory.");
-            return;
-        }
-
-        foreach (string file in files)
-        {
-            string characterName = Path.GetFileNameWithoutExtension(file);
-            Character character = LoadCharacterFromFile(characterName);
-
-            if (character != null)
-            {
-                CharacterManager.Instance.AddCharacter(character);
-                  // Add the loaded character to the list
-            }
-        }
-
-
-    }
-
-    // Load a character from a JSON file
-    public Character LoadCharacterFromFile(string characterName)
-    {
-        string filePath = GetCharacterFilePath(characterName);
-
-        if (!File.Exists(filePath))
-        {
-            Debug.LogError("Character file not found at: " + filePath);
-            return null;
-        }
-
-        // Read the JSON file and deserialize it
-        string json = File.ReadAllText(filePath);
-        CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
-
-        // Convert the CharacterData back into a Character object
-        Character character = ConvertDataToCharacter(characterData);
-        return character;
-    }
-
-
-    // Convert CharacterData to Character
-    private Character ConvertDataToCharacter(CharacterData data)
-    {
-        Character character = ScriptableObject.CreateInstance<Character>();
-
-        character.characterName = data.characterName;
-        character.race = Resources.Load<Race>("Races/" + data.raceName);
-        character.characterClass = Resources.Load<CharacterClass>("Classes/" + data.characterClassName);
-        character.level = data.level;
-        character.HP = data.HP;
-        character.abilityPoint = data.abilityPoint;
-
-        character.abilityScorepoints = new List<Character.AbilityScorePoints>();
-        foreach (var abilityData in data.abilityScorePoints)
-        {
-            Character.AbilityScorePoints abilityScorePoint = new Character.AbilityScorePoints
-            {
-                abilityScore = Resources.Load<AbilityScore>("AbilityScores/" + abilityData.abilityScoreName),
-                abilityScorePoint = abilityData.abilityScorePoint,
-                ablityModifierBonus = abilityData.ablityModifierBonus
-            };
-            character.abilityScorepoints.Add(abilityScorePoint);
-        }
-
-        character.skills = new List<Skill>();
-        foreach (var skillData in data.skillData)
-        {
-            Skill skill = Resources.Load<Skill>("Skills/" + skillData.skillName);
-            character.skills.Add(skill);
-        }
-        
-        return character;
-    }
-
-    public void DisplayCharacterData(Character character)
-    {
-        if (character == null)
-        {
-            Debug.LogError("Character is not assigned!");
-            return;
-        }
-
-        // Display character basic information
-        Debug.Log("Character Name: " + character.characterName);
-        Debug.Log("Race: " + (character.race != null ? character.race.name : "None"));
-        Debug.Log("Class: " + (character.characterClass != null ? character.characterClass.className : "None"));
-        Debug.Log("Level: " + character.level);
-        Debug.Log("HP: " + character.HP);
-        Debug.Log("Ability Points: " + character.abilityPoint);
-
-        // Display ability score points and modifiers
-        Debug.Log("Ability Scores:");
-        foreach (var abilityScorePoint in character.abilityScorepoints)
-        {
-            Debug.Log($" - {(abilityScorePoint.abilityScore != null ? abilityScorePoint.abilityScore.abilityName : "Unknown Ability")}: " +
-                     $"Points: {abilityScorePoint.abilityScorePoint}, " +
-                     $"Modifier Bonus: {abilityScorePoint.ablityModifierBonus}");
-        }
-
-        // Display skills
-        if (character.skills != null && character.skills.Count > 0)
-        {
-            Debug.Log("Skills:");
-            foreach (var skill in character.skills)
-            {
-                Debug.Log($" - {skill.skillName} (Type: {skill.skillType})");
-            }
-        }
-        else
-        {
-            Debug.Log("No skills available.");
-        }
-    }
-
 
 }
-
