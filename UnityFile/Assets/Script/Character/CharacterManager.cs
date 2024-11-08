@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -36,7 +37,18 @@ public class CharacterManager : MonoBehaviour
         return characterList;
     }
 
+    public void RemoveCharacterByName(string characterName)
+    {
+        Character characterToRemove = characterList.Find(character => character.characterName == characterName);
 
-    
-
+        if (characterToRemove != null)
+        {
+            characterList.Remove(characterToRemove);
+            Debug.Log($"Character {characterName} has been removed from the list.");
+        }
+        else
+        {
+            Debug.LogWarning($"Character {characterName} not found in the list.");
+        }
+    }
 }
