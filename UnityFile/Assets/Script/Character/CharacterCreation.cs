@@ -53,7 +53,18 @@ public class CharacterCreation : MonoBehaviour
     //CharacterSelection
     [SerializeField] TMP_Dropdown characterDropdown;
     [SerializeField] GameObject createButton, saveButton, deleteButton;
-    private static string SaveDirectory => Application.persistentDataPath + "/Saves/";
+    private static string SaveDirectory
+    {
+        get
+        {
+            string path = Application.persistentDataPath + "/Saves/";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            return path;
+        }
+    }
 
     private void Start()
     {
