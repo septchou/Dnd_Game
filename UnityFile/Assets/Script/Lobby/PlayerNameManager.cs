@@ -46,6 +46,7 @@ public class PlayerNameManager : MonoBehaviour
             //get the username from the display name 
             string username = user.DisplayName;
             usernameInput.text = username;
+            PhotonNetwork.NickName = username;
         }
         else
         {
