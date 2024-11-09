@@ -80,7 +80,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         var characterDisplay = playerCharacter.GetComponent<CharacterDisplay>();
         if (characterDisplay != null)
         {
-            characterDisplay.SetCharacterInfo(selectedCharacter.characterName, selectedCharacter.HP);
+            characterDisplay.SetCharacterData(selectedCharacter);
         }
     }
+
+
 }
