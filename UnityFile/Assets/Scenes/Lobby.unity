@@ -10732,8 +10732,8 @@ RectTransform:
   - {fileID: 1136946773}
   - {fileID: 736604985}
   - {fileID: 1062205826}
-  - {fileID: 1581634959}
   - {fileID: 1339473073}
+  - {fileID: 1581634959}
   m_Father: {fileID: 1631940477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -14161,12 +14161,12 @@ GameObject:
   - component: {fileID: 1581634961}
   - component: {fileID: 1581634960}
   m_Layer: 5
-  m_Name: SelectEnemyButton
+  m_Name: BackToRoomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1581634959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14182,9 +14182,9 @@ RectTransform:
   - {fileID: 946830090}
   m_Father: {fileID: 1113369283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -100, y: 75}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -100, y: -135.18}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1581634960
@@ -14241,18 +14241,6 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: room
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1839097850}
-        m_TargetAssemblyTypeName: CharacterManager, Assembly-CSharp
-        m_MethodName: ConfirmSelectCharacter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1581634961
@@ -15661,6 +15649,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df5b95731d991d945891a08be996082d, type: 2}
   enemyList:
   - {fileID: 11400000, guid: f8f1cecac2f95e34e9f136f8440fd245, type: 2}
+  - {fileID: 11400000, guid: 6c5715e9292eb484181585a13daf5631, type: 2}
+  - {fileID: 11400000, guid: e16eb5b2dc71e054b9de0c4938caf777, type: 2}
   characterSelectPanel: {fileID: 1113369284}
   selectedCharacter: {fileID: 0}
   playerCharacterPrefab: {fileID: 1389696707206792283, guid: b25b9880c03289442b8f1ccb5e755f38, type: 3}

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cea89711adb0b458bb1a85add26d4a, type: 3}
+  m_Name: TemplateEnemy 2
+  m_EditorClassIdentifier: 
+  characterName: GOGO
+  race: {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
+  characterClass: {fileID: 11400000, guid: e5e181d4d34d4c04889baf62d280c4d0, type: 2}
+  level: 100
+  HP: 0
+  abilityPoint: 20
+  abilityScorepoints:
+  - abilityScore: {fileID: 11400000, guid: adb0690a3c140274a8ad1debab43c61c, type: 2}
+    abilityScorePoint: 10
+    ablityModifierBonus: 0
+  - abilityScore: {fileID: 11400000, guid: 038228c7a2e0f5541a0cb42a97eb6f32, type: 2}
+    abilityScorePoint: 10
+    ablityModifierBonus: 0
+  - abilityScore: {fileID: 11400000, guid: b4a0afc850f5b99499f67866786e556f, type: 2}
+    abilityScorePoint: 10
+    ablityModifierBonus: 0
+  - abilityScore: {fileID: 11400000, guid: f930cc46621b9954cb18bd9a0dfa3d50, type: 2}
+    abilityScorePoint: 10
+    ablityModifierBonus: 0
+  skills: []

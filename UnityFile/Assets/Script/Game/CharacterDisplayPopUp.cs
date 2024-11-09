@@ -73,11 +73,9 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-            PhotonView photonView = hit.collider.GetComponent<PhotonView>();
-
             if (hit.collider != null)
             {
-                // Check if the hit object has a CharacterDisplay component
+                PhotonView photonView = hit.collider.GetComponent<PhotonView>();
                 CharacterDisplay characterDisplay = hit.collider.GetComponent<CharacterDisplay>();
                 clickedCharacter = characterDisplay;
 
@@ -95,14 +93,20 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
                         characterDisplay.SerializeSkillData(characterDisplay.skillData)
                     );
 
-                    if (photonView.IsMine || PhotonNetwork.IsMasterClient) ShowOwnerOption(true);
-                    else ShowOwnerOption(false);
+                    // Check ownership for UI options
+                    if (photonView != null && (photonView.IsMine || PhotonNetwork.IsMasterClient))
+                        ShowOwnerOption(true);
+                    else
+                        ShowOwnerOption(false);
                 }
-
-
+                else
+                {
+                    Debug.LogError("CharacterDisplay component not found on clicked object.");
+                }
             }
         }
     }
+
 
     // Show the character details in the UI
     public void ShowCharacterDetails(string characterName, string className , string raceName, int level, int currentHP, int maxHP, object[] abilityDataObj, object[] skillDataObj)
