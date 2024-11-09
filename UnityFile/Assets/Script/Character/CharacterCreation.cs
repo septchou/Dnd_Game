@@ -8,6 +8,10 @@ using static Character;
 using System;
 using UnityEngine.TextCore.Text;
 using Unity.VisualScripting;
+using Firebase;
+using Firebase.Database;
+using Firebase.Auth;
+using Firebase.Extensions;
 
 
 public class CharacterCreation : MonoBehaviour
@@ -29,6 +33,9 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityScores;
 
+    private DatabaseReference databaseReference;
+    private FirebaseAuth auth;
+
     [System.Serializable]
     public class abilityScoreUI
     {
@@ -39,6 +46,7 @@ public class CharacterCreation : MonoBehaviour
         public TMP_Text abilityScorePointText;
         public TMP_Text abilityScoreModifierText;
         public Button increaseButton, decreaseButton;
+
     }
 
     [SerializeField] int selectedLevel;
@@ -70,7 +78,6 @@ public class CharacterCreation : MonoBehaviour
     {
         InitializeDropdowns();
         InitialUI(0);
-        LoadAllCharacters();
         PopulateCharacterDropdown();
 
         // Button
@@ -90,8 +97,33 @@ public class CharacterCreation : MonoBehaviour
             abilityUI.decreaseButton.onClick.AddListener(() => AssignAbilityPoint(abilityUI, false));
         }
 
-    }
 
+        //Conect to Firebase Auth and Realtime Database
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Result == DependencyStatus.Available)
+            {
+                auth = FirebaseAuth.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+                // Check if the user is logged in and load the character data
+                if (auth != null && databaseReference != null && auth.CurrentUser != null)
+                {
+                    LoadCharacterFromFile();
+                }
+                else
+                {
+                    Debug.LogError("Firebase authentication or database reference is null.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
+            }
+        });
+
+    }
+   
     private void InitializeDropdowns()
     {
         // Populate race dropdown
@@ -542,23 +574,70 @@ public class CharacterCreation : MonoBehaviour
 
     private void DeleteCharacter()
     {
-        // Delete the corresponding character file from disk
-        string filePath = GetCharacterFilePath(defaultCharacter.characterName);
-        if (File.Exists(filePath))
+        if (auth.CurrentUser == null)
         {
-            File.Delete(filePath);
-            Debug.Log($"Character file {defaultCharacter.characterName}.json has been deleted.");
-        }
-        else
-        {
-            Debug.LogWarning($"Character file {defaultCharacter.characterName}.json not found to delete.");
+            Debug.LogError("No user is currently logged in.");
+            return;
         }
 
-        List<Character> characterList = CharacterManager.Instance.GetCharacterList();
-        defaultCharacter = characterList[0];
-        characterDropdown.value = 0;
-        PopulateCharacterDropdown();
+        string userId = auth.CurrentUser.UserId;
+        string characterNameToDelete = defaultCharacter.characterName;
+
+        // delete character data from Firebase
+        databaseReference.Child("character_data").Child(userId).OrderByChild("characterName").EqualTo(characterNameToDelete).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot.Exists)
+                {
+                    foreach (DataSnapshot characterSnapshot in snapshot.Children)
+                    {
+                        // Delete data character
+                        characterSnapshot.Reference.RemoveValueAsync().ContinueWithOnMainThread(removeTask =>
+                        {
+                            if (removeTask.IsCompleted)
+                            {
+                                Debug.Log($"Character {characterNameToDelete} has been deleted from Firebase.");
+
+                                // Remove character from the CharacterManager
+                                CharacterManager.Instance.RemoveCharacterByName(characterNameToDelete);
+
+                                // Delete character from the dropdown
+                                List<Character> characterList = CharacterManager.Instance.GetCharacterList();
+                                if (characterList.Count > 0)
+                                {
+                                    defaultCharacter = characterList[0];
+                                    characterDropdown.value = 0;
+                                }
+                                else
+                                {
+                                    defaultCharacter = null;
+                                    Debug.Log("No characters left after deletion.");
+                                }
+                                PopulateCharacterDropdown();
+                            }
+                            else
+                            {
+                                Debug.LogError($"Failed to delete character {characterNameToDelete} from Firebase: " + removeTask.Exception);
+                            }
+                        });
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"Character {characterNameToDelete} not found in Firebase to delete.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Failed to retrieve character data for deletion: " + task.Exception);
+            }
+        });
     }
+
+
     public void SaveCharacterToFile(Character character)
     {
         if (character == null)
@@ -567,18 +646,30 @@ public class CharacterCreation : MonoBehaviour
             return;
         }
 
-        string filePath = GetCharacterFilePath(character.characterName);
+        //check user is logged in
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("No user is currently logged in.");
+            return;
+        }
 
-        // Convert Character to CharacterData
+        // convert Character to CharacterData and serialize to JSON
         CharacterData characterData = ConvertCharacterToData(character);
+        string json = JsonUtility.ToJson(characterData, true);
 
-        // Serialize the CharacterData to JSON
-        string json = JsonUtility.ToJson(characterData, true);  // 'true' adds indentation for readability
-
-        // Write JSON string to the file
-        File.WriteAllText(filePath, json);
-
-        Debug.Log("Character saved as JSON to: " + filePath);
+        // save the JSON string to a file in realtime database with the user's ID
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("character_data").Child(userId).Push().SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Character data saved successfully to Firebase.");
+            }
+            else
+            {
+                Debug.LogError("Failed to save character data: " + task.Exception);
+            }
+        });
     }
 
     private CharacterData ConvertCharacterToData(Character character)
@@ -628,54 +719,47 @@ public class CharacterCreation : MonoBehaviour
         return data;
     }
 
-    // Load all characters from the Saves directory
-    private void LoadAllCharacters()
-    {
-        if (!Directory.Exists(SaveDirectory))
-        {
-            Debug.LogWarning("Save directory does not exist.");
-            return;
-        }
-
-        string[] files = Directory.GetFiles(SaveDirectory, "*.json");
-        if (files.Length == 0)
-        {
-            Debug.Log("No character files found in the save directory.");
-            return;
-        }
-
-        foreach (string file in files)
-        {
-            string characterName = Path.GetFileNameWithoutExtension(file);
-            Character character = LoadCharacterFromFile(characterName);
-
-            if (character != null)
-            {
-                CharacterManager.Instance.AddCharacter(character);
-                  // Add the loaded character to the list
-            }
-        }
-
-    }
-
     // Load a character from a JSON file
-    public Character LoadCharacterFromFile(string characterName)
+    public void LoadCharacterFromFile()
     {
-        string filePath = GetCharacterFilePath(characterName);
-
-        if (!File.Exists(filePath))
+        if (auth.CurrentUser == null)
         {
-            Debug.LogError("Character file not found at: " + filePath);
-            return null;
+            Debug.LogError("No user is currently logged in.");
+            return;
         }
 
-        // Read the JSON file and deserialize it
-        string json = File.ReadAllText(filePath);
-        CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
+        // Get the user's ID and load the character data from the database
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("character_data").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (!snapshot.Exists || snapshot.ChildrenCount == 0)
+                {
+                    Debug.LogWarning("No characters found for this user.");
+                    Debug.Log("This user has no characters. Please create a new character.");
+                    return;
+                }
+                foreach (DataSnapshot characterSnapshot in snapshot.Children)
+                {
+                    string json = characterSnapshot.GetRawJsonValue();
+                    CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
 
-        // Convert the CharacterData back into a Character object
-        Character character = ConvertDataToCharacter(characterData);
-        return character;
+                    // Convert CharacterData to Character
+                    Character character = ConvertDataToCharacter(characterData);
+                    Debug.Log("Loaded character: " + character.characterName);
+
+                    // Add the loaded character to the CharacterManager
+                    CharacterManager.Instance.AddCharacter(character);
+                }
+                PopulateCharacterDropdown();
+            }
+            else
+            {
+                Debug.LogError("Failed to load character data: " + task.Exception);
+            }
+        });
     }
 
 
