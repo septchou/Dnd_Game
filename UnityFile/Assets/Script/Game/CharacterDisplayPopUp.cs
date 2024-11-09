@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 using UnityEngine.EventSystems;
-using System.Diagnostics;
 
-public class CharacterDisplayPopUp : MonoBehaviour
+
+public class CharacterDisplayPopUp : MonoBehaviourPun
 {
     [System.Serializable]
     public class AbilityScorePointsData
@@ -29,10 +29,10 @@ public class CharacterDisplayPopUp : MonoBehaviour
     {
         public TMP_Text abilityScorePointText;
         public TMP_Text abilityScoreModifierText;
-        public Button increaseButton, decreaseButton;
+        public GameObject increaseButton, decreaseButton;
     }
 
-    // References to the UI elements that will show character details
+    [Header("Character Detail Panel")]
     [SerializeField] GameObject characterDetailPopup , skillDetailPopup;
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text classNameText;
@@ -42,12 +42,19 @@ public class CharacterDisplayPopUp : MonoBehaviour
     [SerializeField] List<abilityScoreUI> abilityUI;
     [SerializeField] List<TMP_Text> skillsText;
 
+    [Header("Skill Detail Panel")]
     [SerializeField] TMP_Text skillnameText;
     [SerializeField] TMP_Text skilldetailText;
     [SerializeField] List<Button> getSkillDetailButton;
-
     [SerializeField] List<string> skillName;
     [SerializeField] List<string> skillDetail;
+
+    [Header("GameplayUI")]
+    [SerializeField] CharacterDisplay clickedCharacter;
+    [SerializeField] GameObject changeHPGameobject;
+    [SerializeField] GameObject hpChangeInputGameobject;
+    [SerializeField] Button changeHPButton;
+    [SerializeField] TMP_InputField hpChangeInput;
 
     void Start()
     {
@@ -66,10 +73,13 @@ public class CharacterDisplayPopUp : MonoBehaviour
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
+            PhotonView photonView = hit.collider.GetComponent<PhotonView>();
+
             if (hit.collider != null)
             {
                 // Check if the hit object has a CharacterDisplay component
                 CharacterDisplay characterDisplay = hit.collider.GetComponent<CharacterDisplay>();
+                clickedCharacter = characterDisplay;
 
                 if (characterDisplay != null)
                 {
@@ -84,7 +94,12 @@ public class CharacterDisplayPopUp : MonoBehaviour
                         characterDisplay.SerializeAbilityScoreData(characterDisplay.abilityScoreData),
                         characterDisplay.SerializeSkillData(characterDisplay.skillData)
                     );
+
+                    if (photonView.IsMine || PhotonNetwork.IsMasterClient) ShowOwnerOption(true);
+                    else ShowOwnerOption(false);
                 }
+
+
             }
         }
     }
@@ -143,6 +158,17 @@ public class CharacterDisplayPopUp : MonoBehaviour
         }
     }
 
+    public void ShowOwnerOption(bool isShow)
+    {
+        for (int i = 0; i < abilityUI.Count; i++)
+        {
+            //abilityUI[i].increaseButton.SetActive(isShow);
+            //abilityUI[i].decreaseButton.SetActive(isShow);
+        }
+        changeHPGameobject.SetActive(isShow);
+        hpChangeInputGameobject.SetActive(isShow);
+    }
+
     // Hide the character detail popup (optional)
     public void CloseCharacterDetails()
     {
@@ -185,5 +211,30 @@ public class CharacterDisplayPopUp : MonoBehaviour
         }
 
         return skills;
+    }
+
+    public void OnChangeHPButtonClick()
+    {
+        // Get the value from the input field and try to parse it to an integer
+        if (int.TryParse(hpChangeInput.text, out int hpChange))
+        {
+            // Call the ChangeHP method to modify the HP
+            clickedCharacter.ChangeHP(hpChange);
+        }
+        else
+        {
+            Debug.LogError("Invalid HP value entered.");
+        }
+
+        ShowCharacterDetails(
+                        clickedCharacter.characterName,
+                        clickedCharacter.className,
+                        clickedCharacter.raceName,
+                        clickedCharacter.level,
+                        clickedCharacter.currentHP,
+                        clickedCharacter.maxHP,
+                        clickedCharacter.SerializeAbilityScoreData(clickedCharacter.abilityScoreData),
+                        clickedCharacter.SerializeSkillData(clickedCharacter.skillData)
+                    );
     }
 }
