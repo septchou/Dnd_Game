@@ -532,6 +532,7 @@ public class CharacterCreation : MonoBehaviour
         existingCharacter.characterClass = availableClasses[classDropdown.value];
         existingCharacter.level = selectedLevel;
         existingCharacter.abilityPoint = selectedAbilityPoint;
+        existingCharacter.skills = new List<Skill>(availableClasses[classDropdown.value].classSkills);
 
         // Set ability scores
         existingCharacter.abilityScorepoints = new List<Character.AbilityScorePoints>();
