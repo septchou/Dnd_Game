@@ -17,7 +17,7 @@ using Firebase.Extensions;
 public class CharacterCreation : MonoBehaviour
 {
     // Default
-    [SerializeField] Character defaultCharacter;
+    public Character defaultCharacter;
 
     // UI Element
     [SerializeField] TMP_InputField nameInputField;
@@ -60,7 +60,7 @@ public class CharacterCreation : MonoBehaviour
 
     //CharacterSelection
     [SerializeField] TMP_Dropdown characterDropdown;
-    [SerializeField] GameObject createButton, saveButton, deleteButton;
+    [SerializeField] GameObject createButton, saveButton, deleteButton, selectButton;
     private static string SaveDirectory
     {
         get
@@ -470,6 +470,7 @@ public class CharacterCreation : MonoBehaviour
                 createButton.SetActive(false);
                 resetButton.SetActive(false);
                 deleteButton.SetActive(true);
+                selectButton.SetActive(true);
 
                 InitialUI(1);  // Initialize the UI without reapplying race bonuses
 
@@ -511,6 +512,7 @@ public class CharacterCreation : MonoBehaviour
                 createButton.SetActive(true);
                 resetButton.SetActive(true);
                 deleteButton.SetActive(false);
+                selectButton.SetActive(false);
                 InitialUI(0);
             }
              
