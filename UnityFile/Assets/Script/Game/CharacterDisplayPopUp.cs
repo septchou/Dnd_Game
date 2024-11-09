@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 using UnityEngine.EventSystems;
+using System.Diagnostics;
 
 public class CharacterDisplayPopUp : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class CharacterDisplayPopUp : MonoBehaviour
     }
 
     // References to the UI elements that will show character details
-    [SerializeField] GameObject characterDetailPopup;
+    [SerializeField] GameObject characterDetailPopup , skillDetailPopup;
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text classNameText;
     [SerializeField] TMP_Text raceNameText;
@@ -40,6 +41,23 @@ public class CharacterDisplayPopUp : MonoBehaviour
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityUI;
     [SerializeField] List<TMP_Text> skillsText;
+
+    [SerializeField] TMP_Text skillnameText;
+    [SerializeField] TMP_Text skilldetailText;
+    [SerializeField] List<Button> getSkillDetailButton;
+
+    [SerializeField] List<string> skillName;
+    [SerializeField] List<string> skillDetail;
+
+    void Start()
+    {
+        // Add listeners to each skill detail button
+        for (int i = 0; i < getSkillDetailButton.Count; i++)
+        {
+            int index = i;  // Capture index for use in the listener
+            getSkillDetailButton[i].onClick.AddListener(() => ShowSkillDetail(index));
+        }
+    }
 
     void Update()
     {
@@ -50,7 +68,6 @@ public class CharacterDisplayPopUp : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log("Hit");
                 // Check if the hit object has a CharacterDisplay component
                 CharacterDisplay characterDisplay = hit.collider.GetComponent<CharacterDisplay>();
 
@@ -100,9 +117,12 @@ public class CharacterDisplayPopUp : MonoBehaviour
         // Populate skill text components
         for (int i = 0; i < skillData.Count; i++)
         {
+
             if (i < skillsText.Count)
             {
                 skillsText[i].text = $"{skillData[i].skillName}";
+                skillName.Add(skillData[i].skillName);
+                skillDetail.Add(skillData[i].skillDetail);
             }
         }
 
@@ -110,10 +130,28 @@ public class CharacterDisplayPopUp : MonoBehaviour
         characterDetailPopup.SetActive(true);
     }
 
+    // Show skill details when button is pressed
+    public void ShowSkillDetail(int index)
+    {
+
+        if (index >= 0 && index < skillName.Count)
+        {
+            skillnameText.text = skillName[index];
+            skilldetailText.text = skillDetail[index];
+
+            skillDetailPopup.SetActive(true);
+        }
+    }
+
     // Hide the character detail popup (optional)
     public void CloseCharacterDetails()
     {
         characterDetailPopup.SetActive(false);
+    }
+
+    public void CloseSkillDetails()
+    {
+        skillDetailPopup.SetActive(false);
     }
 
     private List<AbilityScorePointsData> DeserializeAbilityScoreData(object[] data)
