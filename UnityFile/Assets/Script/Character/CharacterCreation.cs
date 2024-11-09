@@ -12,14 +12,16 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Extensions;
+using Photon.Pun;
 
 
-public class CharacterCreation : MonoBehaviour
+public class CharacterCreation : MonoBehaviourPun
 {
     // Default
+    [Header("Character or Enemy")]
     public Character defaultCharacter;
 
-    // UI Element
+    [Header("UI Element")]
     [SerializeField] TMP_InputField nameInputField;
     [SerializeField] TMP_Dropdown classDropdown;
     [SerializeField] TMP_Dropdown raceDropdown;
@@ -33,6 +35,7 @@ public class CharacterCreation : MonoBehaviour
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityScores;
 
+    [Header("DataBase")]
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
 
@@ -49,46 +52,62 @@ public class CharacterCreation : MonoBehaviour
 
     }
 
+    [Header("Data")]
     [SerializeField] int selectedLevel;
     [SerializeField] int selectedAbilityPoint;
     [SerializeField] Race selectedRace;
     [SerializeField] CharacterClass selectedClass;
 
-    // Scriptable Objects
-    [SerializeField] List<Race> availableRaces;  // List of available races 
-    [SerializeField] List<CharacterClass> availableClasses;  // List of available classes 
+    [Header("Scriptable Object")]
+    [SerializeField] List<Race> availableRaces;  
+    [SerializeField] List<CharacterClass> availableClasses;  
 
-    //CharacterSelection
+    [Header("Character Selection")]
     [SerializeField] TMP_Dropdown characterDropdown;
-    [SerializeField] GameObject createButton, saveButton, deleteButton, selectButton;
-    private static string SaveDirectory
-    {
-        get
-        {
-            string path = Application.persistentDataPath + "/Saves/";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            return path;
-        }
-    }
+    [SerializeField] GameObject characterCreate, characterSave, characterDelete, characterSelect;
+    [SerializeField] GameObject enemyCreate, enemyDelete, enemyEdit;
+    [SerializeField] GameObject enemySelectionDrop, characterSelectionDrop;
+
+    // For DM
+    [Header("Enemy Creation (For DM)")]
+    [SerializeField] TMP_Dropdown enemySelectionDropDown;
+    [SerializeField] Button enemyCreateButton, enemyDeleteButton, enemyEditButton;
+    
 
     private void Start()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            List<Character> characters = CharacterManager.Instance.GetCharacterList();
+            defaultCharacter = characters[0];
+        }
+        else
+        {
+            List<Character> characters = CharacterManager.Instance.GetEnemyList();
+            defaultCharacter = characters[0];
+        }
+        PopulateCharacterDropdown();
         InitializeDropdowns();
         InitialUI(0);
-        PopulateCharacterDropdown();
+        ChangeMode(PhotonNetwork.IsMasterClient, false);
 
         // Button
         createCharacterButton.onClick.AddListener(CreateCharacter);
         saveCharacterButton.onClick.AddListener(EditCharacter);
         deleteCharacterButton.onClick.AddListener(DeleteCharacter);
+        characterDropdown.onValueChanged.AddListener(SelectCharacter);
+
+        enemyCreateButton.onClick.AddListener(CreateCharacter);
+        enemyEditButton.onClick.AddListener(EditCharacter);
+        enemyDeleteButton.onClick.AddListener(DeleteCharacter);
+        enemySelectionDropDown.onValueChanged.AddListener(SelectCharacter);
+
         levelUpButton.onClick.AddListener(LevelUP);
         levelDownButton.onClick.AddListener(LevelDOWN);
         resetPointButton.onClick.AddListener(ResetAbilityPoints);
         raceDropdown.onValueChanged.AddListener(OnRaceChange);
-        characterDropdown.onValueChanged.AddListener(SelectCharacter);
+
+        
 
         // Adding listeners for ability point buttons (increase and decrease)
         foreach (var abilityUI in abilityScores)
@@ -124,7 +143,7 @@ public class CharacterCreation : MonoBehaviour
 
     }
    
-    private void InitializeDropdowns()
+    public void InitializeDropdowns()
     {
         // Populate race dropdown
         List<string> raceNames = new List<string>();
@@ -171,7 +190,7 @@ public class CharacterCreation : MonoBehaviour
         classDropdown.RefreshShownValue();
     }
 
-    private void InitialUI(int isSkipRace)
+    public void InitialUI(int isSkipRace)
     {
 
         nameInputField.text = defaultCharacter.characterName;
@@ -405,19 +424,40 @@ public class CharacterCreation : MonoBehaviour
             // Apply Constitution modifier and level-based HP calculation
             newCharacter.HP = baseHP + (4 * newCharacter.level) + (constitutionModifier * newCharacter.level);
 
-            CharacterManager.Instance.AddCharacter(newCharacter);
+            
+            if(!PhotonNetwork.IsMasterClient) CharacterManager.Instance.AddCharacter(newCharacter);
+            else CharacterManager.Instance.AddEnemy(newCharacter);
+
             PopulateCharacterDropdown();
 
-            int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(newCharacter);
-
-            // Change selection character dropdown into new created one
-            if (characterIndex >= 0)
+            if (!PhotonNetwork.IsMasterClient)
             {
-                characterDropdown.value = characterIndex;
+                int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(newCharacter);
+
+                // Change selection character dropdown into new created one
+                if (characterIndex >= 0)
+                {
+                    characterDropdown.value = characterIndex;
+                }
+
+                SaveCharacterToFile(newCharacter);
+
+                Debug.Log("Character Created: " + newCharacter.characterName);
+            }
+            else
+            {
+                int characterIndex = CharacterManager.Instance.GetEnemyList().IndexOf(newCharacter);
+                if (characterIndex >= 0)
+                {
+                    enemySelectionDropDown.value = characterIndex;
+                }
+
+                // SaveEnemytoFile()
+
+                Debug.Log("Enemy Created: " + newCharacter.characterName);
             }
 
-            SaveCharacterToFile(newCharacter);
-            Debug.Log("Character Created: " + newCharacter.characterName);
+           
         }
 
         else
@@ -426,30 +466,44 @@ public class CharacterCreation : MonoBehaviour
         }
     }
 
-    private void PopulateCharacterDropdown()
+    public void PopulateCharacterDropdown()
     {
         List<string> characterNames = new List<string>();
 
         // Get the list of characters from the CharacterManager
-        List<Character> characters = CharacterManager.Instance.GetCharacterList();
-
-        // Populate the dropdown with the names of the characters
-        foreach (var character in characters)
+        if (!PhotonNetwork.IsMasterClient)
         {
-            characterNames.Add(character.characterName);
+            List<Character> characters = CharacterManager.Instance.GetCharacterList();
+            // Populate the dropdown with the names of the characters
+            foreach (var character in characters)
+            {
+                characterNames.Add(character.characterName);
+            }
+            // Clear existing options and add the new ones
+            characterDropdown.ClearOptions();
+            characterDropdown.AddOptions(characterNames);
+        }
+        else
+        {
+            List<Character> characters = CharacterManager.Instance.GetEnemyList();
+            foreach (var character in characters)
+            {
+                characterNames.Add(character.characterName);
+            }
+
+            enemySelectionDropDown.ClearOptions();
+            enemySelectionDropDown.AddOptions(characterNames);
         }
 
-        // Clear existing options and add the new ones
-        characterDropdown.ClearOptions();
-        characterDropdown.AddOptions(characterNames);
     }
 
     private void SelectCharacter(int characterIndex)
     {
-        
         // Retrieve the list of characters from the CharacterManager singleton
-        List<Character> characterList = CharacterManager.Instance.GetCharacterList();
-
+        List<Character> characterList = !PhotonNetwork.IsMasterClient ?
+        CharacterManager.Instance.GetCharacterList() :
+        CharacterManager.Instance.GetEnemyList();
+        
         // Check if the index is within the bounds of the character list
         if (characterIndex >= 0 && characterIndex < characterList.Count)
         {
@@ -466,11 +520,7 @@ public class CharacterCreation : MonoBehaviour
             if (characterIndex != 0)
             {
                 //change to edit mode
-                saveButton.SetActive(true);
-                createButton.SetActive(false);
-                resetButton.SetActive(false);
-                deleteButton.SetActive(true);
-                selectButton.SetActive(true);
+                ChangeMode(PhotonNetwork.IsMasterClient, true);
 
                 InitialUI(1);  // Initialize the UI without reapplying race bonuses
 
@@ -508,11 +558,7 @@ public class CharacterCreation : MonoBehaviour
             else
             {
                 //change to create mode
-                saveButton.SetActive(false);
-                createButton.SetActive(true);
-                resetButton.SetActive(true);
-                deleteButton.SetActive(false);
-                selectButton.SetActive(false);
+                ChangeMode(PhotonNetwork.IsMasterClient, false);
                 InitialUI(0);
             }
              
@@ -525,7 +571,9 @@ public class CharacterCreation : MonoBehaviour
 
     private void EditCharacter()
     {
-        Character existingCharacter = CharacterManager.Instance.GetCharacterList()[characterDropdown.value];
+        Character existingCharacter = !PhotonNetwork.IsMasterClient ?
+        CharacterManager.Instance.GetCharacterList()[characterDropdown.value] :
+        CharacterManager.Instance.GetEnemyList()[enemySelectionDropDown.value];
 
         existingCharacter.characterName = nameInputField.text;
         existingCharacter.race = availableRaces[raceDropdown.value];
@@ -553,24 +601,36 @@ public class CharacterCreation : MonoBehaviour
         int constitutionModifier = constitutionAbility.abilityModifier + constitutionAbility.abilityModifierBonus;
         existingCharacter.HP = baseHP + (4 * existingCharacter.level) + (constitutionModifier * existingCharacter.level);
 
-        //SelectCharacter(characterDropdown.value);
-
-        int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(existingCharacter);
-
-        // Change selection character dropdown into new created one
-        if (characterIndex >= 0)
+        if (!PhotonNetwork.IsMasterClient)
         {
-            characterDropdown.value = characterIndex;
+            int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(existingCharacter);
+
+            // Change selection character dropdown into new created one
+            if (characterIndex >= 0)
+            {
+                characterDropdown.value = characterIndex;
+            }
+
+            SaveCharacterToFile(existingCharacter);
+
+            Debug.Log("Character Edited: " + existingCharacter.characterName);
         }
+        else
+        {
+            int characterIndex = CharacterManager.Instance.GetEnemyList().IndexOf(existingCharacter);
 
-        SaveCharacterToFile(existingCharacter);
+            // Change selection character dropdown into new created one
+            if (characterIndex >= 0)
+            {
+                enemySelectionDropDown.value = characterIndex;
+            }
 
-        Debug.Log("Character Edited: " + existingCharacter.characterName);
+            // SaveEnemyToFile()
+
+            Debug.Log("Enemy Edited: " + existingCharacter.characterName);
+        }
         
-    }
-    private static string GetCharacterFilePath(string characterName)
-    {
-        return SaveDirectory + characterName + ".json";
+        
     }
 
     private void DeleteCharacter()
@@ -584,58 +644,80 @@ public class CharacterCreation : MonoBehaviour
         string userId = auth.CurrentUser.UserId;
         string characterNameToDelete = defaultCharacter.characterName;
 
-        // delete character data from Firebase
-        databaseReference.Child("character_data").Child(userId).OrderByChild("characterName").EqualTo(characterNameToDelete).GetValueAsync().ContinueWithOnMainThread(task =>
+        if (!PhotonNetwork.IsMasterClient)
         {
-            if (task.IsCompleted)
+            // delete character data from Firebase
+            databaseReference.Child("character_data").Child(userId).OrderByChild("characterName").EqualTo(characterNameToDelete).GetValueAsync().ContinueWithOnMainThread(task =>
             {
-                DataSnapshot snapshot = task.Result;
-
-                if (snapshot.Exists)
+                if (task.IsCompleted)
                 {
-                    foreach (DataSnapshot characterSnapshot in snapshot.Children)
+                    DataSnapshot snapshot = task.Result;
+
+                    if (snapshot.Exists)
                     {
-                        // Delete data character
-                        characterSnapshot.Reference.RemoveValueAsync().ContinueWithOnMainThread(removeTask =>
+                        foreach (DataSnapshot characterSnapshot in snapshot.Children)
                         {
-                            if (removeTask.IsCompleted)
+                            // Delete data character
+                            characterSnapshot.Reference.RemoveValueAsync().ContinueWithOnMainThread(removeTask =>
                             {
-                                Debug.Log($"Character {characterNameToDelete} has been deleted from Firebase.");
-
-                                // Remove character from the CharacterManager
-                                CharacterManager.Instance.RemoveCharacterByName(characterNameToDelete);
-
-                                // Delete character from the dropdown
-                                List<Character> characterList = CharacterManager.Instance.GetCharacterList();
-                                if (characterList.Count > 0)
+                                if (removeTask.IsCompleted)
                                 {
-                                    defaultCharacter = characterList[0];
-                                    characterDropdown.value = 0;
+                                    Debug.Log($"Character {characterNameToDelete} has been deleted from Firebase.");
+
+                                    // Remove character from the CharacterManager
+                                    CharacterManager.Instance.RemoveCharacterByName(characterNameToDelete);
+
+                                    // Delete character from the dropdown
+                                    List<Character> characterList = CharacterManager.Instance.GetCharacterList();
+                                    if (characterList.Count > 0)
+                                    {
+                                        defaultCharacter = characterList[0];
+                                        characterDropdown.value = 0;
+                                    }
+                                    else
+                                    {
+                                        defaultCharacter = null;
+                                        Debug.Log("No characters left after deletion.");
+                                    }
+                                    PopulateCharacterDropdown();
                                 }
                                 else
                                 {
-                                    defaultCharacter = null;
-                                    Debug.Log("No characters left after deletion.");
+                                    Debug.LogError($"Failed to delete character {characterNameToDelete} from Firebase: " + removeTask.Exception);
                                 }
-                                PopulateCharacterDropdown();
-                            }
-                            else
-                            {
-                                Debug.LogError($"Failed to delete character {characterNameToDelete} from Firebase: " + removeTask.Exception);
-                            }
-                        });
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Character {characterNameToDelete} not found in Firebase to delete.");
                     }
                 }
                 else
                 {
-                    Debug.LogWarning($"Character {characterNameToDelete} not found in Firebase to delete.");
+                    Debug.LogError("Failed to retrieve character data for deletion: " + task.Exception);
                 }
+            });
+        }
+        else
+        {
+            // Remove enemy from the CharacterManager
+            CharacterManager.Instance.RemoveEnemyByName(characterNameToDelete);
+
+            // Delete enemy from the dropdown
+            List<Character> characterList = CharacterManager.Instance.GetEnemyList();
+            if (characterList.Count > 0)
+            {
+                defaultCharacter = characterList[0];
+                characterDropdown.value = 0;
             }
             else
             {
-                Debug.LogError("Failed to retrieve character data for deletion: " + task.Exception);
+                defaultCharacter = null;
+                Debug.Log("No enemy left after deletion.");
             }
-        });
+            PopulateCharacterDropdown();
+        }
     }
 
 
@@ -836,6 +918,54 @@ public class CharacterCreation : MonoBehaviour
         {
             Debug.Log("No skills available.");
         }
+    }
+
+    public void ChangeMode(bool isMaster, bool isEditMode)
+    {
+        if (!isMaster)
+        {
+            characterSelectionDrop.SetActive(true);
+            enemySelectionDrop.SetActive(false);
+            if (!isEditMode)
+            {
+                characterSave.SetActive(false);
+                characterCreate.SetActive(true);
+                resetButton.SetActive(true);
+                characterDelete.SetActive(false);
+                characterSelect.SetActive(false);
+            }
+            else
+            {
+                characterSave.SetActive(true);
+                characterCreate.SetActive(false);
+                resetButton.SetActive(false);
+                characterDelete.SetActive(true);
+                characterSelect.SetActive(true);
+
+            }
+            
+        }
+        else
+        {
+            characterSelectionDrop.SetActive(false);
+            enemySelectionDrop.SetActive(true);
+            if (!isEditMode)
+            {
+                enemyEdit.SetActive(false);
+                enemyCreate.SetActive(true);
+                resetButton.SetActive(true);
+                enemyDelete.SetActive(false);
+            }
+            else
+            {
+                enemyEdit.SetActive(true);
+                enemyCreate.SetActive(false);
+                resetButton.SetActive(false);
+                enemyDelete.SetActive(true);
+
+            }
+        }
+        
     }
 
 

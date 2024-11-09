@@ -8,6 +8,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     // List to store all created characters
     [SerializeField] List<Character> characterList = new List<Character>();
 
+    [SerializeField] List<Character> enemyList = new List<Character>();
+
     [SerializeField] CharacterCreation characterSelectPanel;
 
     // Singleton pattern to access this from anywhere in the game
@@ -44,6 +46,17 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         return characterList;
     }
 
+    public void AddEnemy(Character newCharacter)
+    {
+        enemyList.Add(newCharacter);
+        Debug.Log($"Enemy {newCharacter.characterName} has been add to the list.");
+    }
+
+    public List<Character> GetEnemyList()
+    {
+        return enemyList;
+    }
+
     public void RemoveCharacterByName(string characterName)
     {
         Character characterToRemove = characterList.Find(character => character.characterName == characterName);
@@ -56,6 +69,20 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         else
         {
             Debug.LogWarning($"Character {characterName} not found in the list.");
+        }
+    }
+    public void RemoveEnemyByName(string enemyName)
+    {
+        Character enemyToRemove = enemyList.Find(character => character.characterName == enemyName);
+
+        if (enemyToRemove != null)
+        {
+            characterList.Remove(enemyToRemove);
+            Debug.Log($"Enemy {enemyName} has been removed from the list.");
+        }
+        else
+        {
+            Debug.LogWarning($"Enemy {enemyName} not found in the list.");
         }
     }
 
