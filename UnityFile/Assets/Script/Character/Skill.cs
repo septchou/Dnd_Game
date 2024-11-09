@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 public enum SkillType { Damage, Buff, Debuff }
-
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Character Creation/Skill")]
 public class Skill : ScriptableObject
 {
@@ -24,5 +23,7 @@ public class Skill : ScriptableObject
     }
     
     // Ability modifier applied to the skill instead of damage modifier
-    public List<AbilityScore> associatedAbility; 
+    public List<AbilityScore> associatedAbility;
+
+    public string detail;
 }

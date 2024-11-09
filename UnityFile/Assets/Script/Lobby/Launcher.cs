@@ -20,6 +20,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject PlayerListItemPrefab;
     [SerializeField] GameObject startGameButton;
     [SerializeField] GameObject readyButton;
+    [SerializeField] GameObject selectButton;
     [SerializeField] TMP_Text readyButtonText;
 
     void Awake()
@@ -91,10 +92,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             readyButton.SetActive(true);
             startGameButton.SetActive(false);;
+            selectButton.SetActive(true);
         }
         else {
             startGameButton.SetActive(true);
             readyButton.SetActive(false);
+            selectButton.SetActive(false);
         }
         
     }
@@ -185,7 +188,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (AreAllPlayersReady())
         {
-            PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel("GameSetUp");
         }
     }
 
