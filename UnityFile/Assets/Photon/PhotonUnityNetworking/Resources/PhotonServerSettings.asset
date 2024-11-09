@@ -42,6 +42,9 @@ MonoBehaviour:
   - ReceiveCharacterData
   - UpdateCharacterInfo
   - SyncPosition
+  - SyncHP
+  - UpdateAbilityScores
+  - UpdateSkills
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

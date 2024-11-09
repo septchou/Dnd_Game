@@ -52,9 +52,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81fdf4f065a88d84bbe03a3c8fdf54c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHP: 0
+  maxHP: 0
+  characterName: 
+  className: 
+  raceName: 
+  level: 0
+  abilityScoreData: []
+  skillData: []
   characterNameText: {fileID: 2095336532942292238}
   hpText: {fileID: 4357872427262670010}
   Outline: {fileID: 8994203518508902327}
+  characterData: {fileID: 0}
 --- !u!114 &634250626906433164
 MonoBehaviour:
   m_ObjectHideFlags: 0
