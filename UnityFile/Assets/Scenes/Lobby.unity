@@ -15649,8 +15649,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df5b95731d991d945891a08be996082d, type: 2}
   enemyList:
   - {fileID: 11400000, guid: f8f1cecac2f95e34e9f136f8440fd245, type: 2}
-  - {fileID: 11400000, guid: 6c5715e9292eb484181585a13daf5631, type: 2}
-  - {fileID: 11400000, guid: e16eb5b2dc71e054b9de0c4938caf777, type: 2}
   characterSelectPanel: {fileID: 1113369284}
   selectedCharacter: {fileID: 0}
   playerCharacterPrefab: {fileID: 1389696707206792283, guid: b25b9880c03289442b8f1ccb5e755f38, type: 3}

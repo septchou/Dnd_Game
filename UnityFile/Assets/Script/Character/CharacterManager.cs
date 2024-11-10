@@ -77,7 +77,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
         if (enemyToRemove != null)
         {
-            characterList.Remove(enemyToRemove);
+            enemyList.Remove(enemyToRemove);
             Debug.Log($"Enemy {enemyName} has been removed from the list.");
         }
         else

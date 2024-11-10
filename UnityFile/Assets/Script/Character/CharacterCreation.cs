@@ -129,6 +129,7 @@ public class CharacterCreation : MonoBehaviourPun
                 if (auth != null && databaseReference != null && auth.CurrentUser != null)
                 {
                     LoadCharacterFromFile();
+                    LoadEnemyFromFile();
                 }
                 else
                 {
@@ -453,6 +454,7 @@ public class CharacterCreation : MonoBehaviourPun
                 }
 
                 // SaveEnemytoFile()
+                SaveEnemyToFile(newCharacter);
 
                 Debug.Log("Enemy Created: " + newCharacter.characterName);
             }
@@ -625,11 +627,12 @@ public class CharacterCreation : MonoBehaviourPun
                 enemySelectionDropDown.value = characterIndex;
             }
 
-            // SaveEnemyToFile()
+            // Remove the old character and add the new one
+            SaveEnemyToFile(existingCharacter);
+
 
             Debug.Log("Enemy Edited: " + existingCharacter.characterName);
         }
-        
         
     }
 
@@ -701,22 +704,58 @@ public class CharacterCreation : MonoBehaviourPun
         }
         else
         {
-            // Remove enemy from the CharacterManager
-            CharacterManager.Instance.RemoveEnemyByName(characterNameToDelete);
+            //delete enemy data from Firebase
+            databaseReference.Child("enemy_data").Child(userId).OrderByChild("characterName").EqualTo(characterNameToDelete).GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
 
-            // Delete enemy from the dropdown
-            List<Character> characterList = CharacterManager.Instance.GetEnemyList();
-            if (characterList.Count > 0)
-            {
-                defaultCharacter = characterList[0];
-                characterDropdown.value = 0;
-            }
-            else
-            {
-                defaultCharacter = null;
-                Debug.Log("No enemy left after deletion.");
-            }
-            PopulateCharacterDropdown();
+                    if (snapshot.Exists)
+                    {
+                        foreach (DataSnapshot characterSnapshot in snapshot.Children)
+                        {
+                            // Delete data character
+                            characterSnapshot.Reference.RemoveValueAsync().ContinueWithOnMainThread(removeTask =>
+                            {
+                                if (removeTask.IsCompleted)
+                                {
+                                    Debug.Log($"Enemy {characterNameToDelete} has been deleted from Firebase.");
+
+                                    // Remove character from the CharacterManager
+                                    CharacterManager.Instance.RemoveEnemyByName(characterNameToDelete);
+
+                                    // Delete character from the dropdown
+                                    List<Character> characterList = CharacterManager.Instance.GetEnemyList();
+                                    if (characterList.Count > 0)
+                                    {
+                                        defaultCharacter = characterList[0];
+                                        enemySelectionDropDown.value = 0;
+                                    }
+                                    else
+                                    {
+                                        defaultCharacter = null;
+                                        Debug.Log("No enemy left after deletion.");
+                                    }
+                                    PopulateCharacterDropdown();
+                                }
+                                else
+                                {
+                                    Debug.LogError($"Failed to delete enemy {characterNameToDelete} from Firebase: " + removeTask.Exception);
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Enemy {characterNameToDelete} not found in Firebase to delete.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Failed to retrieve enemy data for deletion: " + task.Exception);
+                }
+            });
         }
     }
 
@@ -751,6 +790,41 @@ public class CharacterCreation : MonoBehaviourPun
             else
             {
                 Debug.LogError("Failed to save character data: " + task.Exception);
+            }
+        });
+    }
+
+    // Save Enemy to Firebase
+    public void SaveEnemyToFile(Character character)
+    {
+        if (character == null)
+        {
+            Debug.LogError("Character is null in SaveCharacterToFile!");
+            return;
+        }
+
+        //check user is logged in
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("No user is currently logged in.");
+            return;
+        }
+
+        // convert Character(Enemy) to CharacterData and serialize to JSON
+        CharacterData characterData = ConvertCharacterToData(character);
+        string json = JsonUtility.ToJson(characterData, true);
+
+        // save the JSON string to a file in realtime database with the user's ID
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("enemy_data").Child(userId).Push().SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Enemy data saved successfully to Firebase.");
+            }
+            else
+            {
+                Debug.LogError("Failed to save enemy data: " + task.Exception);
             }
         });
     }
@@ -841,6 +915,49 @@ public class CharacterCreation : MonoBehaviourPun
             else
             {
                 Debug.LogError("Failed to load character data: " + task.Exception);
+            }
+        });
+    }
+
+    //Load Enemy from Firebase
+    public void LoadEnemyFromFile()
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("No user is currently logged in.");
+            return;
+        }
+
+        // Get the user's ID and load the character data from the database
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("enemy_data").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (!snapshot.Exists || snapshot.ChildrenCount == 0)
+                {
+                    Debug.LogWarning("No enemy found for this user.");
+                    Debug.Log("This user has no enemy. Please create a new enemy.");
+                    return;
+                }
+                foreach (DataSnapshot characterSnapshot in snapshot.Children)
+                {
+                    string json = characterSnapshot.GetRawJsonValue();
+                    CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
+
+                    // Convert CharacterData to Character
+                    Character character = ConvertDataToCharacter(characterData);
+                    Debug.Log("Loaded enemy: " + character.characterName);
+
+                    // Add the loaded character to the CharacterManager
+                    CharacterManager.Instance.AddEnemy(character);
+                }
+                PopulateCharacterDropdown();
+            }
+            else
+            {
+                Debug.LogError("Failed to load enemy data: " + task.Exception);
             }
         });
     }

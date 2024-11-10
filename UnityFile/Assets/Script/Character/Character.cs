@@ -13,6 +13,22 @@ public class Character : ScriptableObject
     public int HP;                         // Health points of the character
     public int abilityPoint;
     public List<AbilityScorePoints> abilityScorepoints;
+    
+    private string characterKey;
+
+    public void SetCharacterKey(string key)
+    {
+        characterKey = key;
+    }
+
+    public string GetCharacterKey()
+    {
+        return characterKey;
+    }
+
+
+
+
     // Ability scores (using AbilityScore ScriptableObjects)
     [System.Serializable]
     public class AbilityScorePoints
