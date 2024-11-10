@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02cea89711adb0b458bb1a85add26d4a, type: 3}
-  m_Name: TemplateCharacter
+  m_Name: TemplateEnemy 1
   m_EditorClassIdentifier: 
-  characterName: New Character
-  race: {fileID: 11400000, guid: 4ae8302a2376eff4e92fc16323d25497, type: 2}
-  characterClass: {fileID: 11400000, guid: 80f2e2044c742e54a8bc5c6ea7971921, type: 2}
+  characterName: XXX
+  race: {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
+  characterClass: {fileID: 11400000, guid: e5e181d4d34d4c04889baf62d280c4d0, type: 2}
   level: 10
-  HP: 0
+  HP: 200
   abilityPoint: 20
   abilityScorepoints:
   - abilityScore: {fileID: 11400000, guid: adb0690a3c140274a8ad1debab43c61c, type: 2}

@@ -6,7 +6,8 @@ using TMPro;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 
-public class CharacterDisplayPopUp : MonoBehaviour
+
+public class CharacterDisplayPopUp : MonoBehaviourPun
 {
     [System.Serializable]
     public class AbilityScorePointsData
@@ -28,11 +29,11 @@ public class CharacterDisplayPopUp : MonoBehaviour
     {
         public TMP_Text abilityScorePointText;
         public TMP_Text abilityScoreModifierText;
-        public Button increaseButton, decreaseButton;
+        public GameObject increaseButton, decreaseButton;
     }
 
-    // References to the UI elements that will show character details
-    [SerializeField] GameObject characterDetailPopup;
+    [Header("Character Detail Panel")]
+    [SerializeField] GameObject characterDetailPopup , skillDetailPopup;
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text classNameText;
     [SerializeField] TMP_Text raceNameText;
@@ -40,6 +41,30 @@ public class CharacterDisplayPopUp : MonoBehaviour
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityUI;
     [SerializeField] List<TMP_Text> skillsText;
+
+    [Header("Skill Detail Panel")]
+    [SerializeField] TMP_Text skillnameText;
+    [SerializeField] TMP_Text skilldetailText;
+    [SerializeField] List<Button> getSkillDetailButton;
+    [SerializeField] List<string> skillName;
+    [SerializeField] List<string> skillDetail;
+
+    [Header("GameplayUI")]
+    [SerializeField] CharacterDisplay clickedCharacter;
+    [SerializeField] GameObject changeHPGameobject;
+    [SerializeField] GameObject hpChangeInputGameobject;
+    [SerializeField] Button changeHPButton;
+    [SerializeField] TMP_InputField hpChangeInput;
+
+    void Start()
+    {
+        // Add listeners to each skill detail button
+        for (int i = 0; i < getSkillDetailButton.Count; i++)
+        {
+            int index = i;  // Capture index for use in the listener
+            getSkillDetailButton[i].onClick.AddListener(() => ShowSkillDetail(index));
+        }
+    }
 
     void Update()
     {
@@ -50,9 +75,9 @@ public class CharacterDisplayPopUp : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log("Hit");
-                // Check if the hit object has a CharacterDisplay component
+                PhotonView photonView = hit.collider.GetComponent<PhotonView>();
                 CharacterDisplay characterDisplay = hit.collider.GetComponent<CharacterDisplay>();
+                clickedCharacter = characterDisplay;
 
                 if (characterDisplay != null)
                 {
@@ -67,10 +92,21 @@ public class CharacterDisplayPopUp : MonoBehaviour
                         characterDisplay.SerializeAbilityScoreData(characterDisplay.abilityScoreData),
                         characterDisplay.SerializeSkillData(characterDisplay.skillData)
                     );
+
+                    // Check ownership for UI options
+                    if (photonView != null && (photonView.IsMine || PhotonNetwork.IsMasterClient))
+                        ShowOwnerOption(true);
+                    else
+                        ShowOwnerOption(false);
+                }
+                else
+                {
+                    Debug.LogError("CharacterDisplay component not found on clicked object.");
                 }
             }
         }
     }
+
 
     // Show the character details in the UI
     public void ShowCharacterDetails(string characterName, string className , string raceName, int level, int currentHP, int maxHP, object[] abilityDataObj, object[] skillDataObj)
@@ -100,9 +136,12 @@ public class CharacterDisplayPopUp : MonoBehaviour
         // Populate skill text components
         for (int i = 0; i < skillData.Count; i++)
         {
+
             if (i < skillsText.Count)
             {
                 skillsText[i].text = $"{skillData[i].skillName}";
+                skillName.Add(skillData[i].skillName);
+                skillDetail.Add(skillData[i].skillDetail);
             }
         }
 
@@ -110,10 +149,39 @@ public class CharacterDisplayPopUp : MonoBehaviour
         characterDetailPopup.SetActive(true);
     }
 
+    // Show skill details when button is pressed
+    public void ShowSkillDetail(int index)
+    {
+
+        if (index >= 0 && index < skillName.Count)
+        {
+            skillnameText.text = skillName[index];
+            skilldetailText.text = skillDetail[index];
+
+            skillDetailPopup.SetActive(true);
+        }
+    }
+
+    public void ShowOwnerOption(bool isShow)
+    {
+        for (int i = 0; i < abilityUI.Count; i++)
+        {
+            //abilityUI[i].increaseButton.SetActive(isShow);
+            //abilityUI[i].decreaseButton.SetActive(isShow);
+        }
+        changeHPGameobject.SetActive(isShow);
+        hpChangeInputGameobject.SetActive(isShow);
+    }
+
     // Hide the character detail popup (optional)
     public void CloseCharacterDetails()
     {
         characterDetailPopup.SetActive(false);
+    }
+
+    public void CloseSkillDetails()
+    {
+        skillDetailPopup.SetActive(false);
     }
 
     private List<AbilityScorePointsData> DeserializeAbilityScoreData(object[] data)
@@ -147,5 +215,30 @@ public class CharacterDisplayPopUp : MonoBehaviour
         }
 
         return skills;
+    }
+
+    public void OnChangeHPButtonClick()
+    {
+        // Get the value from the input field and try to parse it to an integer
+        if (int.TryParse(hpChangeInput.text, out int hpChange))
+        {
+            // Call the ChangeHP method to modify the HP
+            clickedCharacter.ChangeHP(hpChange);
+        }
+        else
+        {
+            Debug.LogError("Invalid HP value entered.");
+        }
+
+        ShowCharacterDetails(
+                        clickedCharacter.characterName,
+                        clickedCharacter.className,
+                        clickedCharacter.raceName,
+                        clickedCharacter.level,
+                        clickedCharacter.currentHP,
+                        clickedCharacter.maxHP,
+                        clickedCharacter.SerializeAbilityScoreData(clickedCharacter.abilityScoreData),
+                        clickedCharacter.SerializeSkillData(clickedCharacter.skillData)
+                    );
     }
 }

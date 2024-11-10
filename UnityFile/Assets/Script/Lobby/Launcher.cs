@@ -92,12 +92,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             readyButton.SetActive(true);
             startGameButton.SetActive(false);;
-            selectButton.SetActive(true);
         }
         else {
             startGameButton.SetActive(true);
             readyButton.SetActive(false);
-            selectButton.SetActive(false);
         }
         
     }
