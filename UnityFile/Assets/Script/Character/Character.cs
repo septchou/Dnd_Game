@@ -6,6 +6,8 @@ using static Race;
 [System.Serializable]
 public class Character : ScriptableObject
 {
+    public string firebaseKey { get; set; }
+       
     public string characterName;
     public Race race;                      // The race of the character
     public CharacterClass characterClass;  // The class of the character
@@ -14,20 +16,6 @@ public class Character : ScriptableObject
     public int abilityPoint;
     public List<AbilityScorePoints> abilityScorepoints;
     
-    private string characterKey;
-
-    public void SetCharacterKey(string key)
-    {
-        characterKey = key;
-    }
-
-    public string GetCharacterKey()
-    {
-        return characterKey;
-    }
-
-
-
 
     // Ability scores (using AbilityScore ScriptableObjects)
     [System.Serializable]

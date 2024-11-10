@@ -4,6 +4,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class CharacterData
 {
+    public string firebaseKey { get; set; }
+
     public string characterName;
     public string raceName;
     public string characterClassName;

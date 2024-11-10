@@ -781,17 +781,38 @@ public class CharacterCreation : MonoBehaviourPun
 
         // save the JSON string to a file in realtime database with the user's ID
         string userId = auth.CurrentUser.UserId;
-        databaseReference.Child("character_data").Child(userId).Push().SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+
+        Debug.Log("Character firebaseKey: " + character.firebaseKey);
+        //Check that it new character or existing character
+        if ( string.IsNullOrEmpty(character.firebaseKey)) {
+            DatabaseReference newCharacterRef = databaseReference.Child("character_data").Child(userId).Push();
+            newCharacterRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    character.firebaseKey = newCharacterRef.Key;
+                    Debug.Log("Character data saved successfully to Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to save character data: " + task.Exception);
+                }
+            });
+        }
+        else
         {
-            if (task.IsCompleted)
+            databaseReference.Child("character_data").Child(userId).Child(character.firebaseKey).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
             {
-                Debug.Log("Character data saved successfully to Firebase.");
-            }
-            else
-            {
-                Debug.LogError("Failed to save character data: " + task.Exception);
-            }
-        });
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Character data saved(edit) successfully to Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to save character data: " + task.Exception);
+                }
+            });
+        }
     }
 
     // Save Enemy to Firebase
@@ -816,17 +837,38 @@ public class CharacterCreation : MonoBehaviourPun
 
         // save the JSON string to a file in realtime database with the user's ID
         string userId = auth.CurrentUser.UserId;
-        databaseReference.Child("enemy_data").Child(userId).Push().SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+
+        //check that it new character or existing character
+        if (string.IsNullOrEmpty(character.firebaseKey))
         {
-            if (task.IsCompleted)
+            DatabaseReference newCharacterRef = databaseReference.Child("enemy_data").Child(userId).Push();
+            newCharacterRef.SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
             {
-                Debug.Log("Enemy data saved successfully to Firebase.");
-            }
-            else
+                if (task.IsCompleted)
+                {
+                    character.firebaseKey = newCharacterRef.Key;
+                    Debug.Log("Enemy data saved successfully to Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to save enemy data: " + task.Exception);
+                }
+            });
+        }
+        else
+        {
+            databaseReference.Child("enemy_data").Child(userId).Child(character.firebaseKey).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
             {
-                Debug.LogError("Failed to save enemy data: " + task.Exception);
-            }
-        });
+                if (task.IsCompleted)
+                {
+                    Debug.Log("Enemy data saved(edit) successfully to Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to save enemy data: " + task.Exception);
+                }
+            });
+        }
     }
 
     private CharacterData ConvertCharacterToData(Character character)
@@ -834,6 +876,8 @@ public class CharacterCreation : MonoBehaviourPun
 
         CharacterData data = new CharacterData
         {
+            firebaseKey = character.firebaseKey,
+
             characterName = character.characterName,
             raceName = character.race != null ? character.race.name : "",
             characterClassName = character.characterClass != null ? character.characterClass.className : "",
@@ -900,11 +944,14 @@ public class CharacterCreation : MonoBehaviourPun
                 }
                 foreach (DataSnapshot characterSnapshot in snapshot.Children)
                 {
+                    string key = characterSnapshot.Key;
+
                     string json = characterSnapshot.GetRawJsonValue();
                     CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
 
                     // Convert CharacterData to Character
                     Character character = ConvertDataToCharacter(characterData);
+                    character.firebaseKey = key;
                     Debug.Log("Loaded character: " + character.characterName);
 
                     // Add the loaded character to the CharacterManager
@@ -943,11 +990,14 @@ public class CharacterCreation : MonoBehaviourPun
                 }
                 foreach (DataSnapshot characterSnapshot in snapshot.Children)
                 {
+                    string key = characterSnapshot.Key;
+
                     string json = characterSnapshot.GetRawJsonValue();
                     CharacterData characterData = JsonUtility.FromJson<CharacterData>(json);
 
                     // Convert CharacterData to Character
                     Character character = ConvertDataToCharacter(characterData);
+                    character.firebaseKey = key;
                     Debug.Log("Loaded enemy: " + character.characterName);
 
                     // Add the loaded character to the CharacterManager
@@ -967,6 +1017,8 @@ public class CharacterCreation : MonoBehaviourPun
     private Character ConvertDataToCharacter(CharacterData data)
     {
         Character character = ScriptableObject.CreateInstance<Character>();
+
+        character.firebaseKey = data.firebaseKey;
 
         character.characterName = data.characterName;
         character.race = Resources.Load<Race>("Races/" + data.raceName);
