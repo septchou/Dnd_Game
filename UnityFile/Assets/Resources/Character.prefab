@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 924830316514730680}
   - component: {fileID: 3655290953328916749}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   skillData: []
   characterNameText: {fileID: 2095336532942292238}
   hpText: {fileID: 4357872427262670010}
-  Outline: {fileID: 8994203518508902327}
+  Outline: {fileID: 7026335433105533505}
   characterData: {fileID: 0}
 --- !u!114 &634250626906433164
 MonoBehaviour:
@@ -603,7 +603,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3109588496231348895
 Transform:
   m_ObjectHideFlags: 0

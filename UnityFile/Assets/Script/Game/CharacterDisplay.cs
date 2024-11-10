@@ -31,7 +31,7 @@ public class CharacterDisplay : MonoBehaviourPun
     [Header("GameObject")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text hpText;
-    [SerializeField] GameObject Outline;
+    [SerializeField] SpriteRenderer Outline;
     public Character characterData;
 
     // Method to initialize character data
@@ -74,15 +74,27 @@ public class CharacterDisplay : MonoBehaviourPun
         characterNameText.text = character.characterName;
         hpText.text = $"HP: {currentHP} / {maxHP}";
 
+
         // If this is the local player, activate the outline and sync with other players
         if (photonView.IsMine)
         {
-            Outline.SetActive(true);
-
             // Call RPC to update data for other players
             photonView.RPC("UpdateCharacterInfo", RpcTarget.OthersBuffered, characterName, maxHP, className, raceName, level);
             photonView.RPC("UpdateAbilityScores", RpcTarget.OthersBuffered, SerializeAbilityScoreData(abilityScoreData));
             photonView.RPC("UpdateSkills", RpcTarget.OthersBuffered, SerializeSkillData(skillData));
+            photonView.RPC("SetFaction", RpcTarget.OthersBuffered);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                Outline.color = Color.red;
+                gameObject.tag = "Villain";
+                
+            }
+            else
+            {
+                Outline.color = Color.green;
+                gameObject.tag = "Hero";
+            }
         }
     }
 
@@ -156,6 +168,29 @@ public class CharacterDisplay : MonoBehaviourPun
         }
 
         return skills;
+    }
+
+    [PunRPC]
+    public void SetFaction()
+    {
+
+        if (photonView.IsMine && !PhotonNetwork.IsMasterClient)
+        {
+            Outline.color = Color.green;
+            gameObject.tag = "Hero";
+        }
+
+        else if(!photonView.IsMine && photonView.Owner != PhotonNetwork.MasterClient)
+        {
+            Outline.color = Color.blue;
+            gameObject.tag = "Hero";
+        }
+
+        else if(photonView.Owner == PhotonNetwork.MasterClient)
+        {
+            Outline.color = Color.red;
+            gameObject.tag = "Villain";
+        }
     }
 
     // RPC to update character info across the network (for other players)
