@@ -45,6 +45,7 @@ MonoBehaviour:
   - SyncHP
   - UpdateAbilityScores
   - UpdateSkills
+  - SetFaction
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
