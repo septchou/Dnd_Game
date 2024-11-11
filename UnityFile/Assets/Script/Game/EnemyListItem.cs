@@ -38,6 +38,7 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
         // Check if "spawn mode" is active and the player left-clicked
         if (isSpawnModeActive && Input.GetMouseButtonDown(0))
         {
+            //Debug.Log("Spawn mode activated.");
             // Get the mouse position in world coordinates
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
