@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class GameSceneController : MonoBehaviourPunCallbacks
 {
@@ -21,6 +22,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
     [SerializeField] RectTransform diceRollRectTransform;
     [SerializeField] int activatedCoroutine = 0, diceRolling = 0;
 
+    [SerializeField] Chat chat;
     void Start()
     {
         if (Instance == null)
@@ -100,7 +102,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             // Animate the dice rolling
             for (int j = 0; j < timesRollUntilFinish; j++)  //loops for the rolling effect
             {
-                sideText.text = Random.Range(1, dices[i].diceType + 1).ToString();
+                sideText.text = UnityEngine.Random.Range(1, dices[i].diceType + 1).ToString();
 
                 // Start with a short delay and increase it gradually
                 float delay = Mathf.Lerp(fistDelay, lastDelay, (float)j / timesRollUntilFinish);  
@@ -109,12 +111,13 @@ public class GameSceneController : MonoBehaviourPunCallbacks
 
 
             // Set final dice result
-            int tmp = Random.Range(1, dices[i].diceType + 1);
+            int tmp = UnityEngine.Random.Range(1, dices[i].diceType + 1);
             sideText.text = tmp.ToString();
             result += tmp;
         }
 
-        Debug.Log("Total dice roll result: " + result);
+        chat.SendRollResult(dices, result);
+        //Debug.Log("Total dice roll result: " + result);
 
         activatedCoroutine--;
         yield return new WaitUntil(() => activatedCoroutine == 0);
