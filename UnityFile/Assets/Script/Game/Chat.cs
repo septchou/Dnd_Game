@@ -17,32 +17,14 @@ public class Chat : MonoBehaviour
     }
     public void SendMessage()
     {
-        string senderName;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            senderName = "DM";
-        }
-        else 
-        {
-            senderName = CharacterManager.Instance.selectedCharacter.characterName;
-        }
-        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All,senderName + " : " + inputField.text);
+        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, GetSenderName() + " : " + inputField.text);
         inputField.text = "";
     }
 
     public void SendRollResult(List<Dice> dices, int result)
     {
-        string senderName, content;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            senderName = "DM";
-        }
-        else
-        {
-            senderName = CharacterManager.Instance.selectedCharacter.characterName;
-        }
-
-        content = senderName + " rolled a";
+        string content;
+        content = GetSenderName() + " rolled a";
         for(int i = 0; i < dices.Count; i++)
         {
             content += " D" + dices[i].diceType.ToString() + " ";
@@ -53,6 +35,28 @@ public class Chat : MonoBehaviour
 
     }
 
+    public void SendSkillReport(string skillName,int damage,int hit,bool isMiss)
+    {
+        string content = $"{GetSenderName()} Cast {skillName} with Hit : {hit} and Damage : {damage}";
+        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
+        if (isMiss)
+        {
+            content = GetSenderName() + " miss";
+            GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
+        }
+    }
+        
+    private string GetSenderName()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            return "DM";
+        }
+        else
+        {
+            return CharacterManager.Instance.selectedCharacter.characterName;
+        }
+    }
     [PunRPC]
     public void GetMessage(String recieveMessage)
     {

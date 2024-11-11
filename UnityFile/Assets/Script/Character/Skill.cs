@@ -26,4 +26,35 @@ public class Skill : ScriptableObject
     public List<AbilityScore> associatedAbility;
 
     public string detail;
+
+    public List<Dice> GetHitDiceLists()
+    {
+        List<Dice> dices = new List<Dice>();
+
+        foreach (var hitDice in hitDices)
+        {
+            for (int i = 0; i < hitDice.numberOfDice; i++)
+            {
+                dices.Add(hitDice.dice);
+            }
+        }
+
+        return dices;
+    }
+
+    // This method retrieves all the damage dice from the skill
+    public List<Dice> GetDamageDiceLists()
+    {
+        List<Dice> dices = new List<Dice>();
+
+        foreach (var damageDice in damageDices)
+        {
+            for (int i = 0; i < damageDice.numberOfDice; i++)
+            {
+                dices.Add(damageDice.dice);
+            }
+        }
+
+        return dices;
+    }
 }

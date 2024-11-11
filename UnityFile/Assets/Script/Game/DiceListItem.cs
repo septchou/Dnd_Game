@@ -29,6 +29,11 @@ public class DiceListItem : MonoBehaviour
     {
         List<Dice> dices = new List<Dice>();
         dices.Add(diceRoll);
-        GameSceneController.Instance.RollAnimation(dices);
+        GameSceneController.Instance.RollAnimation(dices, HandleDiceRollResult);
+    }
+
+    private void HandleDiceRollResult(int result, List<Dice> dices)
+    {
+
     }
 }

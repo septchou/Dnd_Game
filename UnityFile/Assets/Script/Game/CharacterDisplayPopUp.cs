@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 using UnityEngine.EventSystems;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class CharacterDisplayPopUp : MonoBehaviourPun
@@ -126,9 +127,10 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
             if (i < abilityUI.Count)
             {
                 abilityUI[i].abilityScorePointText.text = $"{abilityScoreData[i].abilityScorePoint}";
-                abilityUI[i].abilityScoreModifierText.text = (abilityScoreData[i].ablityModifierBonus > 0) 
-                    ? $"+{abilityScoreData[i].ablityModifierBonus}" 
-                    : abilityScoreData[i].ablityModifierBonus.ToString();
+                int modifier = (abilityScoreData[i].abilityScorePoint - 10) / 2 + abilityScoreData[i].ablityModifierBonus;
+                abilityUI[i].abilityScoreModifierText.text = (modifier > 0) 
+                    ? $"+{modifier}" 
+                    : modifier.ToString();
             }
         }
 

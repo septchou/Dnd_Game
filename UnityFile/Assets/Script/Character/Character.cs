@@ -32,4 +32,20 @@ public class Character : ScriptableObject
     // Default value for abilities
     const int defaultAbilityPoints = 20;
 
+    // Method to get the modifier of an ability score
+    public int GetAbilityScoreModifier(AbilityScore ability)
+    {
+        // Find the AbilityScorePoints object that matches the given AbilityScore
+        foreach (AbilityScorePoints score in abilityScorepoints)
+        {
+            if (score.abilityScore == ability)
+            {
+                // Calculate the modifier: (AbilityScorePoints - 10) / 2 (rounded down)
+                return (score.abilityScorePoint - 10) / 2 + score.ablityModifierBonus;
+            }
+        }
+
+        // If the ability is not found, return 0 (error handling or a default behavior)
+        return 0;
+    }
 }

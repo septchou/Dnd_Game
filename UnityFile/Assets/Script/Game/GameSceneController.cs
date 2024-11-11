@@ -15,7 +15,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
 
     [Header("Dice Rolling")]
     [SerializeField] int timesRollUntilFinish = 20;
-    [SerializeField] float fistDelay = 0.05f, lastDelay = 0.2f;
+    [SerializeField] float fistDelay = 0.01f, lastDelay = 0.05f;
     [SerializeField] GameObject diceRollUI;
     [SerializeField] GameObject dicePrefab;
     [SerializeField] Transform diceRollContent;
@@ -64,12 +64,14 @@ public class GameSceneController : MonoBehaviourPunCallbacks
         }
         
     }
-    public void RollAnimation(List<Dice> dices)
+    public delegate void RollResultCallback(int result, List<Dice> dices);
+
+    public void RollAnimation(List<Dice> dices, RollResultCallback callback)
     {
-        StartCoroutine(RollDiceCoroutine(dices));
+        StartCoroutine(RollDiceCoroutine(dices, callback));
     }
 
-    private IEnumerator RollDiceCoroutine(List<Dice> dices)
+    private IEnumerator RollDiceCoroutine(List<Dice> dices, RollResultCallback callback)
     {
         activatedCoroutine++;
         List<GameObject> diceGameObjectList = new List<GameObject>();
@@ -80,16 +82,16 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             diceRolling++;
             GameObject dice = Instantiate(dicePrefab, diceRollContent);
 
-            //Set the dice name
+            // Set the dice name
             Transform diceNameTextTransform = dice.transform.Find("DiceNameText");
             TMP_Text diceNameText = diceNameTextTransform.GetComponent<TMP_Text>();
             diceNameText.text = $"D{dices[i].diceType}";
-            
+
             diceGameObjectList.Add(dice);
         }
 
         float diceWidth = dicePrefab.GetComponent<RectTransform>().rect.width;
-        diceRollRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (diceRolling * diceWidth) + (20 * (diceRolling-1)) + 100);
+        diceRollRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (diceRolling * diceWidth) + (20 * (diceRolling - 1)) + 100);
 
         diceRollUI.SetActive(true);
 
@@ -100,15 +102,14 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             TMP_Text sideText = sideTextTransform.GetComponent<TMP_Text>();
 
             // Animate the dice rolling
-            for (int j = 0; j < timesRollUntilFinish; j++)  //loops for the rolling effect
+            for (int j = 0; j < timesRollUntilFinish; j++) //loops for the rolling effect
             {
                 sideText.text = UnityEngine.Random.Range(1, dices[i].diceType + 1).ToString();
 
                 // Start with a short delay and increase it gradually
-                float delay = Mathf.Lerp(fistDelay, lastDelay, (float)j / timesRollUntilFinish);  
+                float delay = Mathf.Lerp(fistDelay, lastDelay, (float)j / timesRollUntilFinish);
                 yield return new WaitForSeconds(delay);
             }
-
 
             // Set final dice result
             int tmp = UnityEngine.Random.Range(1, dices[i].diceType + 1);
@@ -116,8 +117,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             result += tmp;
         }
 
-        chat.SendRollResult(dices, result);
-        //Debug.Log("Total dice roll result: " + result);
+       
 
         activatedCoroutine--;
         yield return new WaitUntil(() => activatedCoroutine == 0);
@@ -131,5 +131,12 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             Destroy(diceGameObjectList[i]);
         }
 
+        // Send roll result to chat
+        chat.SendRollResult(dices, result);
+
+        // Call the callback with the final result
+        callback?.Invoke(result, dices);
+
+        
     }
 }
