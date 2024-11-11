@@ -1,4 +1,4 @@
-Library: C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+Library: D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --platform=Windows
 --backend=burst-llvm-16
 --target=X64_SSE2
@@ -9,11 +9,11 @@ Library: C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\BurstO
 --target-framework=NetFramework
 --linker-options=PdbAltPath="My project_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\Burst
+--temp-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\Burst
 --debug=Full
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
---decode-folder=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Library\Burst
---output=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+--key-folder=D:/ProgrameFile/UnityFR/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--decode-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Library\Burst
+--output=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
@@ -57,11 +57,11 @@ Library: C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\BurstO
 --target-framework=NetFramework
 --linker-options=PdbAltPath="My project_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\Burst
+--temp-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\Burst
 --debug=Full
---key-folder=C:/Program Files/Unity/Hub/Editor/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
---decode-folder=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Library\Burst
---output=C:\Users\p5094\OneDrive\Documents\GitHub\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
+--key-folder=D:/ProgrameFile/UnityFR/2022.3.46f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
+--decode-folder=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Library\Burst
+--output=D:\KMUTT\CPE\CPE334_SoftwareEngineer\Project\UnityProject\Dnd_Game\UnityFile\Temp\BurstOutput\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
