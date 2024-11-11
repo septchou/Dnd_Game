@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using JetBrains.Annotations;
 
 public class EnemyListPopUp : MonoBehaviourPun
 {
@@ -23,6 +24,7 @@ public class EnemyListPopUp : MonoBehaviourPun
     {
         enemylistPanel.SetActive(!isListopen);
         isListopen = !isListopen;
+
     }
 
     private void ListEnemy()
