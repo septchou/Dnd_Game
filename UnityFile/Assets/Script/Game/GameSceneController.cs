@@ -18,6 +18,8 @@ public class GameSceneController : MonoBehaviourPunCallbacks
     [SerializeField] GameObject diceRollUI;
     [SerializeField] GameObject dicePrefab;
     [SerializeField] Transform diceRollContent;
+    [SerializeField] RectTransform diceRollRectTransform;
+    [SerializeField] int activatedCoroutine = 0, diceRolling = 0;
 
     void Start()
     {
@@ -67,11 +69,13 @@ public class GameSceneController : MonoBehaviourPunCallbacks
 
     private IEnumerator RollDiceCoroutine(List<Dice> dices)
     {
+        activatedCoroutine++;
         List<GameObject> diceGameObjectList = new List<GameObject>();
 
         // Display Dice Roll UI
         for (int i = 0; i < dices.Count; i++)
         {
+            diceRolling++;
             GameObject dice = Instantiate(dicePrefab, diceRollContent);
 
             //Set the dice name
@@ -81,6 +85,9 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             
             diceGameObjectList.Add(dice);
         }
+
+        float diceWidth = dicePrefab.GetComponent<RectTransform>().rect.width;
+        diceRollRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (diceRolling * diceWidth) + (20 * (diceRolling-1)) + 100);
 
         diceRollUI.SetActive(true);
 
@@ -109,12 +116,17 @@ public class GameSceneController : MonoBehaviourPunCallbacks
 
         Debug.Log("Total dice roll result: " + result);
 
-        yield return new WaitForSeconds(3f);
+        activatedCoroutine--;
+        yield return new WaitUntil(() => activatedCoroutine == 0);
+
+        yield return new WaitForSeconds(1.5f);
         diceRollUI.SetActive(false);
 
         for (int i = 0; i < diceGameObjectList.Count; i++)
         {
+            diceRolling--;
             Destroy(diceGameObjectList[i]);
         }
+
     }
 }
