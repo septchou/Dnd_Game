@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -9,8 +10,15 @@ public class InventoryUI : MonoBehaviour
     public GameObject itemSlotPrefab;     //Reference to the item slot prefab
     public Transform itemSlotContainer;
 
-    //Test Item 
+
+    //item
     public List<Item> items;
+
+    //List item panel
+
+    public GameObject listItemPanel;
+    public GameObject itemButtonPrefab;
+    public Transform itemButtonContainer;
 
 
     // Start is called before the first frame update
@@ -18,13 +26,26 @@ public class InventoryUI : MonoBehaviour
     {
         //Hide the inventory panel when the game starts
         inventoryPanel.SetActive(false);
+        LoadItems();
         UpdateInventoryUI();
+        UpdateListItemPanel();
+    }
+    void LoadItems()
+    {
+        // Load items from resources or any other source
+        Item[] loadedItems = Resources.LoadAll<Item>("Items"); // Adjust the path if needed
+        items.AddRange(loadedItems);
     }
 
     public void ToggleInventory()
     {
         //Toggle the visibility of the inventory panel
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+    }
+
+    public void ToggleListOfItems()
+    {
+        listItemPanel.SetActive(!listItemPanel.activeSelf);
     }
 
     public void AddItemtoInventory(Item item)
@@ -64,4 +85,22 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    void UpdateListItemPanel()
+    {
+        // Clear existing items
+        foreach (Transform child in itemButtonContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        //Create a new button for each item
+        // Populate the panel with items
+        foreach (Item item in items)
+        {
+            // Instantiate a button for each item
+            GameObject itemButton = Instantiate(itemButtonPrefab, itemButtonContainer);
+            itemButton.GetComponentInChildren<Text>().text = item.name; // Set item name text
+
+        }
+    }
 }
