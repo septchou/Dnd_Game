@@ -54,9 +54,12 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     [SerializeField] CharacterDisplay clickedCharacter;
     [SerializeField] GameObject changeHPGameobject;
     [SerializeField] GameObject hpChangeInputGameobject;
+    [SerializeField] GameObject removeCharacterButtonObject;
     [SerializeField] Button changeHPButton;
     [SerializeField] TMP_InputField hpChangeInput;
 
+    [Header("Combat")]
+    [SerializeField] Combat combat;
     void Start()
     {
         // Add listeners to each skill detail button
@@ -96,9 +99,22 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
 
                     // Check ownership for UI options
                     if (photonView != null && (photonView.IsMine || PhotonNetwork.IsMasterClient))
+                    {
                         ShowOwnerOption(true);
+
+                        if (photonView.IsMine && PhotonNetwork.IsMasterClient)
+                        {
+                            removeCharacterButtonObject.SetActive(true);
+                        }
+                    }
+                        
                     else
                         ShowOwnerOption(false);
+
+                    if (PhotonNetwork.IsMasterClient && photonView.IsMine)
+                    {
+                        combat.DmChangeCaster(characterDisplay.characterName);
+                    }
                 }
                 else
                 {
@@ -173,6 +189,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         }
         changeHPGameobject.SetActive(isShow);
         hpChangeInputGameobject.SetActive(isShow);
+
+
     }
 
     // Hide the character detail popup (optional)
@@ -243,4 +261,10 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
                         clickedCharacter.SerializeSkillData(clickedCharacter.skillData)
                     );
     }
+
+    public void OnDestroyCharacterButtonClick()
+    {
+        clickedCharacter.DestroyCharacter();
+    }
+    
 }

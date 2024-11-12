@@ -30,7 +30,9 @@ public class EnemyListPopUp : MonoBehaviourPun
     private void ListEnemy()
     {
         List<Character> characters = CharacterManager.Instance.GetEnemyList();
-        for(int i = 1; i < characters.Count; i++) 
+        CharacterManager.Instance.SetEnemyList();
+
+        for (int i = 1; i < characters.Count; i++) 
         {
             Instantiate(enemyList, enemyListContent).GetComponent<EnemyListItem>().SetUp(characters[i]);
         }

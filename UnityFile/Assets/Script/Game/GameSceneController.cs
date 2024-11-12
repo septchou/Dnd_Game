@@ -117,7 +117,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             result += tmp;
         }
 
-       
+
 
         activatedCoroutine--;
         yield return new WaitUntil(() => activatedCoroutine == 0);
@@ -137,6 +137,6 @@ public class GameSceneController : MonoBehaviourPunCallbacks
         // Call the callback with the final result
         callback?.Invoke(result, dices);
 
-        
+
     }
 }

@@ -13881,6 +13881,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 503656672}
+        m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1560288605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15652,6 +15664,7 @@ MonoBehaviour:
   characterSelectPanel: {fileID: 1113369284}
   selectedCharacter: {fileID: 0}
   playerCharacterPrefab: {fileID: 1389696707206792283, guid: b25b9880c03289442b8f1ccb5e755f38, type: 3}
+  enemyListNumber: 
 --- !u!4 &1839097851
 Transform:
   m_ObjectHideFlags: 0

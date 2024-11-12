@@ -17,19 +17,19 @@ public class Chat : MonoBehaviour
     }
     public void SendMessage()
     {
-        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, GetSenderName() + " : " + inputField.text);
+        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, $"<b>{GetSenderName()}</b>" + " : " + inputField.text);
         inputField.text = "";
     }
 
     public void SendRollResult(List<Dice> dices, int result)
     {
         string content;
-        content = GetSenderName() + " rolled a";
+        content = $"<b>{GetSenderName()}</b>" + " rolled a";
         for(int i = 0; i < dices.Count; i++)
         {
-            content += " D" + dices[i].diceType.ToString() + " ";
+            content += "<b> D" + dices[i].diceType.ToString() + " </b>";
         }
-        content += "and got " + result.ToString();
+        content += "and got " + $"<b>{result}</b>";
 
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
 
@@ -37,7 +37,7 @@ public class Chat : MonoBehaviour
 
     public void SendSkillReport(string skillName,int damage,int hit,bool isMiss)
     {
-        string content = $"{GetSenderName()} Cast {skillName} with Hit : {hit} and Damage : {damage}";
+        string content = $"<b>{GetSenderName()}</b> Cast <b>{skillName}</b> with Hit : <b>{hit}</b> and Damage : <b>{damage}</b>";
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
         if (isMiss)
         {

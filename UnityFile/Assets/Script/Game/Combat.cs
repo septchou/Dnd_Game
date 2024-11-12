@@ -31,6 +31,10 @@ public class Combat : MonoBehaviourPun
                 skillButtons[i].onClick.AddListener(() => SelectTargetToCastSkill(index));
             }
         }
+        else
+        {
+            
+        }
     }
 
     // Update is called once per frame
@@ -79,17 +83,40 @@ public class Combat : MonoBehaviourPun
         selectedSkill = skills[i];
     }
 
+    public void DmChangeCaster(string characterName)
+    {
+        List<Character> list = CharacterManager.Instance.GetEnemyList();
+
+        // Extract the base name by removing the number at the end
+        string baseName = characterName.Contains(" ")
+            ? characterName.Substring(0, characterName.LastIndexOf(" "))
+            : characterName; // Use the full name if there's no space
+
+        Caster = list.Find(character => character.characterName == baseName);
+
+        if (Caster != null)
+        {
+            skills = Caster.skills;
+        }
+        else
+        {
+            Debug.LogWarning($"Character with base name '{baseName}' not found in enemy list.");
+        }
+    }
+
     private IEnumerator CastSkill()
     {
         string skillName = selectedSkill.name;
         int FlatHit,FlatDmg;
+
+        getHitValue = true;
+        GameSceneController.Instance.RollAnimation(selectedSkill.GetHitDiceLists(), HandleDiceRollResult);
+        getDamageValue = true;
+        GameSceneController.Instance.RollAnimation(selectedSkill.GetDamageDiceLists(), HandleDiceRollResult);
+        yield return new WaitForSeconds(delay);
+
         if (skillName == "Slash")
         {
-            getHitValue = true;
-            GameSceneController.Instance.RollAnimation(selectedSkill.GetHitDiceLists(), HandleDiceRollResult);
-            getDamageValue = true;
-            GameSceneController.Instance.RollAnimation(selectedSkill.GetDamageDiceLists(), HandleDiceRollResult);
-            yield return new WaitForSeconds(delay);
             // Str / 2
             FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
             hitValue += FlatHit / 2;
@@ -100,6 +127,7 @@ public class Combat : MonoBehaviourPun
             FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
             damageValue += FlatDmg;
         }
+
         bool isMiss = IsThisMiss(hitValue);
         chatLog.SendSkillReport(skillName, damageValue, hitValue, isMiss);
         if (!isMiss)

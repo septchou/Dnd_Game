@@ -47,6 +47,7 @@ MonoBehaviour:
   - UpdateSkills
   - SetFaction
   - GetMessage
+  - RPC_DestroyCharacter
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

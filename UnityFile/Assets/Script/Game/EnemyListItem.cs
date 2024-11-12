@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
+using System.Globalization;
 
 public class EnemyListItem : MonoBehaviourPunCallbacks
 {
@@ -68,14 +69,25 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
             return;
         }
 
+        
+        
         // Spawn the enemy character at the specified position
         GameObject enemyCharacter = PhotonNetwork.Instantiate(characterPrefab.name, position, Quaternion.identity);
+
+        List<Character> enemylist = CharacterManager.Instance.GetEnemyList();
+        int index = enemylist.FindIndex(character => character == enemy);
+
+        int number = CharacterManager.Instance.enemyListNumber[index];
+        CharacterManager.Instance.enemyListNumber[index]++;
 
         // Set character details (name, HP) on the spawned character
         var characterDisplay = enemyCharacter.GetComponent<CharacterDisplay>();
         if (characterDisplay != null)
         {
+            string baseName = enemy.characterName;
+            enemy.characterName = $"{baseName} {number}";
             characterDisplay.SetCharacterData(enemy);
+            enemy.characterName = baseName;
         }
     }
 }

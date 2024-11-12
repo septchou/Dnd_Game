@@ -607,6 +607,7 @@ public class CharacterCreation : MonoBehaviourPun
         {
             int characterIndex = CharacterManager.Instance.GetCharacterList().IndexOf(existingCharacter);
 
+            PopulateCharacterDropdown();
             // Change selection character dropdown into new created one
             if (characterIndex >= 0)
             {
@@ -621,6 +622,7 @@ public class CharacterCreation : MonoBehaviourPun
         {
             int characterIndex = CharacterManager.Instance.GetEnemyList().IndexOf(existingCharacter);
 
+            PopulateCharacterDropdown();
             // Change selection character dropdown into new created one
             if (characterIndex >= 0)
             {

@@ -170,6 +170,16 @@ public class CharacterDisplay : MonoBehaviourPun
         return skills;
     }
 
+    public void DestroyCharacter()
+    {
+        // Check if this object belongs to the local player before destroying
+        if (photonView.IsMine)
+        {
+            // Call an RPC to destroy the object on all clients
+            photonView.RPC("RPC_DestroyCharacter", RpcTarget.AllBuffered);
+        }
+    }
+
     [PunRPC]
     public void SetFaction()
     {
@@ -233,5 +243,12 @@ public class CharacterDisplay : MonoBehaviourPun
         {
             characterData.HP = currentHP;
         }
+    }
+
+    [PunRPC]
+    private void RPC_DestroyCharacter()
+    {
+        // Destroy the game object this script is attached to
+        Destroy(gameObject);
     }
 }

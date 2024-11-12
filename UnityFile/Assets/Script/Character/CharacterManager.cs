@@ -19,6 +19,9 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject playerCharacterPrefab;
 
+    [Header("Gameplay")]
+    public List<int> enemyListNumber;
+
     private void Awake()
     {
         // Ensure the instance of this manager is accessible throughout the game
@@ -110,6 +113,15 @@ public class CharacterManager : MonoBehaviourPunCallbacks
             characterDisplay.SetCharacterData(selectedCharacter);
         }
     }
+
+    public void SetEnemyList()
+    {
+        for(int i = 0; i < enemyList.Count; i++)
+        {
+            enemyListNumber.Add(0);
+        }
+    }
+
 
 
 }
