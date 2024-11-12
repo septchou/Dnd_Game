@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+﻿using UnityEngine;
 
 public class ListOfItemUI : MonoBehaviour
 {
@@ -29,7 +25,7 @@ public class ListOfItemUI : MonoBehaviour
         //Create a new Item Slot for each item in the item database
         foreach (Item item in itemDatabase.allItems)
         {
-            
+
             GameObject itemSlot = Instantiate(itemSlotPrefab, itemSlotContainer);
             if (itemSlot == null)
             {
@@ -44,7 +40,7 @@ public class ListOfItemUI : MonoBehaviour
             }
             slot.inventory = inventoryUI;
             slot.Setup(item);
-            
+
         }
     }
 
