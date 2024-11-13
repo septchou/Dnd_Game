@@ -11,6 +11,8 @@ public class EnemyListPopUp : MonoBehaviourPun
     [SerializeField] GameObject enemyListButton, enemylistPanel, enemyList;
     [SerializeField] Transform enemyListContent;
     [SerializeField] bool isListopen = false;
+    [SerializeField] OverloyOverMouse overlay;
+    [SerializeField] GameObject overlayUI;
     void Start()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -34,7 +36,7 @@ public class EnemyListPopUp : MonoBehaviourPun
 
         for (int i = 1; i < characters.Count; i++) 
         {
-            Instantiate(enemyList, enemyListContent).GetComponent<EnemyListItem>().SetUp(characters[i]);
+            Instantiate(enemyList, enemyListContent).GetComponent<EnemyListItem>().SetUp(characters[i],overlay,overlayUI);
         }
     }
 }

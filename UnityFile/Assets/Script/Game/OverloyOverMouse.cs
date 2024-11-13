@@ -4,15 +4,37 @@ using UnityEngine;
 
 public class OverloyOverMouse : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] bool isOverlayOn = false;
+
+    [SerializeField] GameObject selectedOverlay;
+
     void Start()
     {
+
+    }
+
+    void Update()
+    {
+        if (isOverlayOn)
+        {
+            Vector2 mousePosition = Input.mousePosition;
+            selectedOverlay.GetComponent<RectTransform>().position = mousePosition;
+            selectedOverlay.SetActive(true);
+        }
+        
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CreatedMouseOverlay(GameObject overlay)
     {
-        
+        //if (overlay.GetComponent<RectTransform>() == null) return;
+        selectedOverlay = overlay;
+        isOverlayOn = true;
+    }
+
+    public void RemoveOverlay()
+    {
+        isOverlayOn = false;
+        selectedOverlay.SetActive(false);
     }
 }

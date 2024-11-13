@@ -8,13 +8,18 @@ using static Skill;
 public class Combat : MonoBehaviourPun
 { 
     [SerializeField] Chat chatLog;
+    [SerializeField] OverloyOverMouse overlay;
+    [SerializeField] GameObject selectTargetOverlayUI;
+    [Header("Character")]
     public string characterTurnName;
     [SerializeField] string selectedEnemyName;
     [SerializeField] Character Caster;
     [SerializeField] CharacterDisplay Target;
+    [Header("List")]
     [SerializeField] List<Skill> skills;
     [SerializeField] List<Button> skillButtons;
     [SerializeField] List<GameObject> skillButtonsGameobject;
+    [Header("Stat")]
     [SerializeField] float delay = 3f;
     public bool isMyturn = false;
     [SerializeField] bool isSelecting = false;
@@ -41,6 +46,8 @@ public class Combat : MonoBehaviourPun
     {
         if(isSelecting && Input.GetMouseButtonDown(0))
         {
+            
+
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
@@ -48,13 +55,19 @@ public class Combat : MonoBehaviourPun
             {
                 PhotonView photonView = hit.collider.GetComponent<PhotonView>();
                 Target = hit.collider.GetComponent<CharacterDisplay>();
-                StartCoroutine(CastSkill());
-                isSelecting = false;
+                if(photonView != null && Target != null)
+                {
+                    isSelecting = false;
+                    overlay.RemoveOverlay();
+                    StartCoroutine(CastSkill());
+                }
+                
             }
         }
 
         if(isSelecting && Input.GetMouseButtonDown(1))
         {
+            overlay.RemoveOverlay();
             isSelecting = false;
             Debug.Log("Cancle Cast");
         }
@@ -100,6 +113,7 @@ public class Combat : MonoBehaviourPun
     {
         isSelecting = true;
         selectedSkill = skills[i];
+        overlay.CreatedMouseOverlay(selectTargetOverlayUI);
     }
 
     public void DmChangeCaster(string characterName)

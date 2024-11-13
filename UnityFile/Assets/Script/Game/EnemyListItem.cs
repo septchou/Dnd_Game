@@ -12,6 +12,8 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
     [SerializeField] GameObject characterPrefab;
     [SerializeField] TMP_Text enemyNameText, enemyLevelText, enemyHPText;
     [SerializeField] Character enemy;
+    [SerializeField] OverloyOverMouse overlay;
+    [SerializeField] GameObject overlayUI;
 
     private bool isSpawnModeActive = false;
 
@@ -21,16 +23,19 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
         spawnEnemyButton.onClick.AddListener(EnableSpawnMode);
     }
 
-    public void SetUp(Character character)
+    public void SetUp(Character character, OverloyOverMouse ol , GameObject olUI)
     {
         enemy = character;
         enemyNameText.text = character.characterName;
         enemyLevelText.text = $"LV : {character.level}";
         enemyHPText.text = $"HP : {character.HP}";
+        overlay = ol;
+        overlayUI = olUI;
     }
 
     private void EnableSpawnMode()
     {
+        overlay.CreatedMouseOverlay(overlayUI);
         isSpawnModeActive = true;
     }
 
@@ -39,6 +44,7 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
         // Check if "spawn mode" is active and the player left-clicked
         if (isSpawnModeActive && Input.GetMouseButtonDown(0))
         {
+            
             //Debug.Log("Spawn mode activated.");
             // Get the mouse position in world coordinates
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -47,6 +53,7 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
             if (hit.collider == null)
             {
+                overlay.RemoveOverlay();
                 // Spawn the enemy at the mouse position
                 SpawnEnemyCharacter(mousePos);
                 isSpawnModeActive = false;  // Disable "spawn mode" after spawning
@@ -56,6 +63,7 @@ public class EnemyListItem : MonoBehaviourPunCallbacks
         // Check if "spawn mode" is active and the player right-clicked to cancel
         if (isSpawnModeActive && Input.GetMouseButtonDown(1))
         {
+            overlay.RemoveOverlay();
             isSpawnModeActive = false;  // Exit spawn mode
             Debug.Log("Spawn mode exited.");
         }
