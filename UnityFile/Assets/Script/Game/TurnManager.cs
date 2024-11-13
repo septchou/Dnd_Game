@@ -231,6 +231,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void RPC_EndCombat()
     {
         combatPhaseUI.SetActive(false);
+        endTurnButtonGameObject.SetActive(false);
         isCombatActive = false;
         initiativeResults.Clear();
         for (int i = 0; i < existTurnList.Count; i++)
