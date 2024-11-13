@@ -15,6 +15,6 @@ MonoBehaviour:
   itemID: 2
   itemName: Apple
   description: Big Apple
-  quantity: 1
+  quantity: 7
   icon: {fileID: 21300000, guid: 308f94c9b32ab954da0f50c1fbafed68, type: 3}
   type: 3

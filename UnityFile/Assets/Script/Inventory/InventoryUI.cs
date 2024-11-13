@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase;
+using Firebase.Database;
+using Firebase.Auth;
+using Firebase.Extensions;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -10,6 +14,9 @@ public class InventoryUI : MonoBehaviour
     public GameObject itemSlotPrefab;     //Reference to the item slot prefab
     public Transform itemSlotContainer;
 
+    [Header("Firebase")]
+    public DatabaseReference databaseReference;
+    public FirebaseAuth auth;
 
     //item
     public List<Item> items;
@@ -19,7 +26,70 @@ public class InventoryUI : MonoBehaviour
     {
         //Hide the inventory panel when the game starts
         inventoryPanel.SetActive(false);
+
+        //Connect to firebase
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Result == DependencyStatus.Available)
+            {
+                auth = FirebaseAuth.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+                LoadInventoryFromFirebase();
+                string userId = auth.CurrentUser.UserId;
+                playerInventory.InitializeFirebase(auth, databaseReference, userId);
+                Debug.Log("Firebase is ready to use(InventoryUI)");
+            }
+            else
+            {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
+            }
+        });
         UpdateInventoryUI();
+
+    }
+
+    //Load inventory items from firebase
+    public void LoadInventoryFromFirebase()
+    {
+        //Clear old inventory
+        playerInventory.items.Clear();
+
+        databaseReference.Child("inventory").Child(auth.CurrentUser.UserId).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                foreach (Transform child in itemSlotContainer)
+                {
+                    Destroy(child.gameObject); // Clear existing slots
+                }
+
+                foreach (DataSnapshot itemSnapshot in snapshot.Children)
+                {
+                    string json = itemSnapshot.GetRawJsonValue();
+                    Debug.Log("json: " + json);
+
+                    Item item = JsonUtility.FromJson<Item>(json);
+                    Debug.Log("item: " + item);
+                    if (item != null)
+                    {
+                        Debug.Log("item: " + item);
+                        AddItemtoInventory(item);
+                        Debug.Log("Loaded item: " + item.itemName);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to load item from Firebase");
+                    }
+                }
+                
+            }
+            else
+            {
+                Debug.LogError("Failed to load inventory: " + task.Exception);
+            }
+        });
     }
 
     public void ToggleInventory()
@@ -28,15 +98,23 @@ public class InventoryUI : MonoBehaviour
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
     }
 
-    public void AddItemtoInventory(Item item)
+    public void AddItemtoInventory(Item item, string specifiedUserId = null)
     {
         Debug.Log("playerInventory: " + playerInventory);
         Debug.Log("testItem: " + item);
 
         if (playerInventory != null && item != null)
         {
-            playerInventory.AddItem(item); //Add the test item to the inventory
-            Debug.Log("Added item: " + item.itemName);
+            if(specifiedUserId != null)
+            {
+                playerInventory.AddItem(item, specifiedUserId);
+                Debug.Log("Added item: " + item.itemName + "to" + specifiedUserId);
+            }
+            else
+            {
+                playerInventory.AddItem(item);
+                Debug.Log("Added item: " + item.itemName + "to your Self");
+            }
             UpdateInventoryUI(); // Update the inventory UI
         }
         else
