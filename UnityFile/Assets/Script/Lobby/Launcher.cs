@@ -186,6 +186,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (AreAllPlayersReady())
         {
+            // Close the room before starting the game
+            PhotonNetwork.CurrentRoom.IsVisible = false;  // Makes the room invisible in room list
+            PhotonNetwork.CurrentRoom.IsOpen = false;     // Prevents new players from joining
             PhotonNetwork.LoadLevel("GameSetUp");
         }
     }

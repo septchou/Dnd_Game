@@ -27,6 +27,7 @@ public class CharacterDisplay : MonoBehaviourPun
     public int level;
     public List<AbilityScorePointsData> abilityScoreData;
     public List<SkillData> skillData;
+    public bool isMyTurn;
 
     [Header("GameObject")]
     [SerializeField] TMP_Text characterNameText;

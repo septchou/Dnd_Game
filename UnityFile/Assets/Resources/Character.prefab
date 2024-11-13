@@ -60,6 +60,7 @@ MonoBehaviour:
   level: 0
   abilityScoreData: []
   skillData: []
+  isMyTurn: 0
   characterNameText: {fileID: 2095336532942292238}
   hpText: {fileID: 4357872427262670010}
   Outline: {fileID: 7026335433105533505}

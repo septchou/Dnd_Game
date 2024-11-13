@@ -48,6 +48,13 @@ MonoBehaviour:
   - SetFaction
   - GetMessage
   - RPC_DestroyCharacter
+  - NotifyTurnStart
+  - RPC_NotifyNextTurn
+  - RPC_RequestInitiativeRoll
+  - RPC_SendInitiativeResult
+  - RPC_SetTurnOrder
+  - RPC_EndCombat
+  - RPC_LetPlayerEndTurn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
