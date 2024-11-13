@@ -8,13 +8,15 @@ using static Skill;
 public class Combat : MonoBehaviourPun
 { 
     [SerializeField] Chat chatLog;
+    public string characterTurnName;
+    [SerializeField] string selectedEnemyName;
     [SerializeField] Character Caster;
     [SerializeField] CharacterDisplay Target;
     [SerializeField] List<Skill> skills;
     [SerializeField] List<Button> skillButtons;
     [SerializeField] List<GameObject> skillButtonsGameobject;
     [SerializeField] float delay = 3f;
-    [SerializeField] bool isMyturn = false;
+    public bool isMyturn = false;
     [SerializeField] bool isSelecting = false;
     [SerializeField] Skill selectedSkill;
     [SerializeField] int hitValue, damageValue;
@@ -31,10 +33,7 @@ public class Combat : MonoBehaviourPun
                 skillButtons[i].onClick.AddListener(() => SelectTargetToCastSkill(index));
             }
         }
-        else
-        {
-            
-        }
+
     }
 
     // Update is called once per frame
@@ -60,23 +59,43 @@ public class Combat : MonoBehaviourPun
             Debug.Log("Cancle Cast");
         }
 
-        if (isMyturn)
+        if (PhotonNetwork.IsMasterClient)
         {
-            for(int i = 0; i < skillButtonsGameobject.Count; i++)
+            if(isMyturn && DmSelectCorrectEnemy(characterTurnName))
             {
-                skillButtonsGameobject[i].SetActive(true);
+                for (int i = 0; i < skillButtonsGameobject.Count; i++)
+                {
+                    skillButtonsGameobject[i].SetActive(true);
+                }
             }
+            else
+            {
+                for (int i = 0; i < skillButtonsGameobject.Count; i++)
+                {
+                    skillButtonsGameobject[i].SetActive(false);
+                }
+            }
+            
         }
         else
         {
             for (int i = 0; i < skillButtonsGameobject.Count; i++)
             {
-                skillButtonsGameobject[i].SetActive(false);
+                skillButtonsGameobject[i].SetActive(isMyturn);
             }
         }
 
     }
-
+    
+    private bool DmSelectCorrectEnemy(string characterName)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (selectedEnemyName == characterName) return true;
+            else return false;
+        }
+        else return false;
+    }
     private void SelectTargetToCastSkill(int i)
     {
         isSelecting = true;
@@ -85,6 +104,8 @@ public class Combat : MonoBehaviourPun
 
     public void DmChangeCaster(string characterName)
     {
+        selectedEnemyName = characterName;
+
         List<Character> list = CharacterManager.Instance.GetEnemyList();
 
         // Extract the base name by removing the number at the end
@@ -96,7 +117,13 @@ public class Combat : MonoBehaviourPun
 
         if (Caster != null)
         {
+            // Set skill
             skills = Caster.skills;
+            for (int i = 0; i < skillButtons.Count; i++)
+            {
+                int index = i; // Capture the current index in a local variable
+                skillButtons[i].onClick.AddListener(() => SelectTargetToCastSkill(index));
+            }
         }
         else
         {

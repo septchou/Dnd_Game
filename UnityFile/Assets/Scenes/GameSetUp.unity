@@ -21933,6 +21933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatLog: {fileID: 1810571448}
+  characterTurnName: 
   Caster: {fileID: 0}
   Target: {fileID: 0}
   skills: []
@@ -21947,7 +21948,7 @@ MonoBehaviour:
   - {fileID: 2063744251}
   - {fileID: 1918290311}
   delay: 3
-  isMyturn: 1
+  isMyturn: 0
   isSelecting: 0
   selectedSkill: {fileID: 0}
   hitValue: 0
@@ -21971,6 +21972,7 @@ MonoBehaviour:
   orderedChracterList: []
   isCombatActive: 0
   isTurnListOn: 0
+  combat: {fileID: 1963756366}
   combatPhaseUI: {fileID: 1253721685}
   turnList: {fileID: 1657893673}
   turnListItemPrefab: {fileID: 3693649182699080533, guid: ac8d1aa4bc449e8498db9e5dc6925977, type: 3}

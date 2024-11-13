@@ -13,16 +13,19 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
+    [Header("FindRooom")]
     [SerializeField] TMP_Text roomNameText;
     [SerializeField] Transform roomListContent;
     [SerializeField] GameObject roomListItemPrefab;
+    [Header("Player")]
     [SerializeField] Transform playerListContent;
     [SerializeField] GameObject PlayerListItemPrefab;
+    [Header("Room")]
     [SerializeField] GameObject startGameButton;
     [SerializeField] GameObject readyButton;
     [SerializeField] GameObject selectButton;
     [SerializeField] TMP_Text readyButtonText;
-
+    [SerializeField] CharacterCreation characterCreation;
     void Awake()
     {
         Instance = this;
@@ -66,6 +69,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);
         Debug.Log("Created room success");
         MenuManager.Instance.OpenMenu("loading");
+        characterCreation.CharacterMenuSetup();
     }
 
 
@@ -74,6 +78,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("room");
         Debug.Log("Join " + PhotonNetwork.CurrentRoom.Name);
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+        characterCreation.CharacterMenuSetup();
 
         Player[] players = PhotonNetwork.PlayerList;
 

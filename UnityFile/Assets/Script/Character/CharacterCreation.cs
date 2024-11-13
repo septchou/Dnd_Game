@@ -76,6 +76,35 @@ public class CharacterCreation : MonoBehaviourPun
 
     private void Start()
     {
+        CharacterMenuSetup();
+
+        //Conect to Firebase Auth and Realtime Database
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Result == DependencyStatus.Available)
+            {
+                auth = FirebaseAuth.DefaultInstance;
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+                // Check if the user is logged in and load the character data
+                if (auth != null && databaseReference != null && auth.CurrentUser != null)
+                {
+                    LoadCharacterFromFile();
+                    LoadEnemyFromFile();
+                }
+                else
+                {
+                    Debug.LogError("Firebase authentication or database reference is null.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
+            }
+        });
+    }
+    public void CharacterMenuSetup()
+    {
         if (!PhotonNetwork.IsMasterClient)
         {
             List<Character> characters = CharacterManager.Instance.GetCharacterList();
@@ -107,7 +136,7 @@ public class CharacterCreation : MonoBehaviourPun
         resetPointButton.onClick.AddListener(ResetAbilityPoints);
         raceDropdown.onValueChanged.AddListener(OnRaceChange);
 
-        
+
 
         // Adding listeners for ability point buttons (increase and decrease)
         foreach (var abilityUI in abilityScores)
@@ -117,33 +146,8 @@ public class CharacterCreation : MonoBehaviourPun
         }
 
 
-        //Conect to Firebase Auth and Realtime Database
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
-            {
-                auth = FirebaseAuth.DefaultInstance;
-                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-
-                // Check if the user is logged in and load the character data
-                if (auth != null && databaseReference != null && auth.CurrentUser != null)
-                {
-                    LoadCharacterFromFile();
-                    LoadEnemyFromFile();
-                }
-                else
-                {
-                    Debug.LogError("Firebase authentication or database reference is null.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
-            }
-        });
-
+        
     }
-   
     public void InitializeDropdowns()
     {
         // Populate race dropdown

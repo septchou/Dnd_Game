@@ -39,6 +39,9 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject changePhaseButtonGameObject;
     [SerializeField] GameObject endTurnButtonGameObject;
     [SerializeField] List<TurnListItem> existTurnList = new List<TurnListItem>();
+
+    [Header("Combat")]
+    [SerializeField] Combat combat;
     void Start()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -167,7 +170,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < names.Length; i++)
         {
             CharacterInitiative initiative = new CharacterInitiative(names[i], rolls[i], actorNumbers[i]);
-            orderedChracterList.Add(names[i]);
+            //orderedChracterList.Add(names[i]);
 
             if (!PhotonNetwork.IsMasterClient)
             {
@@ -200,6 +203,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_NotifyNextTurn()
     {
+        combat.isMyturn = false;
+
         turnNow++;
         if (turnNow >= initiativeResults.Count) turnNow = 0;
 
@@ -208,14 +213,16 @@ public class TurnManager : MonoBehaviourPunCallbacks
         int targetActorNumber = initiativeResults[turnNow].ActorNumber;
         Photon.Realtime.Player targetPlayer = PhotonNetwork.CurrentRoom.GetPlayer(targetActorNumber);
 
-        photonView.RPC("RPC_LetPlayerEndTurn", targetPlayer);
+        photonView.RPC("RPC_LetPlayerEndTurn", targetPlayer, initiativeResults[turnNow].CharacterName);
         //Debug.Log(turnNow);
         UpdateTurnListUI();
     }
 
     [PunRPC]
-    public void RPC_LetPlayerEndTurn()
+    public void RPC_LetPlayerEndTurn(string characterName)
     {
+        combat.isMyturn = true;
+        combat.characterTurnName = characterName;
         endTurnButtonGameObject.SetActive(true);
     }
     public void EndCombat()
@@ -230,9 +237,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_EndCombat()
     {
+        combat.isMyturn = false;
         combatPhaseUI.SetActive(false);
         endTurnButtonGameObject.SetActive(false);
         isCombatActive = false;
+        characterList.Clear();
         initiativeResults.Clear();
         for (int i = 0; i < existTurnList.Count; i++)
         {
