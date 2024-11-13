@@ -27,13 +27,13 @@ public class Skill : ScriptableObject
 
     public string detail;
 
-    public List<Dice> GetHitDiceLists()
+    public List<Dice> GetHitDiceLists(int moredice)
     {
         List<Dice> dices = new List<Dice>();
 
         foreach (var hitDice in hitDices)
         {
-            for (int i = 0; i < hitDice.numberOfDice; i++)
+            for (int i = 0; i < hitDice.numberOfDice + moredice; i++)
             {
                 dices.Add(hitDice.dice);
             }
@@ -43,13 +43,13 @@ public class Skill : ScriptableObject
     }
 
     // This method retrieves all the damage dice from the skill
-    public List<Dice> GetDamageDiceLists()
+    public List<Dice> GetDamageDiceLists(int moredice)
     {
         List<Dice> dices = new List<Dice>();
 
         foreach (var damageDice in damageDices)
         {
-            for (int i = 0; i < damageDice.numberOfDice; i++)
+            for (int i = 0; i < damageDice.numberOfDice + moredice; i++)
             {
                 dices.Add(damageDice.dice);
             }

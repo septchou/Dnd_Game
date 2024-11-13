@@ -177,8 +177,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
                 initiativeResults.Add(initiative);
             }
         }
-        
 
+        combat.setupCombat();
         isCombatActive = true;
         turnNow = -1;
         CreateTurnListUI();
@@ -223,6 +223,10 @@ public class TurnManager : MonoBehaviourPunCallbacks
     {
         combat.isMyturn = true;
         combat.characterTurnName = characterName;
+        combat.normalAction = 1;
+        combat.bonusAction = 1;
+        combat.UpdateBuff();
+
         endTurnButtonGameObject.SetActive(true);
     }
     public void EndCombat()

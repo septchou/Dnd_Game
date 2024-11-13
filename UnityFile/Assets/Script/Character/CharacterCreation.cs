@@ -102,6 +102,29 @@ public class CharacterCreation : MonoBehaviourPun
                 Debug.LogError("Could not resolve all Firebase dependencies: " + task.Result);
             }
         });
+
+        // Button
+        createCharacterButton.onClick.AddListener(CreateCharacter);
+        saveCharacterButton.onClick.AddListener(EditCharacter);
+        deleteCharacterButton.onClick.AddListener(DeleteCharacter);
+        characterDropdown.onValueChanged.AddListener(SelectCharacter);
+
+        enemyCreateButton.onClick.AddListener(CreateCharacter);
+        enemyEditButton.onClick.AddListener(EditCharacter);
+        enemyDeleteButton.onClick.AddListener(DeleteCharacter);
+        enemySelectionDropDown.onValueChanged.AddListener(SelectCharacter);
+
+        levelUpButton.onClick.AddListener(LevelUP);
+        levelDownButton.onClick.AddListener(LevelDOWN);
+        resetPointButton.onClick.AddListener(ResetAbilityPoints);
+        raceDropdown.onValueChanged.AddListener(OnRaceChange);
+
+        // Adding listeners for ability point buttons (increase and decrease)
+        foreach (var abilityUI in abilityScores)
+        {
+            abilityUI.increaseButton.onClick.AddListener(() => AssignAbilityPoint(abilityUI, true));
+            abilityUI.decreaseButton.onClick.AddListener(() => AssignAbilityPoint(abilityUI, false));
+        }
     }
     public void CharacterMenuSetup()
     {
@@ -120,30 +143,7 @@ public class CharacterCreation : MonoBehaviourPun
         InitialUI(0);
         ChangeMode(PhotonNetwork.IsMasterClient, false);
 
-        // Button
-        createCharacterButton.onClick.AddListener(CreateCharacter);
-        saveCharacterButton.onClick.AddListener(EditCharacter);
-        deleteCharacterButton.onClick.AddListener(DeleteCharacter);
-        characterDropdown.onValueChanged.AddListener(SelectCharacter);
 
-        enemyCreateButton.onClick.AddListener(CreateCharacter);
-        enemyEditButton.onClick.AddListener(EditCharacter);
-        enemyDeleteButton.onClick.AddListener(DeleteCharacter);
-        enemySelectionDropDown.onValueChanged.AddListener(SelectCharacter);
-
-        levelUpButton.onClick.AddListener(LevelUP);
-        levelDownButton.onClick.AddListener(LevelDOWN);
-        resetPointButton.onClick.AddListener(ResetAbilityPoints);
-        raceDropdown.onValueChanged.AddListener(OnRaceChange);
-
-
-
-        // Adding listeners for ability point buttons (increase and decrease)
-        foreach (var abilityUI in abilityScores)
-        {
-            abilityUI.increaseButton.onClick.AddListener(() => AssignAbilityPoint(abilityUI, true));
-            abilityUI.decreaseButton.onClick.AddListener(() => AssignAbilityPoint(abilityUI, false));
-        }
 
 
         

@@ -22121,10 +22121,17 @@ MonoBehaviour:
   - {fileID: 1918290311}
   delay: 3
   isMyturn: 0
+  normalAction: 1
+  bonusAction: 1
   isSelecting: 0
   selectedSkill: {fileID: 0}
   hitValue: 0
   damageValue: 0
+  activeBuffs: []
+  enemyListBuffs: []
+  hitDiceBuff: 0
+  damageDiceBuff: 0
+  addDamageDices: []
 --- !u!114 &1963756367
 MonoBehaviour:
   m_ObjectHideFlags: 0

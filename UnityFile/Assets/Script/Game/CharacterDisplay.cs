@@ -28,13 +28,14 @@ public class CharacterDisplay : MonoBehaviourPun
     public List<AbilityScorePointsData> abilityScoreData;
     public List<SkillData> skillData;
     public bool isMyTurn;
+    public bool isDodge = false;
 
     [Header("GameObject")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text hpText;
     [SerializeField] SpriteRenderer Outline;
     public Character characterData;
-
+    [SerializeField] Chat chatlog;
     // Method to initialize character data
     public void SetCharacterData(Character character)
     {
@@ -102,6 +103,12 @@ public class CharacterDisplay : MonoBehaviourPun
     // Method to change HP locally and synchronize with others
     public void ChangeHP(int hpChange)
     {
+        if (isDodge)
+        {
+            chatlog.SendDodgeReport();
+            isDodge = false;
+            return;
+        }
         currentHP = Mathf.Clamp(currentHP + hpChange, 0, maxHP);
         hpText.text = $"HP: {currentHP} / {maxHP}";
 
