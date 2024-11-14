@@ -267,4 +267,17 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         clickedCharacter.DestroyCharacter();
     }
     
+    public void UpdateCharacterDisplay()
+    {
+        ShowCharacterDetails(
+                        clickedCharacter.characterName,
+                        clickedCharacter.className,
+                        clickedCharacter.raceName,
+                        clickedCharacter.level,
+                        clickedCharacter.currentHP,
+                        clickedCharacter.maxHP,
+                        clickedCharacter.SerializeAbilityScoreData(clickedCharacter.abilityScoreData),
+                        clickedCharacter.SerializeSkillData(clickedCharacter.skillData)
+                    );
+    }
 }

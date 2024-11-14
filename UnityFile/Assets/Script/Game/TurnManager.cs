@@ -26,7 +26,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [SerializeField] int turnNow = -1;
     [SerializeField] List<Dice> initiativeDices;
     [SerializeField] List<CharacterDisplay> characterList = new List<CharacterDisplay>();
-    [SerializeField] List<string> orderedChracterList = new List<string>();
+
     [SerializeField] List<CharacterInitiative> initiativeResults = new List<CharacterInitiative>();
     [SerializeField] bool isCombatActive = false;
     [SerializeField] bool isTurnListOn = false;
@@ -50,11 +50,6 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     public void SwitchTurnList()
     {
@@ -181,8 +176,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
         combat.setupCombat();
         isCombatActive = true;
         turnNow = -1;
+
         CreateTurnListUI();
+
         combatPhaseUI.SetActive(true);
+        isTurnListOn = true;
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -221,12 +219,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_LetPlayerEndTurn(string characterName)
     {
-        combat.isMyturn = true;
-        combat.characterTurnName = characterName;
-        combat.normalAction = 1;
-        combat.bonusAction = 1;
-        combat.UpdateBuff();
-
+        combat.BeginTurnSetUp(characterName);
         endTurnButtonGameObject.SetActive(true);
     }
     public void EndCombat()
@@ -242,14 +235,17 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void RPC_EndCombat()
     {
         combat.isMyturn = false;
+
+        isTurnListOn = false;
         combatPhaseUI.SetActive(false);
         endTurnButtonGameObject.SetActive(false);
+
         isCombatActive = false;
         characterList.Clear();
         initiativeResults.Clear();
         for (int i = 0; i < existTurnList.Count; i++)
         {
-            Destroy(existTurnList[i]);
+            existTurnList[i].DestroyListItem();
         }
         existTurnList.Clear();
         Debug.Log("Combat has ended for all players.");

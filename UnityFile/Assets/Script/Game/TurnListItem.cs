@@ -7,4 +7,9 @@ public class TurnListItem : MonoBehaviour
 {
     public TMP_Text nameText;
     public GameObject highlightBackGround;
+
+    public void DestroyListItem()
+    {
+        Destroy(gameObject);
+    }
 }

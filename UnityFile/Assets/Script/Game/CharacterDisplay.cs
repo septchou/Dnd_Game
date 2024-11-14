@@ -106,6 +106,7 @@ public class CharacterDisplay : MonoBehaviourPun
         if (isDodge)
         {
             chatlog.SendDodgeReport();
+            photonView.RPC("RPC_useWariorSense", RpcTarget.AllBuffered);
             isDodge = false;
             return;
         }
@@ -258,5 +259,23 @@ public class CharacterDisplay : MonoBehaviourPun
     {
         // Destroy the game object this script is attached to
         Destroy(gameObject);
+    }
+
+    public void GetWariorSense()
+    {
+        isDodge = true;
+        photonView.RPC("RPC_getWariorSense", RpcTarget.AllBuffered);
+    }
+
+    [PunRPC]
+    private void RPC_getWariorSense()
+    {
+        isDodge = true;
+    }
+
+    [PunRPC]
+    private void RPC_useWariorSense()
+    {
+        isDodge = false;
     }
 }

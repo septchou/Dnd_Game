@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityEditor.Playables;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static Character;
@@ -28,6 +28,11 @@ public class EnemyBuff
 {
     public string enemyName;
     public List<Buff> buff;
+    public EnemyBuff(string name, List<Buff> buffs)
+    {
+        this.enemyName = name;
+        this.buff = buffs;
+    }
 }
 [System.Serializable]
 public class abilityBuff
@@ -46,11 +51,13 @@ public class Combat : MonoBehaviourPun
     [SerializeField] Chat chatLog;
     [SerializeField] OverloyOverMouse overlay;
     [SerializeField] GameObject selectTargetOverlayUI;
+    [SerializeField] CharacterDisplayPopUp characterDisplayPopUp;
 
     [Header("Character")]
     public string characterTurnName;
     [SerializeField] string selectedEnemyName;
     [SerializeField] Character Caster;
+    [SerializeField] CharacterDisplay CasterDisplay;
     [SerializeField] CharacterDisplay Target;
 
     [Header("List")]
@@ -61,7 +68,7 @@ public class Combat : MonoBehaviourPun
     [Header("Stat")]
     [SerializeField] float delay = 3f;
     public bool isMyturn = false;
-    public int normalAction = 1, bonusAction = 1;
+    [SerializeField] int normalAction = 1;
     [SerializeField] bool isCastMultiple = false;
     [SerializeField] int multipleTarget = 0;
     [SerializeField] List<CharacterDisplay> multipleTargetlist;
@@ -70,12 +77,15 @@ public class Combat : MonoBehaviourPun
     [SerializeField] int hitValue, damageValue;
     private bool getHitValue = false, getDamageValue = false;
 
-
     [Header("Buff")]
     [SerializeField] List<Buff> activeBuffs;
     [SerializeField] List<EnemyBuff> enemyListBuffs;
     [SerializeField] int hitDiceBuff = 0, damageDiceBuff = 0;
     [SerializeField] List<Dice> addDamageDices;
+    [SerializeField] int modifierBeforeRage;
+
+    [Header("UI")]
+    [SerializeField] GameObject skillPointText;
     void Start()
     {
         if (!PhotonNetwork.IsMasterClient)
@@ -94,6 +104,10 @@ public class Combat : MonoBehaviourPun
                     skillButtons[i].onClick.AddListener(() => CastBuff(index));
                 }
             }
+        }
+        else
+        {
+
         }
 
     }
@@ -142,6 +156,8 @@ public class Combat : MonoBehaviourPun
                 {
                     skillButtonsGameobject[i].SetActive(true);
                 }
+                skillPointText.GetComponent<TextMeshPro>().text = normalAction.ToString();
+                skillPointText.SetActive(true);
             }
             else
             {
@@ -149,6 +165,7 @@ public class Combat : MonoBehaviourPun
                 {
                     skillButtonsGameobject[i].SetActive(false);
                 }
+                skillPointText.SetActive(false);
             }
 
         }
@@ -158,6 +175,8 @@ public class Combat : MonoBehaviourPun
             {
                 skillButtonsGameobject[i].SetActive(isMyturn);
             }
+            skillPointText.GetComponent<TextMeshPro>().text = normalAction.ToString();
+            skillPointText.SetActive(isMyturn);
         }
 
     }
@@ -197,8 +216,15 @@ public class Combat : MonoBehaviourPun
             skills = Caster.skills;
             for (int i = 0; i < skillButtons.Count; i++)
             {
-                int index = i; // Capture the current index in a local variable
-                skillButtons[i].onClick.AddListener(() => SelectTargetToCastSkill(index));
+                int index = i;
+                if (skills[i].skillType == SkillType.Damage)
+                {
+                    skillButtons[i].onClick.AddListener(() => SelectTargetToCastSkill(index));
+                }
+                else if (skills[i].skillType == SkillType.Buff)
+                {
+                    skillButtons[i].onClick.AddListener(() => CastBuff(index));
+                }
             }
         }
         else
@@ -209,145 +235,131 @@ public class Combat : MonoBehaviourPun
 
     private IEnumerator CastSkill()
     {
-        int isEnoughAction = 0;
         string skillName = selectedSkill.name;
-        int FlatHit, FlatDmg;
+        int FlatHit, FlatDmg, totalDiceRoll = 0; ;
         int levelScaledDice = (Caster.level / 5);
         hitValue = 0;
         damageValue = 0;
 
-        if(skillName != "Heal")
+        if(normalAction <= 0)
         {
-            getHitValue = true;
-            GameSceneController.Instance.RollAnimation(selectedSkill.GetHitDiceLists(hitDiceBuff), HandleDiceRollResult);
+            Debug.Log("Not enough normal action point");
         }
-        
-        List<Dice> totalDamageDices = new List<Dice>();
-        totalDamageDices.AddRange(selectedSkill.GetDamageDiceLists(levelScaledDice + damageDiceBuff));
-        totalDamageDices.AddRange(addDamageDices);
-
-        getDamageValue = true;
-        GameSceneController.Instance.RollAnimation(totalDamageDices, HandleDiceRollResult);
-
-        yield return new WaitForSeconds(delay);
-
-        if (skillName == "Slash")
+        else
         {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            // Hit Dice: 1d20 + STR Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
-
-            // Damage: 1d10 + STR Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if (skillName == "Single shot")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            // Hit Dice: 1d20 + DEX Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
-
-            // Damage: 1d6 + DEX Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if (skillName == "Multi shots")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            if (!isCastMultiple)
+            normalAction--;
+            if (skillName != "Heal")
             {
-                normalAction++;
-                isCastMultiple = true;
-                multipleTarget = 3;
-                multipleTargetlist.Add(Target);
+                getHitValue = true;
+                GameSceneController.Instance.RollAnimation(selectedSkill.GetHitDiceLists(hitDiceBuff), HandleDiceRollResult);
+                totalDiceRoll += selectedSkill.GetHitDiceLists(hitDiceBuff).Count;
             }
 
-            // Hit Dice: 1d20 + DEX Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
+            List<Dice> totalDamageDices = new List<Dice>();
+            totalDamageDices.AddRange(selectedSkill.GetDamageDiceLists(levelScaledDice + damageDiceBuff));
+            totalDamageDices.AddRange(addDamageDices);
 
-            // Damage: 1d4 + DEX Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if(skillName == "Fireball")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
+            getDamageValue = true;
+            GameSceneController.Instance.RollAnimation(totalDamageDices, HandleDiceRollResult);
+            totalDiceRoll += totalDamageDices.Count;
 
-            // Hit Dice: 1d20 + INT Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
+            yield return new WaitForSeconds(delay + (float)totalDiceRoll - 2);
 
-            // Damage: 1d8 + INT Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if (skillName == "Lightning Stike")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
+            if (skillName == "Slash")
+            {
 
-            // Hit Dice: 1d20 + INT Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
+                // Hit Dice: 1d20 + STR Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-            // Damage: 1d8 + INT Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if (skillName == "Ice shot")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
+                // Damage: 1d10 + STR Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Single shot")
+            {
+                // Hit Dice: 1d20 + DEX Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-            // Hit Dice: 1d20 + INT Modifier		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
+                // Damage: 1d6 + DEX Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Multi shots")
+            {
+                if (!isCastMultiple)
+                {
+                    normalAction++;
+                    isCastMultiple = true;
+                    multipleTarget = 3;
+                    multipleTargetlist.Add(Target);
+                }
 
-            // Damage: 1d6 + INT Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
-        else if (skillName == "Heal")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
+                // Hit Dice: 1d20 + DEX Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-            // Damage: 1d6 + INT Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-            damageValue *= Caster.level;
-        }
-        else if (skillName == "Turn undead")
-        {
-            //How ????
-        }
-        else if (skillName == "Holy Shot")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
+                // Damage: 1d4 + DEX Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Fireball")
+            {
+                // Hit Dice: 1d20 + INT Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-            // Hit Dice: 1d20 + INT Modifier 		
-            FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            hitValue += FlatHit;
+                // Damage: 1d8 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Lightning Stike")
+            {
+                // Hit Dice: 1d20 + INT Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-            // Damage: 3d4 + INT Modifier
-            FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
-            damageValue += FlatDmg;
-        }
+                // Damage: 1d8 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Ice shot")
+            {
+                // Hit Dice: 1d20 + INT Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
 
-        if (isEnoughAction == 0)
-        {
-            if(skillName != "Heal")
+                // Damage: 1d6 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Heal")
+            {
+
+                // Damage: 1d6 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+                damageValue *= Caster.level;
+            }
+            else if (skillName == "Turn undead")
+            {
+                //How ????
+            }
+            else if (skillName == "Holy Shot")
+            {
+
+                // Hit Dice: 1d20 + INT Modifier 		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
+
+                // Damage: 3d4 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+
+
+            if (skillName != "Heal")
             {
                 bool isMiss = IsThisMiss(hitValue);
                 chatLog.SendSkillReport(skillName, damageValue, hitValue, isMiss);
@@ -358,163 +370,100 @@ public class Combat : MonoBehaviourPun
             }
             else
             {
-                chatLog.SendHealReport(damageValue,Target.characterName);
+                chatLog.SendHealReport(damageValue, Target.characterName);
                 Target.ChangeHP(damageValue);
             }
 
-        }
-        else if (isEnoughAction == 1)
-        {
-            Debug.Log("Not enough normal action point");
-        }
-        else if (isEnoughAction == 2)
-        {
-            Debug.Log("Not enough bonus action point");
-        }
-
-        if (isCastMultiple && multipleTarget > 0)
-        {
-            normalAction++;
-            multipleTarget--;
-            int index = skills.FindIndex(a => a == selectedSkill);
-            SelectTargetToCastSkill(index);
-        }
-        else if (isCastMultiple && multipleTarget <= 0)
-        {
-            isCastMultiple = false;
-            multipleTarget = 0;
-        }
-    }
-    void HandleDiceRollResult(int result, List<Dice> dices)
-    {
-        if (getHitValue)
-        {
-            hitValue = result;
-            getHitValue = false;
-        }
-        else if (getDamageValue)
-        {
-            damageValue = result;
-            getDamageValue = false;
+            if (isCastMultiple && multipleTarget > 0)
+            {
+                normalAction++;
+                multipleTarget--;
+                int index = skills.FindIndex(a => a == selectedSkill);
+                SelectTargetToCastSkill(index);
+            }
+            else if (isCastMultiple && multipleTarget <= 0)
+            {
+                isCastMultiple = false;
+                multipleTarget = 0;
+            }
         }
     }
 
-    private bool IsThisMiss(int hitVal)
-    {
-
-        return false;
-    }
-
-    public void setupCombat()
-    {
-        activeBuffs = new List<Buff>();
-        enemyListBuffs = new List<EnemyBuff>();
-        hitDiceBuff = 0;
-        damageDiceBuff = 0;
-        addDamageDices = new List<Dice>();
-
-        multipleTargetlist = new List<CharacterDisplay>();
-    }
     private void CastBuff(int index)
     {
         selectedSkill = skills[index];
         string skillName = selectedSkill.name;
-        int isEnoughAction = 0;
 
-        if (skillName == "Rage")
+        if (normalAction > 0) 
         {
-            if (bonusAction > 0) bonusAction--;
-            else isEnoughAction = 2;
+            normalAction--;
 
-            Buff newBuff = new Buff(skillName, 2);
-            activeBuffs.Add(newBuff);
-
-            // STR mod +1
-            int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-            Caster.abilityScorepoints[i].ablityModifierBonus++;
-
-            // more hit dice
-            hitDiceBuff++;
-
-        }
-        else if (skillName == "Roar")
-        {
-            // How???
-        }
-        else if (skillName == "Warrior’s sense")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            List<CharacterDisplay> characterList = new List<CharacterDisplay>();
-            GameObject[] heroObjects = GameObject.FindGameObjectsWithTag("Hero");
-            foreach (GameObject heroObject in heroObjects)
+            if (skillName == "Rage")
             {
-                characterList.Add(heroObject.GetComponent<CharacterDisplay>());
+
+                Buff newBuff = new Buff(skillName, 2);
+                activeBuffs.Add(newBuff);
+
+                // STR mod *=2
+                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                modifierBeforeRage = Caster.abilityScorepoints[i].ablityModifierBonus;
+                Caster.abilityScorepoints[i].ablityModifierBonus*=2;
+
+                // more hit dice
+                hitDiceBuff++;
+
+            }
+            else if (skillName == "Roar")
+            {
+                // How???
+            }
+            else if (skillName == "Warrior’s sense")
+            {
+                CasterDisplay.GetWariorSense();
+            }
+            else if (skillName == "Focus")
+            {
+                addDamageDices.Add(selectedSkill.damageDices[0].dice);
+            }
+            else if (skillName == "Ancestor Guidance")
+            {
+
+                Buff newBuff = new Buff(skillName, 2);
+                activeBuffs.Add(newBuff);
+
+                // Dex points +2
+                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                Caster.abilityScorepoints[i].abilityScorePoint += 2;
+            }
+            else if (skillName == "Amplify Magic")
+            {
+
+                Buff newBuff = new Buff(skillName, 2);
+                activeBuffs.Add(newBuff);
+
+                // INT points +2
+                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                Caster.abilityScorepoints[i].abilityScorePoint += 2;
             }
 
-            GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
-            foreach (GameObject villainObject in villainObjects)
-            {
-                characterList.Add(villainObject.GetComponent<CharacterDisplay>());
-            }
-
-            CharacterDisplay casterDisplay = characterList.Find(CharacterDisplay => CharacterDisplay.characterName == characterTurnName);
-            casterDisplay.isDodge = true;
-        }
-        else if (skillName == "Focus")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            addDamageDices.Add(selectedSkill.damageDices[0].dice);
-        }
-        else if (skillName == "Ancestor Guidance")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            Buff newBuff = new Buff(skillName, 2);
-            activeBuffs.Add(newBuff);
-
-            // Dex mod +2
-            int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-            Caster.abilityScorepoints[i].ablityModifierBonus+=2;
-        }
-        else if (skillName == "Amplify Magic")
-        {
-            if (normalAction > 0) normalAction--;
-            else isEnoughAction = 1;
-
-            Buff newBuff = new Buff(skillName, 2);
-            activeBuffs.Add(newBuff);
-
-            // INT mod +2
-            int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-            Caster.abilityScorepoints[i].ablityModifierBonus += 2;
-        }
-
-        if (isEnoughAction == 0)
-        {
             chatLog.SendSkillBuffReport(skillName);
+            CasterDisplay.SetCharacterData(Caster);
+            characterDisplayPopUp.UpdateCharacterDisplay();
+
         }
-        else if (isEnoughAction == 1)
+        else
         {
             Debug.Log("Not enough normal action point");
-        }
-        else if (isEnoughAction == 2)
-        {
-            Debug.Log("Not enough bonus action point");
         }
         
     }
     
-    public void UpdateBuff()
+    private void UpdateBuff()
     {
         if (PhotonNetwork.IsMasterClient)
         {
 
-            int index = enemyListBuffs.FindIndex(a => a.enemyName == "characterTurnName");
+            int index = enemyListBuffs.FindIndex(a => a.enemyName == characterTurnName);
             UpdateAbilityBuff(enemyListBuffs[index].buff);
         }
         else
@@ -544,7 +493,7 @@ public class Combat : MonoBehaviourPun
         if (skill.name == "Rage")
         {
             int index = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == skill.associatedAbility[0]);
-            Caster.abilityScorepoints[index].ablityModifierBonus--;
+            Caster.abilityScorepoints[index].ablityModifierBonus = modifierBeforeRage;
             hitDiceBuff--;
         }
         else if (skill.name == "Focus")
@@ -554,13 +503,82 @@ public class Combat : MonoBehaviourPun
         else if (skill.name == "Ancestor Guidance")
         {
             int index = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == skill.associatedAbility[0]);
-            Caster.abilityScorepoints[index].ablityModifierBonus -= 2;
+            Caster.abilityScorepoints[index].abilityScorePoint -= 2;
         }
         else if (skill.name == "Amplify Magic")
         {
             int index = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == skill.associatedAbility[0]);
-            Caster.abilityScorepoints[index].ablityModifierBonus -= 2;
+            Caster.abilityScorepoints[index].abilityScorePoint -= 2;
         }
+
+        CasterDisplay.SetCharacterData(Caster);
+        characterDisplayPopUp.UpdateCharacterDisplay();
+    }
+
+    private void GetCasterCharacterDisplay()
+    {
+        List<CharacterDisplay> characterList = new List<CharacterDisplay>();
+        GameObject[] heroObjects = GameObject.FindGameObjectsWithTag("Hero");
+        foreach (GameObject heroObject in heroObjects)
+        {
+            characterList.Add(heroObject.GetComponent<CharacterDisplay>());
+        }
+
+        GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
+        foreach (GameObject villainObject in villainObjects)
+        {
+            characterList.Add(villainObject.GetComponent<CharacterDisplay>());
+        }
+
+        CasterDisplay = characterList.Find(a => a.characterName == characterTurnName && a.photonView.IsMine);
     }
     
+    void HandleDiceRollResult(int result, List<Dice> dices)
+    {
+        if (getHitValue)
+        {
+            hitValue = result;
+            getHitValue = false;
+        }
+        else if (getDamageValue)
+        {
+            damageValue = result;
+            getDamageValue = false;
+        }
+    }
+
+    private bool IsThisMiss(int hitVal)
+    {
+
+        return false;
+    }
+
+    public void BeginTurnSetUp(string characterName)
+    {
+        isMyturn = true;
+        characterTurnName = characterName;
+        GetCasterCharacterDisplay();
+        normalAction = 1;
+        UpdateBuff();
+    }
+
+    public void setupCombat()
+    {
+        activeBuffs = new List<Buff>();
+
+        enemyListBuffs = new List<EnemyBuff>();
+
+        List<CharacterDisplay> enemyList = new List<CharacterDisplay>();
+        GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
+        foreach (GameObject villainObject in villainObjects)
+        {
+            enemyListBuffs.Add(new EnemyBuff(villainObject.GetComponent<CharacterDisplay>().characterName, new List<Buff>()));
+        }
+
+        hitDiceBuff = 0;
+        damageDiceBuff = 0;
+        addDamageDices = new List<Dice>();
+
+        multipleTargetlist = new List<CharacterDisplay>();
+    }
 }

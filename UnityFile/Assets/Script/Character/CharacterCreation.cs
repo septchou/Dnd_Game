@@ -1118,7 +1118,9 @@ public class CharacterCreation : MonoBehaviourPun
                 characterSelect.SetActive(true);
 
             }
-            
+            enemyEdit.SetActive(false);
+            enemyCreate.SetActive(false);
+            enemyDelete.SetActive(false);
         }
         else
         {
@@ -1139,6 +1141,10 @@ public class CharacterCreation : MonoBehaviourPun
                 enemyDelete.SetActive(true);
 
             }
+            characterSave.SetActive(false);
+            characterCreate.SetActive(false);
+            characterDelete.SetActive(false);
+            characterSelect.SetActive(false);
         }
         
     }

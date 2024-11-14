@@ -61,10 +61,12 @@ MonoBehaviour:
   abilityScoreData: []
   skillData: []
   isMyTurn: 0
+  isDodge: 0
   characterNameText: {fileID: 2095336532942292238}
   hpText: {fileID: 4357872427262670010}
   Outline: {fileID: 7026335433105533505}
   characterData: {fileID: 0}
+  chatlog: {fileID: 0}
 --- !u!114 &634250626906433164
 MonoBehaviour:
   m_ObjectHideFlags: 0

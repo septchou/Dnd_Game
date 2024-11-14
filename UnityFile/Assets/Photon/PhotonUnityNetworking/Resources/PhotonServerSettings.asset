@@ -55,6 +55,8 @@ MonoBehaviour:
   - RPC_SetTurnOrder
   - RPC_EndCombat
   - RPC_LetPlayerEndTurn
+  - RPC_getWariorSense
+  - RPC_useWariorSense
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Heal
   m_EditorClassIdentifier: 
   skillName: Heal
-  skillType: 1
+  skillType: 0
   hitDices: []
   damageDices:
   - dice: {fileID: 11400000, guid: b1231bded3e504348b872a20cbe59b6b, type: 2}
