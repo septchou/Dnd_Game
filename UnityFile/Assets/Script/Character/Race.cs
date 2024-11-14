@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewRace", menuName = "Character Creation/Race")]
@@ -14,4 +15,5 @@ public class Race : ScriptableObject
         public AbilityScore abilityScore;  // The AbilityScore being modified
         public int modifierPoints;         // The number of modifier points to add
     }
+    
 }

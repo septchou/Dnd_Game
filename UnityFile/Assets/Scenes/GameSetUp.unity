@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 16487054}
   - component: {fileID: 16487053}
   m_Layer: 5
-  m_Name: Damage Dice
+  m_Name: Damage Dice4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 25402244}
   - component: {fileID: 25402243}
   m_Layer: 5
-  m_Name: HitDice
+  m_Name: HitDice4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,12 +598,12 @@ GameObject:
   - component: {fileID: 36009592}
   - component: {fileID: 36009591}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CheckButton2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &36009590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2461,7 +2461,7 @@ GameObject:
   - component: {fileID: 154840780}
   - component: {fileID: 154840779}
   m_Layer: 5
-  m_Name: HitDice
+  m_Name: HitDice2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3010,7 +3010,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.04015, y: -122.276}
+  m_AnchoredPosition: {x: 159.95335, y: -122.276}
   m_SizeDelta: {x: 320, y: 32.956}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &216179552
@@ -3182,7 +3182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.04015, y: -77.899}
+  m_AnchoredPosition: {x: 159.95335, y: -77.899}
   m_SizeDelta: {x: 320, y: 45.798}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &225309095
@@ -3229,7 +3229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &234355466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5705,8 +5705,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.0000076293945}
-  m_SizeDelta: {x: 496.32007, y: 579.2734}
+  m_AnchoredPosition: {x: 0, y: -23.48278}
+  m_SizeDelta: {x: 496.3201, y: 626.2388}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &480345119
 MonoBehaviour:
@@ -6015,7 +6015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &511841784
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6033,7 +6033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 213, y: -117}
+  m_AnchoredPosition: {x: -222.7, y: -118.5}
   m_SizeDelta: {x: 44.9559, y: 30.7846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &511841785
@@ -6263,20 +6263,16 @@ MonoBehaviour:
   abilityUI:
   - abilityScorePointText: {fileID: 2146927122}
     abilityScoreModifierText: {fileID: 436974784}
-    increaseButton: {fileID: 0}
-    decreaseButton: {fileID: 0}
+    abilityRollCheckButton: {fileID: 1303602296}
   - abilityScorePointText: {fileID: 776854139}
     abilityScoreModifierText: {fileID: 1462143804}
-    increaseButton: {fileID: 0}
-    decreaseButton: {fileID: 0}
+    abilityRollCheckButton: {fileID: 36009589}
   - abilityScorePointText: {fileID: 819538304}
     abilityScoreModifierText: {fileID: 433289071}
-    increaseButton: {fileID: 0}
-    decreaseButton: {fileID: 0}
+    abilityRollCheckButton: {fileID: 1328737040}
   - abilityScorePointText: {fileID: 118871753}
     abilityScoreModifierText: {fileID: 68561912}
-    increaseButton: {fileID: 0}
-    decreaseButton: {fileID: 0}
+    abilityRollCheckButton: {fileID: 1077523070}
   skillsText:
   - {fileID: 70239503}
   - {fileID: 1967052496}
@@ -6291,13 +6287,33 @@ MonoBehaviour:
   - {fileID: 1974970078}
   skillName: []
   skillDetail: []
+  hitDiceDetail:
+  - {fileID: 1581887620}
+  - {fileID: 154840779}
+  - {fileID: 1657130913}
+  - {fileID: 25402243}
+  dmgDiceDetail:
+  - {fileID: 1134101824}
+  - {fileID: 1364206679}
+  - {fileID: 705430863}
+  - {fileID: 16487053}
   clickedCharacter: {fileID: 0}
   changeHPGameobject: {fileID: 929716988}
   hpChangeInputGameobject: {fileID: 1074832800}
   removeCharacterButtonObject: {fileID: 459423763}
   changeHPButton: {fileID: 929716990}
   hpChangeInput: {fileID: 1074832802}
+  abilityRollButton:
+  - {fileID: 1303602298}
+  - {fileID: 36009591}
+  - {fileID: 1328737042}
+  - {fileID: 1077523072}
+  abilityRollDice:
+  - {fileID: 11400000, guid: 5cb5247cc5af8ac468b9921d4f6a7699, type: 2}
   combat: {fileID: 1963756366}
+  chatLog: {fileID: 1810571448}
+  abilityScoreDatas: []
+  characterClickedName: 
 --- !u!1 &523418143
 GameObject:
   m_ObjectHideFlags: 0
@@ -7823,7 +7839,7 @@ RectTransform:
   m_Children:
   - {fileID: 1936590691}
   - {fileID: 658221053}
-  - {fileID: 1862350594}
+  - {fileID: 1653995940}
   m_Father: {fileID: 1202323483}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -8625,8 +8641,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 319.26758, y: -65}
-  m_SizeDelta: {x: 310.0803, y: 130}
+  m_AnchoredPosition: {x: 318.93744, y: -65}
+  m_SizeDelta: {x: 319.9067, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &658221054
 MonoBehaviour:
@@ -8822,7 +8838,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 155.04015, y: -25}
+  m_AnchoredPosition: {x: 159.95335, y: -25}
   m_SizeDelta: {x: 320, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &693545342
@@ -9175,7 +9191,7 @@ GameObject:
   - component: {fileID: 705430864}
   - component: {fileID: 705430863}
   m_Layer: 5
-  m_Name: Damage Dice
+  m_Name: Damage Dice3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10638,7 +10654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -32.3, y: -128}
+  m_AnchoredPosition: {x: -235, y: -80}
   m_SizeDelta: {x: 180.7852, y: 33.8975}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &786270579
@@ -12610,17 +12626,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028938580}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1599135422}
+  m_Father: {fileID: 1653995940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 850, y: 213}
-  m_SizeDelta: {x: 109.5701, y: 34.4254}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 70.38675, y: -88.21127}
+  m_SizeDelta: {x: 140.7735, y: 46.4703}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1028938582
 MonoBehaviour:
@@ -13312,12 +13328,12 @@ GameObject:
   - component: {fileID: 1077523073}
   - component: {fileID: 1077523072}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CheckButton4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1077523071
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13569,7 +13585,7 @@ GameObject:
   - component: {fileID: 1134101825}
   - component: {fileID: 1134101824}
   m_Layer: 5
-  m_Name: Damage Dice
+  m_Name: Damage Dice1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15090,12 +15106,12 @@ GameObject:
   - component: {fileID: 1303602299}
   - component: {fileID: 1303602298}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CheckButton1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1303602297
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15502,12 +15518,12 @@ GameObject:
   - component: {fileID: 1328737043}
   - component: {fileID: 1328737042}
   m_Layer: 5
-  m_Name: Button
+  m_Name: CheckButton3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1328737041
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15742,7 +15758,7 @@ GameObject:
   - component: {fileID: 1364206680}
   - component: {fileID: 1364206679}
   m_Layer: 5
-  m_Name: Damage Dice
+  m_Name: Damage Dice2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18245,7 +18261,7 @@ GameObject:
   - component: {fileID: 1581887621}
   - component: {fileID: 1581887620}
   m_Layer: 5
-  m_Name: HitDice
+  m_Name: HitDice1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18399,7 +18415,6 @@ RectTransform:
   - {fileID: 1074832801}
   - {fileID: 929716989}
   - {fileID: 459423764}
-  - {fileID: 1028938581}
   m_Father: {fileID: 1646352051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -19289,8 +19304,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 68961260}
-  - {fileID: 786270578}
   - {fileID: 1616855527}
+  - {fileID: 786270578}
   - {fileID: 2071874936}
   - {fileID: 976711878}
   - {fileID: 1599135422}
@@ -19418,6 +19433,70 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &1653995939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1653995940}
+  - component: {fileID: 1653995941}
+  m_Layer: 5
+  m_Name: HP&SP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1653995940
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653995939}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1862350594}
+  - {fileID: 1028938581}
+  m_Father: {fileID: 631782868}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 571.9336, y: -65}
+  m_SizeDelta: {x: 140.7735, y: 118.8097}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1653995941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1653995939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1657130911
 GameObject:
   m_ObjectHideFlags: 0
@@ -19430,7 +19509,7 @@ GameObject:
   - component: {fileID: 1657130914}
   - component: {fileID: 1657130913}
   m_Layer: 5
-  m_Name: HitDice
+  m_Name: HitDice3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21808,12 +21887,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 631782868}
+  m_Father: {fileID: 1653995940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 570.5159, y: -65}
-  m_SizeDelta: {x: 140.1132, y: 104.9315}
+  m_AnchoredPosition: {x: 70.38675, y: -32.48805}
+  m_SizeDelta: {x: 140.7735, y: 64.9761}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1862350595
 MonoBehaviour:
@@ -22609,7 +22688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 8.075806, y: 0}
+  m_AnchoredPosition: {x: 6.3280334, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1936590692
@@ -22760,7 +22839,7 @@ MonoBehaviour:
   damageDiceBuff: 0
   addDamageDices: []
   modifierBeforeRage: 0
-  skillPointText: {fileID: 0}
+  skillPointText: {fileID: 1028938580}
 --- !u!114 &1963756367
 MonoBehaviour:
   m_ObjectHideFlags: 0

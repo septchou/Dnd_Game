@@ -156,7 +156,7 @@ public class Combat : MonoBehaviourPun
                 {
                     skillButtonsGameobject[i].SetActive(true);
                 }
-                skillPointText.GetComponent<TextMeshPro>().text = normalAction.ToString();
+                skillPointText.GetComponent<TextMeshProUGUI>().text = normalAction.ToString();
                 skillPointText.SetActive(true);
             }
             else
@@ -175,8 +175,9 @@ public class Combat : MonoBehaviourPun
             {
                 skillButtonsGameobject[i].SetActive(isMyturn);
             }
-            skillPointText.GetComponent<TextMeshPro>().text = normalAction.ToString();
             skillPointText.SetActive(isMyturn);
+            TextMeshProUGUI tmp = skillPointText.GetComponent<TextMeshProUGUI>();
+            tmp.text = normalAction.ToString();
         }
 
     }
@@ -362,7 +363,7 @@ public class Combat : MonoBehaviourPun
             if (skillName != "Heal")
             {
                 bool isMiss = IsThisMiss(hitValue);
-                chatLog.SendSkillReport(skillName, damageValue, hitValue, isMiss);
+                chatLog.SendSkillReport(Caster.characterName,skillName, damageValue, hitValue, isMiss);
                 if (!isMiss)
                 {
                     Target.ChangeHP(damageValue * -1);
@@ -370,7 +371,7 @@ public class Combat : MonoBehaviourPun
             }
             else
             {
-                chatLog.SendHealReport(damageValue, Target.characterName);
+                chatLog.SendHealReport(Caster.characterName, damageValue, Target.characterName);
                 Target.ChangeHP(damageValue);
             }
 
@@ -446,7 +447,7 @@ public class Combat : MonoBehaviourPun
                 Caster.abilityScorepoints[i].abilityScorePoint += 2;
             }
 
-            chatLog.SendSkillBuffReport(skillName);
+            chatLog.SendSkillBuffReport(Caster.characterName,skillName);
             CasterDisplay.SetCharacterData(Caster);
             characterDisplayPopUp.UpdateCharacterDisplay();
 

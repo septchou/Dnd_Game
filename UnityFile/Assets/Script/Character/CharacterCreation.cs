@@ -13,6 +13,7 @@ using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Photon.Pun;
+using System.Drawing;
 
 
 public class CharacterCreation : MonoBehaviourPun
@@ -259,7 +260,7 @@ public class CharacterCreation : MonoBehaviourPun
 
     private int CalculateModifier(int score)
     {
-        return (score - 10) / 2;
+        return (int)Math.Floor((score - 10) / 2.0);
     }
 
     private void ApplyRaceBonuses()

@@ -168,6 +168,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void OnReadyButtonClicked()
     {
+        if (CharacterManager.Instance.selectedCharacter == null)
+        {
+            Debug.Log("Can't ready select the character first");
+            return;
+        }
+
         bool isReady = false;
 
         // Check the current ready status and toggle it

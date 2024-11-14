@@ -57,4 +57,28 @@ public class Skill : ScriptableObject
 
         return dices;
     }
+
+    public string GetHitDiceData()
+    {
+        List<string> diceStrings = new List<string>();
+
+        foreach (var hitDice in hitDices)
+        {
+            diceStrings.Add($"{hitDice.numberOfDice}D{(int)hitDice.dice.diceType}");
+        }
+        if (diceStrings.Count == 0 || skillType != SkillType.Damage) return "-";
+        return string.Join("+ ", diceStrings);
+    }
+
+    public string GetDmgDiceData()
+    {
+        List<string> diceStrings = new List<string>();
+
+        foreach (var dmgDice in damageDices)
+        {
+            diceStrings.Add($"{dmgDice.numberOfDice}D{(int)dmgDice.dice.diceType}");
+        }
+        if (diceStrings.Count == 0 || skillType != SkillType.Damage || skillName == "Heal") return "-";
+        return string.Join("+ ", diceStrings);
+    }
 }

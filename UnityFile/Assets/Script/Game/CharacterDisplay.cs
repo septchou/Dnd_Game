@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class CharacterDisplay : MonoBehaviourPun
 {
@@ -36,6 +37,7 @@ public class CharacterDisplay : MonoBehaviourPun
     [SerializeField] SpriteRenderer Outline;
     public Character characterData;
     [SerializeField] Chat chatlog;
+    [SerializeField] Slider slider;
     // Method to initialize character data
     public void SetCharacterData(Character character)
     {
@@ -75,7 +77,7 @@ public class CharacterDisplay : MonoBehaviourPun
         // Initialize character UI
         characterNameText.text = character.characterName;
         hpText.text = $"HP: {currentHP} / {maxHP}";
-
+        UpdatehealthBar();
 
         // If this is the local player, activate the outline and sync with other players
         if (photonView.IsMine)
@@ -100,6 +102,11 @@ public class CharacterDisplay : MonoBehaviourPun
         }
     }
 
+    private void UpdatehealthBar()
+    {
+        slider.value = (float)currentHP / (float)maxHP;
+    }
+
     // Method to change HP locally and synchronize with others
     public void ChangeHP(int hpChange)
     {
@@ -112,7 +119,7 @@ public class CharacterDisplay : MonoBehaviourPun
         }
         currentHP = Mathf.Clamp(currentHP + hpChange, 0, maxHP);
         hpText.text = $"HP: {currentHP} / {maxHP}";
-
+        UpdatehealthBar();
         photonView.RPC("SyncHP", RpcTarget.OthersBuffered, currentHP);
     }
 

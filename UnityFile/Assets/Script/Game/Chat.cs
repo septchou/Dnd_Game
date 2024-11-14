@@ -36,9 +36,9 @@ public class Chat : MonoBehaviour
 
     }
 
-    public void SendSkillReport(string skillName,int damage,int hit,bool isMiss)
+    public void SendSkillReport(string characterName, string skillName,int damage,int hit,bool isMiss)
     {
-        string content = $"<b>{GetSenderName()}</b> Cast <b>{skillName}</b> with Hit : <b>{hit}</b> and Damage : <b>{damage}</b>";
+        string content = $"<b>{characterName}</b> Cast <b>{skillName}</b> with Hit : <b>{hit}</b> and Damage : <b>{damage}</b>";
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
         if (isMiss)
         {
@@ -47,9 +47,9 @@ public class Chat : MonoBehaviour
         }
     }
 
-    public void SendSkillBuffReport(string skillName)
+    public void SendSkillBuffReport(string characterName, string skillName)
     {
-        string content = $"<b>{GetSenderName()}</b> Cast <b>{skillName}</b>";
+        string content = $"<b>{characterName}</b> Cast <b>{skillName}</b>";
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
     }
 
@@ -59,11 +59,18 @@ public class Chat : MonoBehaviour
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
     }
 
-    public void SendHealReport(int damage,string targetName)
+    public void SendHealReport(string characterName, int damage,string targetName)
     {
-        string content = $"<b>{GetSenderName()}</b> heal <b>{targetName}</b> by <b>{damage}</b> points";
+        string content = $"<b>{characterName}</b> heal <b>{targetName}</b> by <b>{damage}</b> points";
         GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
     }
+
+    public void SendAbilityRollReport(string characterName, string abilityName, int result)
+    {
+        string content = $"<b>{characterName}</b> roll ability <b>{abilityName}</b> check and get <b>{result}</b>";
+        GetComponent<PhotonView>().RPC("GetMessage", RpcTarget.All, content);
+    }
+
     private string GetSenderName()
     {
         if (PhotonNetwork.IsMasterClient)

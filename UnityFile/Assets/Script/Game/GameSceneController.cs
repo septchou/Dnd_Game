@@ -6,6 +6,8 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using System;
+using static Skill;
+using System.Reflection;
 
 public class GameSceneController : MonoBehaviourPunCallbacks
 {
@@ -22,7 +24,9 @@ public class GameSceneController : MonoBehaviourPunCallbacks
     [SerializeField] RectTransform diceRollRectTransform;
     [SerializeField] int activatedCoroutine = 0, diceRolling = 0;
 
+    [Header("Chat")]
     [SerializeField] Chat chat;
+
     void Start()
     {
         if (Instance == null)
@@ -48,6 +52,7 @@ public class GameSceneController : MonoBehaviourPunCallbacks
                 Debug.LogError("CharacterManager instance not found!");
             }
         }
+
     }
 
 
@@ -139,4 +144,5 @@ public class GameSceneController : MonoBehaviourPunCallbacks
 
 
     }
+
 }

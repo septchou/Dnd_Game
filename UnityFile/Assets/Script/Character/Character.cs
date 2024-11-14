@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using static Race;
+using System;
 
 [CreateAssetMenu(fileName = "NewCharacter", menuName = "Character Creation/Character")]
 [System.Serializable]
@@ -41,7 +42,7 @@ public class Character : ScriptableObject
             if (score.abilityScore == ability)
             {
                 // Calculate the modifier: (AbilityScorePoints - 10) / 2 (rounded down)
-                return (score.abilityScorePoint - 10) / 2 + score.ablityModifierBonus;
+                return (int)Math.Floor((score.abilityScorePoint - 10) / 2.0) + score.ablityModifierBonus;
             }
         }
 
