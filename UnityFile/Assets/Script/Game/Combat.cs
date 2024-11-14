@@ -217,6 +217,11 @@ public class Combat : MonoBehaviourPun
             skills = Caster.skills;
             for (int i = 0; i < skillButtons.Count; i++)
             {
+                skillButtons[i].onClick.RemoveAllListeners();
+            }
+
+            for (int i = 0; i < skillButtons.Count; i++)
+            {
                 int index = i;
                 if (skills[i].skillType == SkillType.Damage)
                 {
