@@ -244,6 +244,7 @@ public class Combat : MonoBehaviourPun
         string skillName = selectedSkill.name;
         int FlatHit, FlatDmg, totalDiceRoll = 0; ;
         int levelScaledDice = (Caster.level / 5);
+        bool dmgAgainst = false;
         hitValue = 0;
         damageValue = 0;
 
@@ -256,11 +257,13 @@ public class Combat : MonoBehaviourPun
             normalAction--;
             if (skillName != "Heal")
             {
+                // Roll Hit
                 getHitValue = true;
                 GameSceneController.Instance.RollAnimation(selectedSkill.GetHitDiceLists(hitDiceBuff), HandleDiceRollResult);
                 totalDiceRoll += selectedSkill.GetHitDiceLists(hitDiceBuff).Count;
             }
 
+            // Roll Dmg
             List<Dice> totalDamageDices = new List<Dice>();
             totalDamageDices.AddRange(selectedSkill.GetDamageDiceLists(levelScaledDice + damageDiceBuff));
             totalDamageDices.AddRange(addDamageDices);
@@ -273,12 +276,21 @@ public class Combat : MonoBehaviourPun
 
             if (skillName == "Slash")
             {
-
                 // Hit Dice: 1d20 + STR Modifier		
                 FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
                 hitValue += FlatHit;
 
                 // Damage: 1d10 + STR Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
+            }
+            else if (skillName == "Circle slash")
+            {
+                // Hit Dice: 1d20 + STR Modifier		
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
+
+                // Damage: 1d4 + STR Modifier
                 FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
                 damageValue += FlatDmg;
             }
@@ -319,6 +331,8 @@ public class Combat : MonoBehaviourPun
                 // Damage: 1d8 + INT Modifier
                 FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
                 damageValue += FlatDmg;
+
+                if (Target.raceName == "Slime" || Target.raceName == "Half beast") dmgAgainst = true;
             }
             else if (skillName == "Lightning Stike")
             {
@@ -329,6 +343,8 @@ public class Combat : MonoBehaviourPun
                 // Damage: 1d8 + INT Modifier
                 FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
                 damageValue += FlatDmg;
+
+                if (Target.raceName == "Elf" || Target.raceName == "Human") dmgAgainst = true;
             }
             else if (skillName == "Ice shot")
             {
@@ -339,6 +355,8 @@ public class Combat : MonoBehaviourPun
                 // Damage: 1d6 + INT Modifier
                 FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
                 damageValue += FlatDmg;
+
+                if (Target.raceName == "Orc") dmgAgainst = true;
             }
             else if (skillName == "Heal")
             {
@@ -348,9 +366,15 @@ public class Combat : MonoBehaviourPun
                 damageValue += FlatDmg;
                 damageValue *= Caster.level;
             }
-            else if (skillName == "Turn undead")
+            else if (skillName == "Bonk")
             {
-                //How ????
+                // Hit Dice: 1d20 + INT Modifier	
+                FlatHit = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                hitValue += FlatHit;
+
+                // Damage: 1d10 + INT Modifier
+                FlatDmg = Caster.GetAbilityScoreModifier(selectedSkill.associatedAbility[0]);
+                damageValue += FlatDmg;
             }
             else if (skillName == "Holy Shot")
             {
@@ -371,7 +395,21 @@ public class Combat : MonoBehaviourPun
                 chatLog.SendSkillReport(Caster.characterName,skillName, damageValue, hitValue, isMiss);
                 if (!isMiss)
                 {
-                    Target.ChangeHP(damageValue * -1);
+                    if (dmgAgainst) damageValue += damageValue / 2;
+                    if (skillName != "Circle slash")
+                    {
+                        Target.ChangeHP(damageValue * -1);
+                    }
+                    else
+                    {
+                        GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
+                        foreach (GameObject villainObject in villainObjects)
+                        {
+                           CharacterDisplay enemy = villainObject.GetComponent<CharacterDisplay>();
+                           enemy.ChangeHP(damageValue * -1);
+                        }
+                    }
+                    
                 }
             }
             else
@@ -419,10 +457,6 @@ public class Combat : MonoBehaviourPun
                 hitDiceBuff++;
 
             }
-            else if (skillName == "Roar")
-            {
-                // How???
-            }
             else if (skillName == "Warrior’s sense")
             {
                 CasterDisplay.GetWariorSense();
@@ -450,6 +484,17 @@ public class Combat : MonoBehaviourPun
                 // INT points +2
                 int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
                 Caster.abilityScorepoints[i].abilityScorePoint += 2;
+            }
+            else if (skillName == "Blessing")
+            {
+                if (!PhotonNetwork.IsMasterClient)
+                {
+                    photonView.RPC("RPC_PlayerApplyBlessing", RpcTarget.All);
+                }
+                else
+                {
+                    
+                }
             }
 
             chatLog.SendSkillBuffReport(Caster.characterName,skillName);
@@ -515,6 +560,13 @@ public class Combat : MonoBehaviourPun
         {
             int index = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == skill.associatedAbility[0]);
             Caster.abilityScorepoints[index].abilityScorePoint -= 2;
+        }
+        else if (skill.name == "Blessing")
+        {
+            foreach (var ability in Caster.abilityScorepoints)
+            {
+                ability.abilityScorePoint--;
+            }
         }
 
         CasterDisplay.SetCharacterData(Caster);
@@ -586,5 +638,23 @@ public class Combat : MonoBehaviourPun
         addDamageDices = new List<Dice>();
 
         multipleTargetlist = new List<CharacterDisplay>();
+    }
+
+    [PunRPC]
+    public void RPC_PlayerApplyBlessing()
+    {
+        if (PhotonNetwork.IsMasterClient) return;
+
+        Buff newBuff = new Buff("Blessing", 2);
+        activeBuffs.Add(newBuff);
+
+        foreach (var ability in Caster.abilityScorepoints)
+        {
+            ability.abilityScorePoint++;
+        }
+
+        CasterDisplay.SetCharacterData(Caster);
+        characterDisplayPopUp.UpdateCharacterDisplay();
+
     }
 }

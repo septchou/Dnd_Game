@@ -4575,6 +4575,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b30fb62ac2e6c5c4aa0b9ad65257ef5d, type: 2}
   - {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
   - {fileID: 11400000, guid: af2a334ce465eae43b69d51842962991, type: 2}
+  - {fileID: 11400000, guid: 3fc9b9581d4a9b247a336ef44d34ddee, type: 2}
   availableClasses:
   - {fileID: 11400000, guid: 80f2e2044c742e54a8bc5c6ea7971921, type: 2}
   - {fileID: 11400000, guid: 04bf32ede8b8d4d489a3cf929d28e72e, type: 2}

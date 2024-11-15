@@ -17,5 +17,5 @@ MonoBehaviour:
   classSkills:
   - {fileID: 11400000, guid: 55a62de6c49eae5459ac8ab6a497ec4c, type: 2}
   - {fileID: 11400000, guid: 593c90cc7a5a4844d833fdd84073666f, type: 2}
-  - {fileID: 11400000, guid: f156cf0e93c61a5429470d8e50be6974, type: 2}
+  - {fileID: 11400000, guid: 1b3c69663e472824dbdcb7d0725ef45b, type: 2}
   - {fileID: 11400000, guid: cdcdd476a0cbbf34b899a9bb24b8a45d, type: 2}
