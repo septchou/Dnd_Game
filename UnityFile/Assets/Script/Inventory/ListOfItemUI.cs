@@ -38,7 +38,7 @@ public class ListOfItemUI : MonoBehaviour
             {
                 Debug.LogError("slot is null");
             }
-            slot.inventory = inventoryUI;
+            slot.inventoryUI = inventoryUI;
             slot.Setup(item);
 
         }

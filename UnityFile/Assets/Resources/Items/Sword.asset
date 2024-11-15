@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 1
   itemName: Sword
-  description: Stupid Sword
-  quantity: 18
-  icon: {fileID: 21300000, guid: 9724550fefdcb6941aa2087f47624aa4, type: 3}
+  description: Stupid
+  quantity: 1
+  iconPath: Icons/Sword
   type: 0

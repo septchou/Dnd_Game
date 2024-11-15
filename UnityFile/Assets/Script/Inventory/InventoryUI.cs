@@ -6,6 +6,7 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Extensions;
+using System.Linq;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class InventoryUI : MonoBehaviour
 
     //item
     public List<Item> items;
+    public string userId;
 
     // Start is called before the first frame update
     void Start()
@@ -34,8 +36,8 @@ public class InventoryUI : MonoBehaviour
             {
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                LoadInventoryFromFirebase();
-                string userId = auth.CurrentUser.UserId;
+                //LoadInventoryFromFirebase();
+                userId = auth.CurrentUser.UserId;
                 playerInventory.InitializeFirebase(auth, databaseReference, userId);
                 Debug.Log("Firebase is ready to use(InventoryUI)");
             }
@@ -70,14 +72,16 @@ public class InventoryUI : MonoBehaviour
                     string json = itemSnapshot.GetRawJsonValue();
                     Debug.Log("json: " + json);
 
-                    Item item = JsonUtility.FromJson<Item>(json);
-                    Debug.Log("item: " + item);
-                    if (item != null)
+                    ItemData itemData = JsonUtility.FromJson<ItemData>(json);
+                    Debug.Log("item: " + itemData);
+                    if (itemData != null)
                     {
+                        Item item = itemData.ToItem();
                         Debug.Log("item: " + item);
-                        AddItemtoInventory(item);
+                        Debug.Log("Quantity:Kuy " + item.quantity);
+                        AddItemtoInventory(item,item.quantity);     
                         Debug.Log("Loaded item: " + item.itemName);
-                    }
+                    } 
                     else
                     {
                         Debug.LogError("Failed to load item from Firebase");
@@ -92,29 +96,57 @@ public class InventoryUI : MonoBehaviour
         });
     }
 
+    public void UpdateFirebase()
+    {
+        for (int i = 0; i < playerInventory.items.Count; i++)
+        {
+            playerInventory.UpdateItemInFirebase(playerInventory.items[i], userId);
+        }
+    }
+
     public void ToggleInventory()
     {
         //Toggle the visibility of the inventory panel
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
     }
 
-    public void AddItemtoInventory(Item item, string specifiedUserId = null)
+    public void AddItemtoInventory(Item item, int quantity, string specifiedUserId = null)
     {
-        Debug.Log("playerInventory: " + playerInventory);
-        Debug.Log("testItem: " + item);
+        //Debug.Log("playerInventory: " + playerInventory);
+        //Debug.Log("testItem: " + item);
 
         if (playerInventory != null && item != null)
         {
-            if(specifiedUserId != null)
+            Debug.Log("Quantity: " + quantity);
+            if (specifiedUserId != null)
             {
-                playerInventory.AddItem(item, specifiedUserId);
+                for(int i = 0 ; i< quantity;i++){
+                    playerInventory.AddItem(item, specifiedUserId);
+                }
                 Debug.Log("Added item: " + item.itemName + "to" + specifiedUserId);
             }
             else
             {
-                playerInventory.AddItem(item);
+                for (int i = 0; i < quantity; i++)
+                {
+                    playerInventory.AddItem(item);
+                }
                 Debug.Log("Added item: " + item.itemName + "to your Self");
             }
+            UpdateInventoryUI(); // Update the inventory UI
+        }
+        else
+        {
+            Debug.LogError("Inventory or Test Item is missing.");
+        }
+    }
+
+    //Remove Item
+    public void RemoveItemFromInventory(Item item, string specifiedUserId = null)
+    {
+        if (playerInventory != null && item != null)
+        {
+            playerInventory.RemoveItem(item.itemID, 1, specifiedUserId);
             UpdateInventoryUI(); // Update the inventory UI
         }
         else
@@ -138,6 +170,7 @@ public class InventoryUI : MonoBehaviour
             ItemSlot slot = itemSlot.GetComponent<ItemSlot>();
             if (slot != null)
             {
+                slot.inventoryUI = this; // Set the Inventory UI reference
                 slot.Setup(item); // Set up the Item Slot with the item data
             }
         }

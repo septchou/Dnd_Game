@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Apple
   m_EditorClassIdentifier: 
   itemID: 2
-  itemName: Apple
-  description: Big Apple
-  quantity: 7
-  icon: {fileID: 21300000, guid: 308f94c9b32ab954da0f50c1fbafed68, type: 3}
-  type: 3
+  itemName: Big Apple
+  description: Big and Sweet apple
+  quantity: 1
+  iconPath: Icons/Apple
+  type: 0

@@ -39,27 +39,34 @@ public class Inventory : ScriptableObject
             if (existingItem != null)
             {
                 //If the item is already in the inventory, increase the quantity
-                existingItem.quantity = existingItem.quantity + 1;
+                existingItem.quantity++;
                 Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
             }
             else
             {
                 //If the item is not in the inventory, add it to the list
+                item.quantity = 1;
                 items.Add(item);
                 Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
             }
-            UpdateItemInFirebase(item, targetUserId);
+            //UpdateItemInFirebase(existingItem, targetUserId);
         }
     }
+
     //Update an item in Firebase
-    private void UpdateItemInFirebase(Item item, string targetUserId)
+    public void UpdateItemInFirebase(Item item, string targetUserId)
     {
-        string json = JsonUtility.ToJson(item);
-        databaseReference.Child("inventory").Child(targetUserId).Child(item.itemID).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        //Convert item to ItemData
+        ItemData itemData = ItemData.FromItem(item);
+
+        string json = JsonUtility.ToJson(itemData);
+
+        //Update the item in Firebase
+        databaseReference.Child("inventory").Child(targetUserId).Child(itemData.itemID).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
-                Debug.Log("Item added to Firebase");
+                Debug.Log($"Item {item.itemName} updated in Firebase for user: {targetUserId}");
             }
             else if (task.IsFaulted)
             {
