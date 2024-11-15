@@ -36,7 +36,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     }
 
     [Header("Character Detail Panel")]
-    [SerializeField] GameObject characterDetailPopup , skillDetailPopup;
+    [SerializeField] GameObject characterDetailPopup;
+    [SerializeField] GameObject skillDetailPopup;
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text classNameText;
     [SerializeField] TMP_Text raceNameText;
@@ -53,6 +54,12 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     [SerializeField] List<string> skillDetail;
     [SerializeField] List<TMP_Text> hitDiceDetail;
     [SerializeField] List<TMP_Text> dmgDiceDetail;
+
+    [Header("Race Skill panel")]
+    [SerializeField] Transform raceSkillcontent;
+    [SerializeField] RectTransform raceSkillPanel;
+    [SerializeField] GameObject raceSkilllistPrefab;
+    [SerializeField] List <RaceSkillItem> raceSkillList;
 
     [Header("GameplayUI")]
     [SerializeField] CharacterDisplay clickedCharacter;
@@ -183,8 +190,30 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
             }
         }
 
+        foreach(var racelist in raceSkillList)
+        {
+            racelist.DestroyListItem();
+        }
+        Race race = Resources.Load<Race>("Races/" + raceName);
+        
+        raceSkillList = new List<RaceSkillItem>();
+        for( int i = 0; i < race.raceSkills.Count; i++)
+        {
+            Skill raceskill = race.raceSkills[i];
+            raceSkillList.Add(Instantiate(raceSkilllistPrefab, raceSkillcontent).GetComponent<RaceSkillItem>());
+            raceSkillList[i].SetUp(raceskill.skillName, raceskill.detail);
+        }
+
+        // Adjust raceSkillPanel
+        RectTransform prefabRect = raceSkilllistPrefab.GetComponent<RectTransform>();
+        float prefabHeight = prefabRect.rect.height;
+        float totalHeight = prefabHeight * raceSkillList.Count;
+        RectTransform panelRect = raceSkillPanel.GetComponent<RectTransform>();
+        panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, totalHeight);
+
         // Activate the popup UI
         characterDetailPopup.SetActive(true);
+        
     }
 
     // Show skill details when button is pressed
