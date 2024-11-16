@@ -23,9 +23,6 @@ public class SkillListItem : MonoBehaviour
         float skillNameHeight = skillNameText.preferredHeight;
         float skillDetailHeight = skillDetailText.preferredHeight;
 
-        Debug.Log("Skill Name Height: " + skillNameHeight);
-        Debug.Log("Skill Detail Height: " + skillDetailHeight);
-
         // Adjust the height of skillDetailTextGameObj based on the text
         if (skillDetailTextRectTransform != null)
         {
