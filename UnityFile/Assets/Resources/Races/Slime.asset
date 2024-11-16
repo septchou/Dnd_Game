@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: Slime
   m_EditorClassIdentifier: 
   raceName: Slime
-  abilityScoreModifiers: []
+  abilityScoreModifiers:
+  - abilityScore: {fileID: 11400000, guid: adb0690a3c140274a8ad1debab43c61c, type: 2}
+    modifierPoints: 0
+  - abilityScore: {fileID: 11400000, guid: 038228c7a2e0f5541a0cb42a97eb6f32, type: 2}
+    modifierPoints: 0
+  - abilityScore: {fileID: 11400000, guid: b4a0afc850f5b99499f67866786e556f, type: 2}
+    modifierPoints: 0
+  - abilityScore: {fileID: 11400000, guid: f930cc46621b9954cb18bd9a0dfa3d50, type: 2}
+    modifierPoints: 0
   raceSkills:
   - {fileID: 11400000, guid: 241614a6cc0db8047b53112eafabf6f0, type: 2}

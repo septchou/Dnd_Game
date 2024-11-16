@@ -402,11 +402,23 @@ public class Combat : MonoBehaviourPun
                     }
                     else
                     {
-                        GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
-                        foreach (GameObject villainObject in villainObjects)
+                        if (!PhotonNetwork.IsMasterClient)
                         {
-                           CharacterDisplay enemy = villainObject.GetComponent<CharacterDisplay>();
-                           enemy.ChangeHP(damageValue * -1);
+                            GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
+                            foreach (GameObject villainObject in villainObjects)
+                            {
+                                CharacterDisplay enemy = villainObject.GetComponent<CharacterDisplay>();
+                                enemy.ChangeHP(damageValue * -1);
+                            }
+                        }
+                        else
+                        {
+                            GameObject[] heroObjects = GameObject.FindGameObjectsWithTag("Hero");
+                            foreach (GameObject herobject in heroObjects)
+                            {
+                                CharacterDisplay hero = herobject.GetComponent<CharacterDisplay>();
+                                hero.ChangeHP(damageValue * -1);
+                            }
                         }
                     }
                     
@@ -442,65 +454,129 @@ public class Combat : MonoBehaviourPun
         {
             normalAction--;
 
-            if (skillName == "Rage")
+            if (!PhotonNetwork.IsMasterClient)
             {
+                if (skillName == "Rage")
+                {
 
-                Buff newBuff = new Buff(skillName, 2);
-                activeBuffs.Add(newBuff);
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
 
-                // STR mod *=2
-                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-                modifierBeforeRage = Caster.abilityScorepoints[i].ablityModifierBonus;
-                Caster.abilityScorepoints[i].ablityModifierBonus*=2;
+                    // STR mod *=2
+                    int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                    modifierBeforeRage = Caster.abilityScorepoints[i].ablityModifierBonus;
+                    Caster.abilityScorepoints[i].ablityModifierBonus *= 2;
 
-                // more hit dice
-                hitDiceBuff++;
+                    // more hit dice
+                    hitDiceBuff++;
 
-            }
-            else if (skillName == "Warrior’s sense")
-            {
-                CasterDisplay.GetWariorSense();
-            }
-            else if (skillName == "Focus")
-            {
-                addDamageDices.Add(selectedSkill.damageDices[0].dice);
-            }
-            else if (skillName == "Ancestor Guidance")
-            {
+                }
+                else if (skillName == "Warrior’s sense")
+                {
+                    CasterDisplay.GetWariorSense();
+                }
+                else if (skillName == "Focus")
+                {
+                    addDamageDices.Add(selectedSkill.damageDices[0].dice);
+                }
+                else if (skillName == "Ancestor Guidance")
+                {
 
-                Buff newBuff = new Buff(skillName, 2);
-                activeBuffs.Add(newBuff);
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
 
-                // Dex points +2
-                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-                Caster.abilityScorepoints[i].abilityScorePoint += 2;
-            }
-            else if (skillName == "Amplify Magic")
-            {
+                    // Dex points +2
+                    int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                    Caster.abilityScorepoints[i].abilityScorePoint += 2;
+                }
+                else if (skillName == "Amplify Magic")
+                {
 
-                Buff newBuff = new Buff(skillName, 2);
-                activeBuffs.Add(newBuff);
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
 
-                // INT points +2
-                int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
-                Caster.abilityScorepoints[i].abilityScorePoint += 2;
-            }
-            else if (skillName == "Blessing")
-            {
-                if (!PhotonNetwork.IsMasterClient)
+                    // INT points +2
+                    int i = Caster.abilityScorepoints.FindIndex(a => a.abilityScore == selectedSkill.associatedAbility[0]);
+                    Caster.abilityScorepoints[i].abilityScorePoint += 2;
+                }
+                else if (skillName == "Blessing")
                 {
                     photonView.RPC("RPC_PlayerApplyBlessing", RpcTarget.All);
                 }
-                else
-                {
-                    
-                }
+
+                chatLog.SendSkillBuffReport(Caster.characterName, skillName);
+                CasterDisplay.SetCharacterData(Caster);
+                characterDisplayPopUp.UpdateCharacterDisplay();
             }
+            else
+            {
+                if (skillName == "Rage")
+                {
 
-            chatLog.SendSkillBuffReport(Caster.characterName,skillName);
-            CasterDisplay.SetCharacterData(Caster);
-            characterDisplayPopUp.UpdateCharacterDisplay();
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
 
+                    // Str *=2
+                    int i = CasterDisplay.abilityScoreData.FindIndex(a => a.abilityScoreName == selectedSkill.associatedAbility[0].name);
+                    modifierBeforeRage = CasterDisplay.abilityScoreData[i].ablityModifierBonus;
+                    CasterDisplay.abilityScoreData[i].ablityModifierBonus *= 2;
+
+                    // more hit dice
+                    hitDiceBuff++;
+
+                }
+                else if (skillName == "Warrior’s sense")
+                {
+                    CasterDisplay.GetWariorSense();
+                }
+                else if (skillName == "Focus")
+                {
+                    addDamageDices.Add(selectedSkill.damageDices[0].dice);
+                }
+                else if (skillName == "Ancestor Guidance")
+                {
+
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
+
+                    // Dex points +2
+                    int i = CasterDisplay.abilityScoreData.FindIndex(a => a.abilityScoreName == selectedSkill.associatedAbility[0].name);
+                    CasterDisplay.abilityScoreData[i].abilityScorePoint += 2;
+
+                }
+                else if (skillName == "Amplify Magic")
+                {
+                    Buff newBuff = new Buff(skillName, 2);
+                    activeBuffs.Add(newBuff);
+
+                    // INT points +2
+                    int i = CasterDisplay.abilityScoreData.FindIndex(a => a.abilityScoreName == selectedSkill.associatedAbility[0].name);
+                    CasterDisplay.abilityScoreData[i].abilityScorePoint += 2;
+                }
+                else if (skillName == "Blessing")
+                {
+                    foreach(EnemyBuff enemyBuff in enemyListBuffs)
+                    {
+                        Buff newBuff = new Buff(skillName, 2);
+                        enemyBuff.buff.Add(newBuff);
+                    }
+
+                    GameObject[] villainObjects = GameObject.FindGameObjectsWithTag("Villain");
+                    foreach (GameObject villainObject in villainObjects)
+                    {
+                        CharacterDisplay enemy = villainObject.GetComponent<CharacterDisplay>();
+                        foreach( AbilityScore ability in selectedSkill.associatedAbility)
+                        {
+                            int i = enemy.abilityScoreData.FindIndex(a => a.abilityScoreName == ability.name);
+                            enemy.abilityScoreData[i].abilityScorePoint++;
+                        }
+                    }
+
+                }
+                CasterDisplay.UpdateAbilityFromBuff();
+                chatLog.SendSkillBuffReport(CasterDisplay.characterName, skillName);
+                characterDisplayPopUp.UpdateCharacterDisplay();
+            }
         }
         else
         {
