@@ -22,6 +22,8 @@ public class InventoryUI : MonoBehaviour
     //item
     public List<Item> items;
     public string userId;
+    public PlayerDropdown PlayerDropdown;
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +38,7 @@ public class InventoryUI : MonoBehaviour
             {
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                //LoadInventoryFromFirebase();
+                LoadInventoryFromFirebase();
                 userId = auth.CurrentUser.UserId;
                 playerInventory.InitializeFirebase(auth, databaseReference, userId);
                 Debug.Log("Firebase is ready to use(InventoryUI)");
@@ -51,12 +53,13 @@ public class InventoryUI : MonoBehaviour
     }
 
     //Load inventory items from firebase
-    public void LoadInventoryFromFirebase()
+    public void LoadInventoryFromFirebase(string specifiedUserId = null)
     {
+        string targetUserId = specifiedUserId ?? userId;
         //Clear old inventory
         playerInventory.items.Clear();
 
-        databaseReference.Child("inventory").Child(auth.CurrentUser.UserId).GetValueAsync().ContinueWithOnMainThread(task =>
+        databaseReference.Child("inventory").Child(targetUserId).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -78,7 +81,6 @@ public class InventoryUI : MonoBehaviour
                     {
                         Item item = itemData.ToItem();
                         Debug.Log("item: " + item);
-                        Debug.Log("Quantity:Kuy " + item.quantity);
                         AddItemtoInventory(item,item.quantity);     
                         Debug.Log("Loaded item: " + item.itemName);
                     } 
@@ -96,11 +98,12 @@ public class InventoryUI : MonoBehaviour
         });
     }
 
-    public void UpdateFirebase()
+    public void UpdateFirebase(string specifiedUserId = null)
     {
+        string targetUserId = specifiedUserId ?? userId;
         for (int i = 0; i < playerInventory.items.Count; i++)
         {
-            playerInventory.UpdateItemInFirebase(playerInventory.items[i], userId);
+            playerInventory.UpdateItemInFirebase(playerInventory.items[i], targetUserId);
         }
     }
 
@@ -114,10 +117,9 @@ public class InventoryUI : MonoBehaviour
     {
         //Debug.Log("playerInventory: " + playerInventory);
         //Debug.Log("testItem: " + item);
-
+        Debug.Log("userId: " + specifiedUserId);
         if (playerInventory != null && item != null)
         {
-            Debug.Log("Quantity: " + quantity);
             if (specifiedUserId != null)
             {
                 for(int i = 0 ; i< quantity;i++){
@@ -171,6 +173,7 @@ public class InventoryUI : MonoBehaviour
             if (slot != null)
             {
                 slot.inventoryUI = this; // Set the Inventory UI reference
+                slot.PlayerDropdown = PlayerDropdown;
                 slot.Setup(item); // Set up the Item Slot with the item data
             }
         }

@@ -11,6 +11,9 @@ public class all_ItemSlot : MonoBehaviour
     public Button addButton;
     public InventoryUI inventoryUI;
 
+    public PlayerDropdown PlayerDropdown;
+
+
     // Set up the Item Slot with the item data
     public void Setup(Item item)
     {
@@ -18,8 +21,27 @@ public class all_ItemSlot : MonoBehaviour
         itemName.text = item.itemName;
 
         addButton.onClick.RemoveAllListeners();
-        addButton.onClick.AddListener(() => inventoryUI.AddItemtoInventory(item,1));
-        addButton.onClick.AddListener(() => inventoryUI.UpdateFirebase());
+        addButton.onClick.AddListener(() =>
+        {
+            string selectedUserID = PlayerDropdown.GetSelectedUserId();
+            if(!string.IsNullOrEmpty(selectedUserID))
+            {
+                inventoryUI.AddItemtoInventory(item, 1, selectedUserID);
+                Debug.Log("Added item: " + item.itemName + "to" + selectedUserID);
+            }
+            else
+            {
+                inventoryUI.AddItemtoInventory(item, 1);
+                Debug.Log("Added item: " + item.itemName + "to your Self");
+            }
+        });
+
+        addButton.onClick.AddListener(() =>
+        {
+            string selectedUserID = PlayerDropdown.GetSelectedUserId();
+            inventoryUI.UpdateFirebase(selectedUserID);
+
+        }); 
     }
 }
 

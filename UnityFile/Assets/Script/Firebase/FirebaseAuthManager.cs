@@ -5,6 +5,9 @@ using Firebase.Auth;
 using Firebase;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Firebase.Database;
+using System.Collections.Generic;
+using Firebase.Extensions;
 
 public class FirebaseAuthManager : MonoBehaviour
 {
@@ -13,6 +16,7 @@ public class FirebaseAuthManager : MonoBehaviour
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser user;
+    public DatabaseReference databaseReference;
 
     // Login Variables
     [Space]
@@ -131,6 +135,8 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             user = loginTask.Result.User; // Fix: Access the User property of AuthResult
 
+            SaveUserToDatabase(user.UserId, user.DisplayName, email);
+
             Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
 
             //After login success, change scene to the game scene
@@ -239,6 +245,7 @@ public class FirebaseAuthManager : MonoBehaviour
                 }
                 else
                 {
+                    SaveUserToDatabase(user.UserId, name, email);
                     Debug.Log("Registration Sucessful Welcome " + user.DisplayName);
                     UIManager.Instance.OpenLoginPanel();
                 }
@@ -247,4 +254,32 @@ public class FirebaseAuthManager : MonoBehaviour
 
 
     }
+
+    private void SaveUserToDatabase(string userId, string displayName, string email)
+    {
+        DatabaseReference databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        
+        var userData = new Dictionary<string, object>
+    {
+        { "displayName", displayName },
+        { "email", email },
+        { "createdAt", System.DateTime.UtcNow.ToString("o") } 
+    };
+
+
+        databaseReference.Child("users").Child(userId).SetValueAsync(userData).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("User data saved successfully.");
+            }
+            else
+            {
+                Debug.LogError("Failed to save user data: " + task.Exception);
+            }
+        });
+    }
+
+
 }

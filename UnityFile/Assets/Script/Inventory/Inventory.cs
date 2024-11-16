@@ -32,6 +32,7 @@ public class Inventory : ScriptableObject
     {
         //Check that want to add item to the specified user's inventory if not , add to your own inventory
         string targetUserId = specifiedUserId ?? userId;
+        Debug.Log("Target User ID: " + targetUserId);
         if (databaseReference != null && !string.IsNullOrEmpty(targetUserId))
         {
             //Check if the item is already in the inventory
@@ -85,7 +86,7 @@ public class Inventory : ScriptableObject
             if (item.quantity <= 0)
             {
                 items.Remove(item); //Remove the item from the inventory if the quantity is 0 or less
-                DeleteItemFromFirebase(itemID);
+                DeleteItemFromFirebase(itemID, targetUserId);
                 Debug.Log("Removed " + item.itemName + " from inventory");
             }
             else

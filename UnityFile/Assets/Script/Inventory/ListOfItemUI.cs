@@ -8,6 +8,7 @@ public class ListOfItemUI : MonoBehaviour
     public ItemDatabase itemDatabase;       //itemDatabase
     public Inventory playerInventory;       //playerInventory
     public InventoryUI inventoryUI;         //inventoryUI
+    public PlayerDropdown PlayerDropdown;
 
     void Start()
     {
@@ -39,7 +40,9 @@ public class ListOfItemUI : MonoBehaviour
                 Debug.LogError("slot is null");
             }
             slot.inventoryUI = inventoryUI;
+            slot.PlayerDropdown = PlayerDropdown;
             slot.Setup(item);
+
 
         }
     }
