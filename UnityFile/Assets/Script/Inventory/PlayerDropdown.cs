@@ -7,7 +7,6 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Photon.Pun;
 using TMPro;
-using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class PlayerDropdown : MonoBehaviourPunCallbacks
 {
