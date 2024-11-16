@@ -1,15 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 using UnityEngine.UI;
 
-public class OnMouseOverRaceandClass : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class OnMouseOverClass : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-
     [SerializeField] List<GameObject> existListItem = new List<GameObject>();
     [SerializeField] GameObject detailListItemPrefab, raceDetailListPanel, classDetailListPanel;
     [SerializeField] TMP_Text headerText;
@@ -21,28 +18,27 @@ public class OnMouseOverRaceandClass : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         if (isMouseOver)
         {
-            raceDetailListPanel.SetActive(true);
-            classDetailListPanel.SetActive(false);
+            raceDetailListPanel.SetActive(false);
+            classDetailListPanel.SetActive(true);
         }
         else
         {
-            //raceDetailListPanel.SetActive(false);
+            //classDetailListPanel.SetActive(false);
         }
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        popUpRaceDetailUI();
+        popUpClassDetailUI();
         isMouseOver = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        popUpRaceDetailUI();
+        popUpClassDetailUI();
         isMouseOver = false;
     }
 
-
-    private void popUpRaceDetailUI()
+    private void popUpClassDetailUI()
     {
         foreach (GameObject item in existListItem)
         {
@@ -50,24 +46,22 @@ public class OnMouseOverRaceandClass : MonoBehaviour, IPointerEnterHandler, IPoi
         }
         existListItem = new List<GameObject>();
 
-
-        Race race = characterCreation.GetRaceFromDropDown();
-        if(race != null)
+        CharacterClass characterclass = characterCreation.GetCharacterClassFromDropDown();
+        if (characterclass != null)
         {
-            //float prefabHeight = 0;
-            headerText.text = race.name;
-            foreach (Skill skill in race.raceSkills)
+            headerText.text = characterclass.name;
+            foreach (Skill skill in characterclass.classSkills)
             {
                 GameObject item = Instantiate(detailListItemPrefab, detailContent);
-                existListItem.Add(item);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(item.GetComponent<RectTransform>());
+                existListItem.Add(item);
                 item.GetComponent<SkillListItem>().SetUp(skill.skillName, skill.detail);
-                //RectTransform prefabRect = detailListItemPrefab.GetComponent<RectTransform>();
-                //prefabHeight += prefabRect.rect.height;
             }
 
-            /*float totalHeight = prefabHeight + 60;
-            RectTransform panelRect = raceDetailListPanel.GetComponent<RectTransform>();
+            /*RectTransform prefabRect = detailListItemPrefab.GetComponent<RectTransform>();
+            float prefabHeight = prefabRect.rect.height;
+            float totalHeight = prefabHeight * existListItem.Count + 260;
+            RectTransform panelRect = classDetailListPanel.GetComponent<RectTransform>();
             panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, totalHeight);*/
         }
 

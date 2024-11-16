@@ -1156,6 +1156,14 @@ public class CharacterCreation : MonoBehaviourPun
         
     }
 
+    public Race GetRaceFromDropDown()
+    {
+        return availableRaces[raceDropdown.value];
+    }
 
+    public CharacterClass GetCharacterClassFromDropDown()
+    {
+        return availableClasses[classDropdown.value];
+    }
 }
 
