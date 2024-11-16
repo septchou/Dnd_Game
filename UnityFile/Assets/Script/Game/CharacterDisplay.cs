@@ -259,6 +259,7 @@ public class CharacterDisplay : MonoBehaviourPun
         {
             characterData.HP = currentHP;
         }
+        UpdatehealthBar();
     }
 
     [PunRPC]
@@ -284,5 +285,10 @@ public class CharacterDisplay : MonoBehaviourPun
     private void RPC_useWariorSense()
     {
         isDodge = false;
+    }
+
+    public void UpdateAbilityFromBuff()
+    {
+        photonView.RPC("UpdateAbilityScores", RpcTarget.OthersBuffered, SerializeAbilityScoreData(abilityScoreData));
     }
 }

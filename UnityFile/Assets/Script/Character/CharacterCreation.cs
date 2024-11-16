@@ -144,10 +144,6 @@ public class CharacterCreation : MonoBehaviourPun
         InitialUI(0);
         ChangeMode(PhotonNetwork.IsMasterClient, false);
 
-
-
-
-        
     }
     public void InitializeDropdowns()
     {
@@ -238,10 +234,11 @@ public class CharacterCreation : MonoBehaviourPun
                 if (abilityUI != null)
                 {
                     // Apply modifier points
-                    abilityUI.abilityModifierBonus += modifier.modifierPoints;
-                    int modifiedScore = abilityUI.abilityModifier + abilityUI.abilityModifierBonus;
+                    abilityUI.abilityPoint += modifier.modifierPoints;
+                    int modifiedScore = CalculateModifier(abilityUI.abilityPoint);
 
                     // Update UI
+                    abilityUI.abilityScorePointText.text = abilityUI.abilityPoint.ToString();
                     if (modifiedScore > 0) abilityUI.abilityScoreModifierText.text = $"+{modifiedScore}";
                     else abilityUI.abilityScoreModifierText.text = modifiedScore.ToString();
                 }
@@ -271,10 +268,11 @@ public class CharacterCreation : MonoBehaviourPun
             var abilityUI = abilityScores.Find(a => a.ability == modifier.abilityScore);
             if (abilityUI != null)
             {
-                abilityUI.abilityModifierBonus += modifier.modifierPoints;
+                abilityUI.abilityPoint += modifier.modifierPoints;
                 int modifiedScore = CalculateModifier(abilityUI.abilityPoint) + abilityUI.abilityModifierBonus;
 
                 // Update UI with new modifiers
+                abilityUI.abilityScorePointText.text = abilityUI.abilityPoint.ToString();
                 abilityUI.abilityScoreModifierText.text = (modifiedScore > 0) ? $"+{modifiedScore}" : modifiedScore.ToString();
             }
         }
@@ -285,9 +283,17 @@ public class CharacterCreation : MonoBehaviourPun
         // Reset modifier bonuses before applying new race bonuses
         foreach (var abilityUI in abilityScores)
         {
+            //Remove old race bonus
+            int i = selectedRace.abilityScoreModifiers.FindIndex(a => a.abilityScore == abilityUI.ability);
+            abilityUI.abilityPoint -= selectedRace.abilityScoreModifiers[i].modifierPoints;
+
+            //Reset modifier
             var defaultAbility = defaultCharacter.abilityScorepoints.Find(a => a.abilityScore == abilityUI.ability);
-            abilityUI.abilityModifierBonus = defaultAbility.ablityModifierBonus; // Reset the bonus
+            abilityUI.abilityModifierBonus = defaultAbility.ablityModifierBonus;
+
+            // Update UI with new modifiers
             int modifiedScore = CalculateModifier(abilityUI.abilityPoint) + abilityUI.abilityModifierBonus;
+            abilityUI.abilityScorePointText.text = abilityUI.abilityPoint.ToString();
             abilityUI.abilityScoreModifierText.text = (modifiedScore > 0) ? $"+{modifiedScore}" : modifiedScore.ToString();
         }
 

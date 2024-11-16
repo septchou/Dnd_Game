@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-public enum SkillType { Damage, Buff, Debuff }
+public enum SkillType { Damage, Buff, Debuff, RacePassive }
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Character Creation/Skill")]
 public class Skill : ScriptableObject
 {

@@ -7,7 +7,7 @@ public class Race : ScriptableObject
 {
     public string raceName;  // Name of the race (e.g., "Elf", "Dwarf", etc.)
     public List<AbilityScoreModifier> abilityScoreModifiers;  // List of AbilityScoreModifiers
-
+    public List<Skill> raceSkills;
     // Helper class to hold AbilityScore and its modifier points
     [System.Serializable]
     public class AbilityScoreModifier

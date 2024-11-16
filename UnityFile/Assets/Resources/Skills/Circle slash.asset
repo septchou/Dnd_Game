@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc38c3a5630de564480df75eebb8910d, type: 3}
-  m_Name: Holy Shot
+  m_Name: Circle slash
   m_EditorClassIdentifier: 
-  skillName: Holy Shot
+  skillName: Circle slash
   skillType: 0
   hitDices:
   - dice: {fileID: 11400000, guid: 5cb5247cc5af8ac468b9921d4f6a7699, type: 2}
     numberOfDice: 1
   damageDices:
   - dice: {fileID: 11400000, guid: d65d455a91ce5a14a9d80c9c21e8cab4, type: 2}
-    numberOfDice: 2
+    numberOfDice: 1
   associatedAbility:
-  - {fileID: 11400000, guid: f930cc46621b9954cb18bd9a0dfa3d50, type: 2}
-  detail: "\u0E43\u0E0A\u0E49 1 action \u0E17\u0E33\u0E01\u0E32\u0E23\u0E23\u0E48\u0E32\u0E22\u0E01\u0E23\u0E30\u0E2A\u0E38\u0E19\u0E41\u0E2A\u0E07
-    2 \u0E19\u0E31\u0E14\u0E44\u0E1B\u0E17\u0E33\u0E14\u0E32\u0E40\u0E21\u0E08\u0E41\u0E2A\u0E07\u0E43\u0E2A\u0E48\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22
-    \u0E23\u0E30\u0E22\u0E30 10 m"
+  - {fileID: 11400000, guid: adb0690a3c140274a8ad1debab43c61c, type: 2}
+  detail: "\u0E43\u0E0A\u0E49 1 action \u0E17\u0E33\u0E14\u0E32\u0E40\u0E21\u0E08\u0E15\u0E48\u0E2D\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22
+    \u0E17\u0E38\u0E01\u0E15\u0E31\u0E27\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E23\u0E30\u0E22\u0E30
+    1 m \u0E08\u0E32\u0E01\u0E15\u0E31\u0E27\u0E1C\u0E39\u0E49\u0E40\u0E25\u0E48\u0E19"

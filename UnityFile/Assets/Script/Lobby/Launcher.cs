@@ -63,7 +63,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.IsVisible = true;
         roomOptions.IsOpen = true;
-        roomOptions.MaxPlayers = 4;
+        roomOptions.MaxPlayers = 5;
         roomOptions.CleanupCacheOnLeave = true;
 
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);

@@ -19,6 +19,9 @@ MonoBehaviour:
   - abilityScore: {fileID: 11400000, guid: 038228c7a2e0f5541a0cb42a97eb6f32, type: 2}
     modifierPoints: 0
   - abilityScore: {fileID: 11400000, guid: b4a0afc850f5b99499f67866786e556f, type: 2}
-    modifierPoints: 0
+    modifierPoints: 2
   - abilityScore: {fileID: 11400000, guid: f930cc46621b9954cb18bd9a0dfa3d50, type: 2}
     modifierPoints: 0
+  raceSkills:
+  - {fileID: 11400000, guid: 372f4261551ab0c4aa18e5f98cbe74b3, type: 2}
+  - {fileID: 11400000, guid: 8a75a6e80a826c54eb3c62215d3867f5, type: 2}
