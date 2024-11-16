@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 public class ListOfItemUI : MonoBehaviour
 {
@@ -9,10 +10,19 @@ public class ListOfItemUI : MonoBehaviour
     public Inventory playerInventory;       //playerInventory
     public InventoryUI inventoryUI;         //inventoryUI
     public PlayerDropdown PlayerDropdown;
+    public GameObject addItemBT;
 
     void Start()
     {
         ShowAllItemsInGame();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void ShowAllItemsInGame()

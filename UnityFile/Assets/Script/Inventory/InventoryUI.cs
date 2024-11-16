@@ -38,8 +38,8 @@ public class InventoryUI : MonoBehaviour
             {
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                LoadInventoryFromFirebase();
                 userId = auth.CurrentUser.UserId;
+                LoadInventoryFromFirebase();
                 playerInventory.InitializeFirebase(auth, databaseReference, userId);
                 Debug.Log("Firebase is ready to use(InventoryUI)");
             }
