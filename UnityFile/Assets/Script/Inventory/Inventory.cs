@@ -77,7 +77,8 @@ public class Inventory : ScriptableObject
     }
 
     //Remove an item from the inventory
-    public void RemoveItem(string itemID, int quantity, string specifiedUserId = null) {
+    public void RemoveItem(string itemID, int quantity, string specifiedUserId = null)
+    {
         string targetUserId = specifiedUserId ?? userId;
         Item item = items.Find(i => i.itemID == itemID);
         if (item != null)

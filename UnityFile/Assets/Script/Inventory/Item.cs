@@ -28,7 +28,7 @@ public class ItemData
     public string description;
     public int quantity;
     public string iconPath;
-    public string type;  
+    public string type;
 
     // Constructor
     public ItemData(string id, string name, string desc, int qty, string icon, string itemType)
@@ -50,7 +50,7 @@ public class ItemData
             item.description,
             item.quantity,
             item.iconPath,
-            item.type.ToString() 
+            item.type.ToString()
         );
     }
 

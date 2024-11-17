@@ -20,12 +20,14 @@ public class PlayerDropdown : MonoBehaviourPunCallbacks
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
+          
             if (task.Result == DependencyStatus.Available)
             {
+                Debug.Log("Kuy");
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase is ready to use(PlayerDropdown)");
                 LoadPlayerListFromFirebase();
+                Debug.Log("Firebase is ready to use(PlayerDropdown)");
             }
             else
             {
@@ -58,9 +60,10 @@ public class PlayerDropdown : MonoBehaviourPunCallbacks
 
     private void LoadPlayerListFromFirebase()
     {
+        Debug.Log("Loading player list from Firebase");
         databaseReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            if(task.IsCompleted)
+            if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
                 playerList.Clear();

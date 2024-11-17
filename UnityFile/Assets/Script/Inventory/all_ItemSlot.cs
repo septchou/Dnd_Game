@@ -24,7 +24,7 @@ public class all_ItemSlot : MonoBehaviour
         addButton.onClick.AddListener(() =>
         {
             string selectedUserID = PlayerDropdown.GetSelectedUserId();
-            if(!string.IsNullOrEmpty(selectedUserID))
+            if (!string.IsNullOrEmpty(selectedUserID))
             {
                 inventoryUI.AddItemtoInventory(item, 1, selectedUserID);
                 Debug.Log("Added item: " + item.itemName + "to" + selectedUserID);
@@ -41,7 +41,7 @@ public class all_ItemSlot : MonoBehaviour
             string selectedUserID = PlayerDropdown.GetSelectedUserId();
             inventoryUI.UpdateFirebase(selectedUserID);
 
-        }); 
+        });
     }
 }
 

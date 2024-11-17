@@ -81,15 +81,15 @@ public class InventoryUI : MonoBehaviour
                     {
                         Item item = itemData.ToItem();
                         Debug.Log("item: " + item);
-                        AddItemtoInventory(item,item.quantity);     
+                        AddItemtoInventory(item, item.quantity);
                         Debug.Log("Loaded item: " + item.itemName);
-                    } 
+                    }
                     else
                     {
                         Debug.LogError("Failed to load item from Firebase");
                     }
                 }
-                
+
             }
             else
             {
@@ -122,7 +122,8 @@ public class InventoryUI : MonoBehaviour
         {
             if (specifiedUserId != null)
             {
-                for(int i = 0 ; i< quantity;i++){
+                for (int i = 0; i < quantity; i++)
+                {
                     playerInventory.AddItem(item, specifiedUserId);
                 }
                 Debug.Log("Added item: " + item.itemName + "to" + specifiedUserId);

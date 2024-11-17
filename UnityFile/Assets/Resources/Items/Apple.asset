@@ -15,6 +15,6 @@ MonoBehaviour:
   itemID: 2
   itemName: Big Apple
   description: Big and Sweet apple
-  quantity: 5
+  quantity: 1
   iconPath: Icons/Apple
   type: 3

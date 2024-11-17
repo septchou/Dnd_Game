@@ -17,11 +17,11 @@ public class ListOfItemUI : MonoBehaviour
         ShowAllItemsInGame();
         if (PhotonNetwork.IsMasterClient)
         {
-            gameObject.SetActive(true);
+            addItemBT.SetActive(true);
         }
         else
         {
-            gameObject.SetActive(false);
+            addItemBT.SetActive(false);
         }
     }
 
