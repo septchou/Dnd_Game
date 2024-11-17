@@ -18,8 +18,8 @@ public class OnMouseOverClass : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         if (isMouseOver)
         {
-            raceDetailListPanel.SetActive(false);
-            classDetailListPanel.SetActive(true);
+            /*raceDetailListPanel.SetActive(false);
+            classDetailListPanel.SetActive(true);*/
         }
         else
         {
@@ -30,12 +30,16 @@ public class OnMouseOverClass : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         popUpClassDetailUI();
         isMouseOver = true;
+        raceDetailListPanel.SetActive(false);
+        classDetailListPanel.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         popUpClassDetailUI();
         isMouseOver = false;
+        raceDetailListPanel.SetActive(false);
+        classDetailListPanel.SetActive(true);
     }
 
     private void popUpClassDetailUI()

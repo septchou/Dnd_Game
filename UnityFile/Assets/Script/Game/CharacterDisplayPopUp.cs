@@ -108,35 +108,42 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
 
                 if (characterDisplay != null)
                 {
-                    // Get data from CharacterDisplay and pass it to ShowCharacterDetails
-                    ShowCharacterDetails(
-                        characterDisplay.characterName,
-                        characterDisplay.className,
-                        characterDisplay.raceName,
-                        characterDisplay.level,
-                        characterDisplay.currentHP,
-                        characterDisplay.maxHP,
-                        characterDisplay.SerializeAbilityScoreData(characterDisplay.abilityScoreData),
-                        characterDisplay.SerializeSkillData(characterDisplay.skillData)
-                    );
-
-                    // Check ownership for UI options
-                    if (photonView != null && (photonView.IsMine || PhotonNetwork.IsMasterClient))
+                    if ((photonView.Owner != PhotonNetwork.MasterClient) || (PhotonNetwork.IsMasterClient))
                     {
-                        ShowOwnerOption(true);
 
-                        if (photonView.IsMine && PhotonNetwork.IsMasterClient)
+                        // Get data from CharacterDisplay and pass it to ShowCharacterDetails
+                        ShowCharacterDetails(
+                            characterDisplay.characterName,
+                            characterDisplay.className,
+                            characterDisplay.raceName,
+                            characterDisplay.level,
+                            characterDisplay.currentHP,
+                            characterDisplay.maxHP,
+                            characterDisplay.SerializeAbilityScoreData(characterDisplay.abilityScoreData),
+                            characterDisplay.SerializeSkillData(characterDisplay.skillData)
+                        );
+
+                        // Check ownership for UI options
+                        if (photonView != null && (photonView.IsMine || PhotonNetwork.IsMasterClient))
                         {
-                            removeCharacterButtonObject.SetActive(true);
-                        }
-                    }
-                        
-                    else
-                        ShowOwnerOption(false);
+                            ShowOwnerOption(true);
 
-                    if (PhotonNetwork.IsMasterClient && photonView.IsMine)
-                    {
-                        combat.DmChangeCaster(characterDisplay.characterName);
+                            if (photonView.IsMine && PhotonNetwork.IsMasterClient)
+                            {
+                                removeCharacterButtonObject.SetActive(true);
+                            }
+                        }
+
+                        else
+                        {
+                            ShowOwnerOption(false);
+                        }
+
+
+                        if (PhotonNetwork.IsMasterClient && photonView.IsMine)
+                        {
+                            combat.DmChangeCaster(characterDisplay.characterName);
+                        }
                     }
                 }
                 else
@@ -329,14 +336,14 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
                     );
     }
 
+    
     public void AbilityRollCheck(int index)
     {
-
-        int modifier = (abilityScoreDatas[index].abilityScorePoint - 10) / 2 + abilityScoreDatas[index].ablityModifierBonus;
+        int modifier = (int)Math.Floor((abilityScoreDatas[index].abilityScorePoint - 10) / 2.0) + abilityScoreDatas[index].ablityModifierBonus;
         RollResultCallback callback = (result, rolledDices) =>
         {
             int finalResult = result + modifier;
-            chatLog.SendAbilityRollReport(characterClickedName, abilityScoreDatas[index].abilityScoreName, result);
+            chatLog.SendAbilityRollReport(characterClickedName, abilityScoreDatas[index].abilityScoreName, finalResult);
         };
 
         GameSceneController.Instance.RollAnimation(abilityRollDice, callback);

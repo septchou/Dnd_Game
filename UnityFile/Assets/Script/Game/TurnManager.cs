@@ -236,6 +236,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
     {
         combat.isMyturn = false;
 
+        combat.RemoveAllBuff();
+
         isTurnListOn = false;
         combatPhaseUI.SetActive(false);
         endTurnButtonGameObject.SetActive(false);

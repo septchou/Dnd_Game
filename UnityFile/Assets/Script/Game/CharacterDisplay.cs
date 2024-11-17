@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+using System;
 
 public class CharacterDisplay : MonoBehaviourPun
 {
@@ -290,5 +291,11 @@ public class CharacterDisplay : MonoBehaviourPun
     public void UpdateAbilityFromBuff()
     {
         photonView.RPC("UpdateAbilityScores", RpcTarget.OthersBuffered, SerializeAbilityScoreData(abilityScoreData));
+    }
+    public int GetCharacterModifier(string abilityName)
+    {
+        int index = abilityScoreData.FindIndex(a => a.abilityScoreName == abilityName);
+        
+        return (int)Math.Floor((abilityScoreData[index].abilityScorePoint - 10) / 2.0) + abilityScoreData[index].ablityModifierBonus; ;
     }
 }

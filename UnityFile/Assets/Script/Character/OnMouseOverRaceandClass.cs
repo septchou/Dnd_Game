@@ -21,8 +21,8 @@ public class OnMouseOverRaceandClass : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         if (isMouseOver)
         {
-            raceDetailListPanel.SetActive(true);
-            classDetailListPanel.SetActive(false);
+            /*raceDetailListPanel.SetActive(true);
+            classDetailListPanel.SetActive(false);*/
         }
         else
         {
@@ -33,12 +33,16 @@ public class OnMouseOverRaceandClass : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         popUpRaceDetailUI();
         isMouseOver = true;
+        raceDetailListPanel.SetActive(true);
+        classDetailListPanel.SetActive(false);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        popUpRaceDetailUI();
+        //popUpRaceDetailUI();
         isMouseOver = false;
+        raceDetailListPanel.SetActive(true);
+        classDetailListPanel.SetActive(false);
     }
 
 
