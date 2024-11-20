@@ -15,6 +15,7 @@ public class RoomListItem : MonoBehaviour
     {
         info = _info;
         roomName.text = _info.Name;
+       
 
         playerNumber.text = $"0{_info.PlayerCount} / 0{_info.MaxPlayers} "; 
     }
