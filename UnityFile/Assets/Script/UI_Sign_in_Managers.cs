@@ -36,4 +36,10 @@ public class UIManager : MonoBehaviour
         registrationPanel.SetActive(true);
         loginPanel.SetActive(false);
     }
+
+    public void ExitTheGame()
+    {
+        Debug.Log("BYE BYE");
+        Application.Quit();
+    }
 }
