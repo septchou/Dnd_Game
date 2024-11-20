@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0ad55fb94aee144b908cf07f80b1ff, type: 3}
+  m_Name: Stone
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: e8d8494195d6d06408c840e38a17ab0b, type: 2}
+  uiCategory: {fileID: 11400000, guid: 86ef18216ae597646bf45f67b3f8a447, type: 2}
+  tileBase: {fileID: 11400000, guid: a07534c39cdc6694dbc35e55c9602eea, type: 2}
+  placeType: 0

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0ad55fb94aee144b908cf07f80b1ff, type: 3}
+  m_Name: IronChest
+  m_EditorClassIdentifier: 
+  category: {fileID: 11400000, guid: 83de8f777e1a05446b91c920c733e36e, type: 2}
+  uiCategory: {fileID: 11400000, guid: 851ae6733afdac048b2f17c753bd4d1c, type: 2}
+  tileBase: {fileID: 11400000, guid: cd0f683edab95bc49bee5a8608ca44f6, type: 2}
+  placeType: 0
