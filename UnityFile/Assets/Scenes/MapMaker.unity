@@ -801,7 +801,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2062686873}
         m_TargetAssemblyTypeName: SaveHandler, Assembly-CSharp
-        m_MethodName: OnLoad
+        m_MethodName: OnLoadFromFirebase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2082,7 +2082,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2062686873}
         m_TargetAssemblyTypeName: SaveHandler, Assembly-CSharp
-        m_MethodName: OnSave
+        m_MethodName: OnSaveToFirebase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2822,7 +2822,7 @@ MonoBehaviour:
   bounds:
     m_Position: {x: -2000, y: -2000, z: 0}
     m_Size: {x: 4000, y: 4000, z: 0}
-  filename: tilemapData.json
+  filename: Hello
 --- !u!1 &2096360691
 GameObject:
   m_ObjectHideFlags: 0
