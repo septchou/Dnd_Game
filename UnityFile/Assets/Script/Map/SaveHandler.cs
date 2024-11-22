@@ -12,6 +12,8 @@ using UnityEditor.U2D.Aseprite;
 using TMPro;
 using Unity.UI;
 using UnityEngine.UI;
+using System.Xml.Serialization;
+using Google.MiniJSON;
 
 public class SaveHandler : Singleton<SaveHandler> {
     Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
@@ -25,8 +27,8 @@ public class SaveHandler : Singleton<SaveHandler> {
     private FirebaseAuth auth;
 
     [Header("Save/Load")]
-    [SerializeField] List<string> mapName = new List<string>();
-    [SerializeField] string filename;
+    [SerializeField] List<string> mapNames = new List<string>();
+    [SerializeField] int selectedMapIndex;
     [SerializeField] TMP_InputField inputSave;
     [SerializeField] TMP_Dropdown dropdownLoad;
     [SerializeField] Button loadButton;
@@ -52,8 +54,6 @@ public class SaveHandler : Singleton<SaveHandler> {
             }
         });
     
-        //loadButton.onClick.AddListener(OnLoadSelectedMapFromFirebase);
-        //dropdownLoad.onValueChanged.AddListener(delegate { OnLoadSelectedMapFromFirebase(); });
         
     }
 
@@ -90,6 +90,17 @@ public class SaveHandler : Singleton<SaveHandler> {
         return Guid.NewGuid().ToString();
     }
 
+    private void ResetMap()
+    {
+        foreach (var mapObj in tilemaps)
+        {
+            mapObj.Value.ClearAllTiles();//Clear all tiles
+        }
+
+        Debug.Log("Map has been reset.");
+    }
+
+
     public void OnLoadSelectedMapFromFirebase()
     {
         if (dropdownLoad.options.Count == 0)
@@ -98,17 +109,25 @@ public class SaveHandler : Singleton<SaveHandler> {
             return;
         }
 
-        int selectedIndex = dropdownLoad.value;
-        string selectedMapKey = mapName[selectedIndex]; 
+        selectedMapIndex = dropdownLoad.value;
+        if (selectedMapIndex == 0) // "New map"
+        {
+            Debug.Log("Creating new map...");
+            ResetMap(); //Reset map
+            inputSave.text = ""; // Clear input field
+        }
+        else
+        {
+            string selectedMapKey = mapNames[selectedMapIndex];
+            Debug.Log($"Loading map with key: {selectedMapKey}");
+            OnLoadMapFromFirebase(selectedMapKey);
+            inputSave.text = dropdownLoad.options[selectedMapIndex].text;
+        }
 
-        Debug.Log($"Selected map key: {selectedMapKey}");
-
-        
-        OnLoadMapFromFirebase(selectedMapKey);
     }
 
 
-    public void OnSaveToFirebase(string mapKey = null)
+    public void OnSaveToFirebase()
     {
         if (auth.CurrentUser == null)
         {
@@ -120,18 +139,19 @@ public class SaveHandler : Singleton<SaveHandler> {
 
         string mapName = inputSave.text;
 
-        // If it new map create key
-        if (string.IsNullOrEmpty(mapKey))
+        // If selectedMapIndex is 0, then we are creating a new map
+        string mapKey;
+        if (selectedMapIndex == 0) // "New map"
         {
             mapKey = GenerateUniqueKey();
             Debug.Log("Generated new mapKey: " + mapKey);
         }
-
-        /*TilemapData mapData = new TilemapData
+        else 
         {
-            key = mapKey,
-            tiles = new List<TileInfo>()
-        };*/
+            mapKey = mapNames[selectedMapIndex];
+            Debug.Log("Updating existing mapKey: " + mapKey);
+        }
+
         List<TilemapData> data = new List<TilemapData>();
         //Convert to json
         foreach (var mapObj in tilemaps)
@@ -158,10 +178,12 @@ public class SaveHandler : Singleton<SaveHandler> {
             }
             data.Add(mapData);
         }
-        string json = JsonUtility.ToJson(data);
 
-        Debug.Log("Generated JSON: " + json);
+        // Wrap the TilemapData list into a TilemapDataWrapper
+        TilemapDataWrapper wrapper = new TilemapDataWrapper(data);
 
+        // Convert the wrapper into JSON
+        string json = JsonUtility.ToJson(wrapper);
 
         //Save to database
         MapKeyData mapKeyData = new MapKeyData(mapName); //mapName = map.name
@@ -210,7 +232,10 @@ public class SaveHandler : Singleton<SaveHandler> {
             {
                 DataSnapshot snapshot = task.Result;
                 dropdownLoad.ClearOptions();
-                mapName.Clear();
+                mapNames.Clear();
+
+                dropdownLoad.options.Add(new TMP_Dropdown.OptionData("New map"));
+                mapNames.Add("New map");
 
                 foreach (DataSnapshot keySnapshot in snapshot.Children)
                 {
@@ -219,17 +244,9 @@ public class SaveHandler : Singleton<SaveHandler> {
 
                     Debug.Log($"Found map key: {mapKey}, name: {mapName}");
 
-                    Tilemap tilemap = FindTilemapByName(mapName);
-                    if (tilemap != null)
-                    {
-                        tilemaps[mapKey] = tilemap;
-                        dropdownLoad.options.Add(new TMP_Dropdown.OptionData(mapName));
-                        this.mapName.Add(mapKey);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Tilemap not found in scene for name: {mapName}");
-                    }
+                    dropdownLoad.options.Add(new TMP_Dropdown.OptionData(mapName));
+
+                    mapNames.Add(mapKey);
                 }
 
                 dropdownLoad.RefreshShownValue();
@@ -249,59 +266,64 @@ public class SaveHandler : Singleton<SaveHandler> {
             return;
         }
 
+        if(selectedMapIndex == 0)
+        {
+            ResetMap();
+            return;
+        }
+
         string userId = auth.CurrentUser.UserId;
 
         databaseReference.Child("tilemap_data").Child(userId).Child(mapKey).GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            if (task.IsCompleted)
+            if (task.IsCompleted && task.Result.Exists)
             {
-                DataSnapshot snapshot = task.Result;
-                if (!snapshot.Exists)
+                // If data exists, retrieve the JSON
+                string json = task.Result.GetRawJsonValue();
+
+                // Deserialize the JSON into a TilemapDataWrapper
+                TilemapDataWrapper wrapper = JsonUtility.FromJson<TilemapDataWrapper>(json);
+
+                foreach (var mapData in wrapper.tilemapDataList)
                 {
-                    Debug.LogWarning($"No tilemap data found for key: {mapKey}");
-                    return;
+                    // if key does NOT exist in dictionary skip it
+                    if (!tilemaps.ContainsKey(mapData.key))
+                    {
+                        Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
+                        continue;
+                    }
+
+                    // get according map
+                    var map = tilemaps[mapData.key];
+
+                    // clear map
+                    map.ClearAllTiles();
+
+                    if (mapData.tiles != null && mapData.tiles.Count > 0)
+                    {
+                        foreach (var tile in mapData.tiles)
+                        {
+
+                            if (guidToTileBase.ContainsKey(tile.guidForBuildable))
+                            {
+                                map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
+                            }
+                            else
+                            {
+                                Debug.LogError("Refernce " + tile.guidForBuildable + " could not be found.");
+                            }
+
+                        }
+                    }
                 }
 
-                TilemapData mapData = JsonUtility.FromJson<TilemapData>(snapshot.GetRawJsonValue());
-                Debug.Log($"Loaded map data for key: {mapKey}");
-
-                // Apply data to tilemaps
-                Debug.Log("Applying Tilemap Data for key: " + mapData.key);
-                ApplyTilemapData(mapData);
             }
             else
             {
-                Debug.LogError("Failed to load tilemap data: " + task.Exception);
+                Debug.LogError("Failed to load tilemap data or no data exists at the given key.");
             }
         });
     }
-
-    private void ApplyTilemapData(TilemapData mapData)
-    {
-        Debug.Log($"Applying Tilemap Data for key: {mapData.key}");
-
-        if (!tilemaps.ContainsKey(mapData.key))
-        {
-            Debug.LogWarning($"No Tilemap found for key: {mapData.key}");
-            return;
-        }
-
-        Tilemap map = tilemaps[mapData.key];
-        map.ClearAllTiles();
-
-        foreach (var tileInfo in mapData.tiles)
-        {
-            if (guidToTileBase.ContainsKey(tileInfo.guidForBuildable))
-            {
-                map.SetTile(tileInfo.position, guidToTileBase[tileInfo.guidForBuildable]);
-            }
-            else
-            {
-                Debug.LogError($"Tile not found for GUID: {tileInfo.guidForBuildable}");
-            }
-        }
-    }
-
 
     private string GetTilemapNameFromKey(string key)
     {
@@ -328,25 +350,76 @@ public class SaveHandler : Singleton<SaveHandler> {
         return null;
     }
 
+    public void OnDeleteMapFromFirebase()
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("No user is logged in.");
+            return;
+        }
+
+        if (dropdownLoad.options.Count == 0 || selectedMapIndex == 0)
+        {
+            Debug.LogWarning("No map selected to delete.");
+            return;
+        }
+
+        selectedMapIndex = dropdownLoad.value;
+
+        if (selectedMapIndex == 0) return;
+
+        string selectedMapKey = mapNames[selectedMapIndex];
+
+        string userId = auth.CurrentUser.UserId;
+
+        // Confirm deletion
+        Debug.Log($"Attempting to delete map with key: {selectedMapKey}");
+
+        // Remove map key from Firebase
+        databaseReference.Child("tilemap_data").Child(userId).Child("keys").Child(selectedMapKey).RemoveValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    Debug.Log($"Successfully deleted map key: {selectedMapKey} from Firebase.");
+                }
+                else
+                {
+                    Debug.LogError("Failed to delete map key: " + task.Exception);
+                }
+            });
+
+        // Remove actual map data from Firebase
+        databaseReference.Child("tilemap_data").Child(userId).Child(selectedMapKey).RemoveValueAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    Debug.Log($"Successfully deleted map data for key: {selectedMapKey} from Firebase.");
+
+                    // Refresh map list
+                    OnLoadFromFirebase();
+                }
+                else
+                {
+                    Debug.LogError("Failed to delete map data: " + task.Exception);
+                }
+            });
+    }
 
 
 
 }
 
 
-[Serializable]
+[System.Serializable]
 public class TilemapData {
     public string key; // the key of your dictionary for the tilemap - here: the name of the map in the hierarchy
     public List<TileInfo> tiles = new List<TileInfo>();
 }
 
-// [Serializable]
-// public class TilemapDataListWrapper
-// {
-//     public List<TilemapData> tilemaps = new List<TilemapData>();
-// }
 
-[Serializable]
+[System.Serializable]
 public class MapKeyData
 {
     public string name;
@@ -366,5 +439,17 @@ public class TileInfo {
     public TileInfo(Vector3Int pos, string guid) {
         position = pos;
         guidForBuildable = guid;
+    }
+}
+
+[System.Serializable]
+public class TilemapDataWrapper
+{
+    public List<TilemapData> tilemapDataList;
+
+    // Constructor to initialize the list
+    public TilemapDataWrapper(List<TilemapData> tilemapDataList)
+    {
+        this.tilemapDataList = tilemapDataList;
     }
 }
