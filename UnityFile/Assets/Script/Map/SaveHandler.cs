@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
@@ -9,6 +9,9 @@ using Firebase.Extensions;
 using UnityEngine.Timeline;
 using UnityEngine.InputSystem;
 using UnityEditor.U2D.Aseprite;
+using TMPro;
+using Unity.UI;
+using UnityEngine.UI;
 
 public class SaveHandler : Singleton<SaveHandler> {
     Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
@@ -16,11 +19,17 @@ public class SaveHandler : Singleton<SaveHandler> {
     Dictionary<string, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
 
     [SerializeField] BoundsInt bounds;
-    [SerializeField] string filename = "Map";
+    
 
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
 
+    [Header("Save/Load")]
+    [SerializeField] List<string> mapName = new List<string>();
+    [SerializeField] string filename;
+    [SerializeField] TMP_InputField inputSave;
+    [SerializeField] TMP_Dropdown dropdownLoad;
+    [SerializeField] Button loadButton;
 
     private void Start() {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
@@ -32,12 +41,20 @@ public class SaveHandler : Singleton<SaveHandler> {
                 InitTilemaps();
                 InitTileReferences();
                 Debug.Log("Firebase initialized successfully(Map).");
+
+                // Load map
+                OnLoadFromFirebase();
+
             }
             else
             {
                 Debug.LogError("Could not resolve all Firebase dependencies.");
             }
         });
+    
+        //loadButton.onClick.AddListener(OnLoadSelectedMapFromFirebase);
+        //dropdownLoad.onValueChanged.AddListener(delegate { OnLoadSelectedMapFromFirebase(); });
+        
     }
 
     private void InitTileReferences()
@@ -59,19 +76,39 @@ public class SaveHandler : Singleton<SaveHandler> {
     }
 
     private void InitTilemaps() {
-        // get all tilemaps from scene
-        // and write to dictionary
         Tilemap[] maps = FindObjectsOfType<Tilemap>();
-
-        // the hierarchy name must be unique
-        // you might add some checks here to make sure
         foreach (var map in maps) {
-            // if you have tilemaps you don't want to safe - filter them here
-            tilemaps.Add(map.name, map);
+            string key = map.name; // ใช้ชื่อ Tilemap เป็น Key
+            if (!tilemaps.ContainsKey(key)) {
+                tilemaps.Add(key, map);
+                Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
+            }
         }
     }
+    string GenerateUniqueKey()
+    {
+        return Guid.NewGuid().ToString();
+    }
 
-    public void OnSaveToFirebase()
+    public void OnLoadSelectedMapFromFirebase()
+    {
+        if (dropdownLoad.options.Count == 0)
+        {
+            Debug.LogWarning("No maps available to load.");
+            return;
+        }
+
+        int selectedIndex = dropdownLoad.value;
+        string selectedMapKey = mapName[selectedIndex]; 
+
+        Debug.Log($"Selected map key: {selectedMapKey}");
+
+        
+        OnLoadMapFromFirebase(selectedMapKey);
+    }
+
+
+    public void OnSaveToFirebase(string mapKey = null)
     {
         if (auth.CurrentUser == null)
         {
@@ -81,15 +118,26 @@ public class SaveHandler : Singleton<SaveHandler> {
 
         string userId = auth.CurrentUser.UserId;
 
-        // List that will later be saved
-        TilemapDataListWrapper dataWrapper = new TilemapDataListWrapper();
+        string mapName = inputSave.text;
 
+        // If it new map create key
+        if (string.IsNullOrEmpty(mapKey))
+        {
+            mapKey = GenerateUniqueKey();
+            Debug.Log("Generated new mapKey: " + mapKey);
+        }
+
+        /*TilemapData mapData = new TilemapData
+        {
+            key = mapKey,
+            tiles = new List<TileInfo>()
+        };*/
+        List<TilemapData> data = new List<TilemapData>();
+        //Convert to json
         foreach (var mapObj in tilemaps)
         {
-            TilemapData mapData = new TilemapData
-            {
-                key = mapObj.Key
-            };
+            TilemapData mapData = new TilemapData();
+            mapData.key = mapObj.Key;
 
             BoundsInt boundsForThisMap = mapObj.Value.cellBounds;
 
@@ -108,27 +156,42 @@ public class SaveHandler : Singleton<SaveHandler> {
                     }
                 }
             }
-
-            dataWrapper.tilemaps.Add(mapData);
+            data.Add(mapData);
         }
-        Debug.Log("DataWrapper: " + dataWrapper.tilemaps);
-        string json = JsonUtility.ToJson(dataWrapper);
+        string json = JsonUtility.ToJson(data);
+
         Debug.Log("Generated JSON: " + json);
 
 
-        Debug.Log("UserID:" + userId);
-        // Check if mapKey exists, update or create a new one
-        databaseReference.Child("tilemap_data").Child(userId).Child(filename).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => {
+        //Save to database
+        MapKeyData mapKeyData = new MapKeyData(mapName); //mapName = map.name
+        string keyJson = JsonUtility.ToJson(mapKeyData);
+        databaseReference.Child("tilemap_data").Child(userId).Child("keys").Child(mapKey).SetRawJsonValueAsync(keyJson).ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
-                Debug.Log($"Tilemap data saved successfully to Firebase with name: {filename}");
+                Debug.Log($"Key '{mapKey}' with name '{mapName}' saved successfully to Firebase.");
+            }
+            else
+            {
+                Debug.LogError("Failed to save key: " + task.Exception);
+            }
+        });
+
+        databaseReference.Child("tilemap_data").Child(userId).Child(mapKey).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log($"Tilemap data saved successfully to Firebase with key: {mapKey}");
+                
             }
             else
             {
                 Debug.LogError("Failed to save tilemap data: " + task.Exception);
-                
             }
         });
+
+        OnLoadFromFirebase();
     }
 
     public void OnLoadFromFirebase()
@@ -141,47 +204,70 @@ public class SaveHandler : Singleton<SaveHandler> {
 
         string userId = auth.CurrentUser.UserId;
 
-        databaseReference.Child("tilemap_data").Child(userId).Child(filename).GetValueAsync().ContinueWithOnMainThread(task => {
+        databaseReference.Child("tilemap_data").Child(userId).Child("keys").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                dropdownLoad.ClearOptions();
+                mapName.Clear();
+
+                foreach (DataSnapshot keySnapshot in snapshot.Children)
+                {
+                    string mapKey = keySnapshot.Key;
+                    string mapName = keySnapshot.Child("name").Value.ToString();
+
+                    Debug.Log($"Found map key: {mapKey}, name: {mapName}");
+
+                    Tilemap tilemap = FindTilemapByName(mapName);
+                    if (tilemap != null)
+                    {
+                        tilemaps[mapKey] = tilemap;
+                        dropdownLoad.options.Add(new TMP_Dropdown.OptionData(mapName));
+                        this.mapName.Add(mapKey);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Tilemap not found in scene for name: {mapName}");
+                    }
+                }
+
+                dropdownLoad.RefreshShownValue();
+            }
+            else
+            {
+                Debug.LogError("Failed to load map keys: " + task.Exception);
+            }
+        });
+    }
+
+    public void OnLoadMapFromFirebase(string mapKey)
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("No user is logged in.");
+            return;
+        }
+
+        string userId = auth.CurrentUser.UserId;
+
+        databaseReference.Child("tilemap_data").Child(userId).Child(mapKey).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
                 if (!snapshot.Exists)
                 {
-                    Debug.LogWarning("No tilemap data found for this user.");
+                    Debug.LogWarning($"No tilemap data found for key: {mapKey}");
                     return;
                 }
 
-                TilemapDataListWrapper dataWrapper = JsonUtility.FromJson<TilemapDataListWrapper>(snapshot.GetRawJsonValue());
+                TilemapData mapData = JsonUtility.FromJson<TilemapData>(snapshot.GetRawJsonValue());
+                Debug.Log($"Loaded map data for key: {mapKey}");
 
-
-                foreach (var mapData in dataWrapper.tilemaps)
-                {
-                    if (!tilemaps.ContainsKey(mapData.key))
-                    {
-                        Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
-                        continue;
-                    }
-
-                    var map = tilemaps[mapData.key];
-                    map.ClearAllTiles();
-
-                    if (mapData.tiles != null && mapData.tiles.Count > 0)
-                    {
-                        foreach (var tile in mapData.tiles)
-                        {
-                            if (guidToTileBase.ContainsKey(tile.guidForBuildable))
-                            {
-                                map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
-                            }
-                            else
-                            {
-                                Debug.LogError("Reference " + tile.guidForBuildable + " could not be found.");
-                            }
-                        }
-                    }
-                }
-
-                Debug.Log("Tilemap data loaded successfully from Firebase.");
+                // Apply data to tilemaps
+                Debug.Log("Applying Tilemap Data for key: " + mapData.key);
+                ApplyTilemapData(mapData);
             }
             else
             {
@@ -189,6 +275,59 @@ public class SaveHandler : Singleton<SaveHandler> {
             }
         });
     }
+
+    private void ApplyTilemapData(TilemapData mapData)
+    {
+        Debug.Log($"Applying Tilemap Data for key: {mapData.key}");
+
+        if (!tilemaps.ContainsKey(mapData.key))
+        {
+            Debug.LogWarning($"No Tilemap found for key: {mapData.key}");
+            return;
+        }
+
+        Tilemap map = tilemaps[mapData.key];
+        map.ClearAllTiles();
+
+        foreach (var tileInfo in mapData.tiles)
+        {
+            if (guidToTileBase.ContainsKey(tileInfo.guidForBuildable))
+            {
+                map.SetTile(tileInfo.position, guidToTileBase[tileInfo.guidForBuildable]);
+            }
+            else
+            {
+                Debug.LogError($"Tile not found for GUID: {tileInfo.guidForBuildable}");
+            }
+        }
+    }
+
+
+    private string GetTilemapNameFromKey(string key)
+    {
+        return tilemaps.ContainsKey(key) ? tilemaps[key].name : null;
+    }
+
+    private Tilemap FindTilemapByName(string name)
+    {
+        name = name.Trim(); // Delete spaces 
+        Debug.Log($"Searching Tilemap by name: {name}");
+
+        Tilemap[] maps = FindObjectsOfType<Tilemap>();
+        foreach (var map in maps)
+        {
+            Debug.Log($"Found Tilemap: {map.name}");
+            if (map.name == name)
+            {
+                Debug.Log($"Match found: {map.name}");
+                return map;
+            }
+        }
+
+        Debug.LogWarning($"Tilemap not found: {name}");
+        return null;
+    }
+
 
 
 
@@ -201,10 +340,21 @@ public class TilemapData {
     public List<TileInfo> tiles = new List<TileInfo>();
 }
 
+// [Serializable]
+// public class TilemapDataListWrapper
+// {
+//     public List<TilemapData> tilemaps = new List<TilemapData>();
+// }
+
 [Serializable]
-public class TilemapDataListWrapper
+public class MapKeyData
 {
-    public List<TilemapData> tilemaps = new List<TilemapData>();
+    public string name;
+
+    public MapKeyData(string name)
+    {
+        this.name = name;
+    }
 }
 
 
