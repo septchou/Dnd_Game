@@ -8692,11 +8692,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0E43\u0E0A\u0E49 1 bonus action \u0E17\u0E33\u0E01\u0E32\u0E23\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E42\u0E2B\u0E21\u0E14\u0E1A\u0E49\u0E32\u0E04\u0E25\u0E31\u0E48\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E23\u0E30\u0E22\u0E30\u0E40\u0E27\u0E25\u0E32
-    2 \u0E23\u0E2D\u0E1A\u0E01\u0E32\u0E23\u0E40\u0E25\u0E48\u0E19 \u0E08\u0E32\u0E01\u0E19\u0E31\u0E49\u0E19\u0E44\u0E14\u0E49\u0E23\u0E31\u0E1A\u0E1C\u0E25\u0E08\u0E32\u0E01\u0E2A\u0E01\u0E34\u0E25\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E14\u0E31\u0E07\u0E19\u0E35\u0E49\r\n1.\t\u0E40\u0E21\u0E37\u0E48\u0E2D\u0E17\u0E33\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E42\u0E14\u0E19\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22\u0E08\u0E30\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E14\u0E32\u0E40\u0E21\u0E08\u0E17\u0E35\u0E48\u0E17\u0E33\u0E44\u0E14\u0E49\u0E40\u0E17\u0E48\u0E32\u0E01\u0E31\u0E1A
-    STR\r\n2.\t\u0E40\u0E21\u0E37\u0E48\u0E2D\u0E17\u0E33\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E08\u0E30\u0E17\u0E33\u0E01\u0E32\u0E23\u0E17\u0E2D\u0E22
-    Hit dice \u0E40\u0E1E\u0E34\u0E48\u0E21\u0E2D\u0E35\u0E01 1 \u0E25\u0E39\u0E01
-    \u0E42\u0E14\u0E22\u0E04\u0E33\u0E19\u0E27\u0E19\u0E15\u0E32\u0E21 Hit dice \u0E02\u0E2D\u0E07\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E14\u0E31\u0E07\u0E01\u0E25\u0E48\u0E32\u0E27\r\n"
+  m_text: "Use 1 action to enter a frenzy mode for 2 turns. While in this mode, gain
+    the following additional effects:  \r\n\t1. When attacking and hitting a target,
+    add extra damage equal to your STR Modifier.  \r\n\t2. When attacking, roll an
+    additional Hit Dice based on the attack's Hit Dice and include it in the calculation.\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a555983832cfa59479d85d46895ee09b, type: 2}
   m_sharedMaterial: {fileID: -6907463945311706947, guid: a555983832cfa59479d85d46895ee09b, type: 2}
@@ -10275,7 +10274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1140040663
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11057,7 +11056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMin.x
@@ -11065,15 +11064,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11105,11 +11104,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -130
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -13561,7 +13560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13929,7 +13928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -17433,7 +17432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 6.3280334, y: 0}
+  m_AnchoredPosition: {x: 6.328026, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1936590692

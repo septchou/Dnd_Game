@@ -20,5 +20,4 @@ MonoBehaviour:
     numberOfDice: 1
   associatedAbility:
   - {fileID: 11400000, guid: f930cc46621b9954cb18bd9a0dfa3d50, type: 2}
-  detail: "\u0E43\u0E0A\u0E49 1 action \u0E17\u0E33\u0E01\u0E32\u0E23\u0E23\u0E31\u0E01\u0E29\u0E32\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22
-    1 \u0E15\u0E31\u0E27 \u0E40\u0E17\u0E48\u0E32\u0E01\u0E31\u0E1A 1d6 x level"
+  detail: "\tUse 1 action to heal a single target for 1d6 x level."

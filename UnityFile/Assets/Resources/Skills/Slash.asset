@@ -23,7 +23,5 @@ MonoBehaviour:
   associatedAbility:
   - {fileID: 11400000, guid: adb0690a3c140274a8ad1debab43c61c, type: 2}
   - {fileID: 11400000, guid: 038228c7a2e0f5541a0cb42a97eb6f32, type: 2}
-  detail: "\u0E43\u0E0A\u0E49 1 action \u0E17\u0E33\u0E14\u0E32\u0E40\u0E21\u0E08\u0E15\u0E48\u0E2D\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22
-    1 \u0E15\u0E31\u0E27\u0E17\u0E35\u0E48\u0E2D\u0E22\u0E39\u0E48\u0E43\u0E19\u0E23\u0E30\u0E22\u0E30
-    1 m \u0E08\u0E32\u0E01\u0E15\u0E31\u0E27\u0E1C\u0E39\u0E49\u0E40\u0E25\u0E48\u0E19
-    \tHit Dice: 1d20 + STR/2 + DEX/2\t\tDamage: 1d10 + STR "
+  detail: "\tUse 1 action to deal damage to a single target within 1 meter of the
+    player."
