@@ -48,9 +48,9 @@ public class TilemapGame : Singleton<TilemapGame>
         // Add a Rigidbody2D to freeze the tilemap in place
         Rigidbody2D rb = tilemapGameObject.AddComponent<Rigidbody2D>();
     
-        // Set the Rigidbody to be kinematic so it doesn't react to physics, and freeze it on all axes
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        // Set the Rigidbody to be Static so it doesn't move
+        rb.bodyType = RigidbodyType2D.Static;
+
 
         Debug.Log("Wall Tilemap with Collider and Rigidbody added: " + tilemapGameObject.name);
     }
