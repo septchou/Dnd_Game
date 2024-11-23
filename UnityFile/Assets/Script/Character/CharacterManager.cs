@@ -22,6 +22,8 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     [Header("Gameplay")]
     public List<int> enemyListNumber;
 
+    [Header("Scene")]
+    [SerializeField] bool isSwitchToMap;
     private void Awake()
     {
         // Ensure the instance of this manager is accessible throughout the game

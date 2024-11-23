@@ -176,6 +176,7 @@ MonoBehaviour:
   startGameButton: {fileID: 1560288602}
   readyButton: {fileID: 344483968}
   selectButton: {fileID: 1156136132}
+  mapButton: {fileID: 2119927992}
   readyButtonText: {fileID: 687995330}
   characterCreation: {fileID: 503656675}
 --- !u!1 &33542359
@@ -4424,6 +4425,7 @@ RectTransform:
   - {fileID: 1156136133}
   - {fileID: 1560288603}
   - {fileID: 344483969}
+  - {fileID: 2119927993}
   m_Father: {fileID: 1631940477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8634,8 +8636,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14906,7 +14908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1421424789
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14920,7 +14922,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 383867704}
-  - {fileID: 2119927993}
   m_Father: {fileID: 1631940477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -17304,6 +17305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1839097851}
   - component: {fileID: 1839097850}
+  - component: {fileID: 1839097852}
   m_Layer: 0
   m_Name: CharacterManager
   m_TagString: Untagged
@@ -17331,6 +17333,7 @@ MonoBehaviour:
   selectedCharacter: {fileID: 0}
   playerCharacterPrefab: {fileID: 1389696707206792283, guid: b25b9880c03289442b8f1ccb5e755f38, type: 3}
   enemyListNumber: 
+  isSwitchToMap: 0
 --- !u!4 &1839097851
 Transform:
   m_ObjectHideFlags: 0
@@ -17346,6 +17349,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1839097852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839097849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a791933e2eac3479873286cde141a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSwitchMap: 0
+  switchMapButton: {fileID: 0}
 --- !u!1 &1854122883
 GameObject:
   m_ObjectHideFlags: 0
@@ -20275,7 +20292,7 @@ GameObject:
   - component: {fileID: 2119927995}
   - component: {fileID: 2119927994}
   m_Layer: 5
-  m_Name: Stupid
+  m_Name: MapButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20288,19 +20305,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119927992}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0004882635, w: 0.9999999}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 814637617}
-  m_Father: {fileID: 1421424789}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 761, y: -473}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Father: {fileID: 503656673}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.056}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 797.2, y: -335}
+  m_SizeDelta: {x: 325.6026, y: 93.215}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2119927994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20345,9 +20362,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 31787643}
-        m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
-        m_MethodName: ChangeScene
+      - m_Target: {fileID: 1839097852}
+        m_TargetAssemblyTypeName: MapSwitch, Assembly-CSharp
+        m_MethodName: ChangeToMapScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

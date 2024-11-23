@@ -24,8 +24,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject startGameButton;
     [SerializeField] GameObject readyButton;
     [SerializeField] GameObject selectButton;
+    [SerializeField] GameObject mapButton;
     [SerializeField] TMP_Text readyButtonText;
     [SerializeField] CharacterCreation characterCreation;
+
     void Awake()
     {
         Instance = this;
@@ -34,7 +36,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Connect to Photon server when the game starts
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();  // Connects to Photon master server
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            if (MapSwitch.Instance.isSwitchMap)
+            {
+                OnJoinedRoom();
+                MapSwitch.Instance.isSwitchMap = false;
+                MapSwitch.Instance.ReassignButton();
+            }
+        }
+
     }
 
     // Callback when connected to the Photon server
@@ -97,11 +112,13 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient)
         {
             readyButton.SetActive(true);
-            startGameButton.SetActive(false);;
+            startGameButton.SetActive(false);
+            mapButton.SetActive(false);
         }
         else {
             startGameButton.SetActive(true);
             readyButton.SetActive(false);
+            mapButton.SetActive(true);
         }
         
     }
@@ -198,6 +215,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (AreAllPlayersReady())
         {
+            PhotonNetwork.AutomaticallySyncScene = true;
+
             // Close the room before starting the game
             PhotonNetwork.CurrentRoom.IsVisible = false;  // Makes the room invisible in room list
             PhotonNetwork.CurrentRoom.IsOpen = false;     // Prevents new players from joining
