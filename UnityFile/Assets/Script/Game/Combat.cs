@@ -233,6 +233,7 @@ public class Combat : MonoBehaviourPun
                     skillButtons[i].onClick.AddListener(() => CastBuff(index));
                 }
             }
+            
         }
         else
         {
@@ -284,7 +285,7 @@ public class Combat : MonoBehaviourPun
             GameSceneController.Instance.RollAnimation(totalDamageDices, HandleDiceRollResult);
             totalDiceRoll += totalDamageDices.Count;
 
-            yield return new WaitForSeconds(delay + (float)totalDiceRoll - 2);
+            yield return new WaitForSeconds(delay *(float)totalDiceRoll);
 
             if (skillName == "Slash")
             {

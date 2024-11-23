@@ -32,7 +32,7 @@ public class Inventory : ScriptableObject
     {
         //Check that want to add item to the specified user's inventory if not , add to your own inventory
         string targetUserId = specifiedUserId ?? userId;
-        Debug.Log("Target User ID: " + targetUserId);
+        //Debug.Log("Target User ID: " + targetUserId);
         if (databaseReference != null && !string.IsNullOrEmpty(targetUserId))
         {
             //Check if the item is already in the inventory
@@ -41,14 +41,14 @@ public class Inventory : ScriptableObject
             {
                 //If the item is already in the inventory, increase the quantity
                 existingItem.quantity++;
-                Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
+                //Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
             }
             else
             {
                 //If the item is not in the inventory, add it to the list
                 item.quantity = 1;
                 items.Add(item);
-                Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
+                //Debug.Log("Added " + item.quantity + " " + item.itemName + " to inventory");
             }
             //UpdateItemInFirebase(existingItem, targetUserId);
         }
@@ -67,11 +67,11 @@ public class Inventory : ScriptableObject
         {
             if (task.IsCompleted)
             {
-                Debug.Log($"Item {item.itemName} updated in Firebase for user: {targetUserId}");
+                //Debug.Log($"Item {item.itemName} updated in Firebase for user: {targetUserId}");
             }
             else if (task.IsFaulted)
             {
-                Debug.LogError("Failed to add item to Firebase: " + task.Exception);
+                //Debug.LogError("Failed to add item to Firebase: " + task.Exception);
             }
         });
     }
@@ -88,12 +88,12 @@ public class Inventory : ScriptableObject
             {
                 items.Remove(item); //Remove the item from the inventory if the quantity is 0 or less
                 DeleteItemFromFirebase(itemID, targetUserId);
-                Debug.Log("Removed " + item.itemName + " from inventory");
+                //Debug.Log("Removed " + item.itemName + " from inventory");
             }
             else
             {
                 UpdateItemInFirebase(item, targetUserId);
-                Debug.Log("Removed " + quantity + " " + item.itemName + " from inventory");
+                //Debug.Log("Removed " + quantity + " " + item.itemName + " from inventory");
             }
         }
     }
@@ -106,11 +106,11 @@ public class Inventory : ScriptableObject
         {
             if (task.IsCompleted)
             {
-                Debug.Log("Item removed from Firebase");
+                //Debug.Log("Item removed from Firebase");
             }
             else if (task.IsFaulted)
             {
-                Debug.LogError("Failed to remove item from Firebase: " + task.Exception);
+                //Debug.LogError("Failed to remove item from Firebase: " + task.Exception);
             }
         });
     }

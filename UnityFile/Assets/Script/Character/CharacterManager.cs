@@ -42,7 +42,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public void AddCharacter(Character newCharacter)
     {
         characterList.Add(newCharacter);
-        Debug.Log($"Character {newCharacter.characterName} has been added.");
+        //Debug.Log($"Character {newCharacter.characterName} has been added.");
     }
 
     // Method to get all characters (if needed for the character selection page)
@@ -54,7 +54,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
     public void AddEnemy(Character newCharacter)
     {
         enemyList.Add(newCharacter);
-        Debug.Log($"Enemy {newCharacter.characterName} has been add to the list.");
+        //Debug.Log($"Enemy {newCharacter.characterName} has been add to the list.");
     }
 
     public List<Character> GetEnemyList()
@@ -69,7 +69,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         if (characterToRemove != null)
         {
             characterList.Remove(characterToRemove);
-            Debug.Log($"Character {characterName} has been removed from the list.");
+            //Debug.Log($"Character {characterName} has been removed from the list.");
         }
         else
         {
@@ -83,7 +83,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         if (enemyToRemove != null)
         {
             enemyList.Remove(enemyToRemove);
-            Debug.Log($"Enemy {enemyName} has been removed from the list.");
+            //Debug.Log($"Enemy {enemyName} has been removed from the list.");
         }
         else
         {

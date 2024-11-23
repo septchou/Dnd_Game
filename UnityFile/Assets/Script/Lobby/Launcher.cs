@@ -55,7 +55,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Callback when connected to the Photon server
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to Photon Master Server");
+        //Debug.Log("Connected to Photon Master Server");
         PhotonNetwork.JoinLobby();  // Joins the default lobby
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.EnableCloseConnection = true;
@@ -65,7 +65,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("Title");
-        Debug.Log("Joined Lobby");
+        //Debug.Log("Joined Lobby");
     }
 
     public void CreateRoom()
@@ -82,7 +82,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         roomOptions.CleanupCacheOnLeave = true;
 
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions,TypedLobby.Default);
-        Debug.Log("Created room success");
+        //Debug.Log("Created room success");
         MenuManager.Instance.OpenMenu("loading");
         characterCreation.CharacterMenuSetup();
     }
@@ -91,7 +91,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
-        Debug.Log("Join " + PhotonNetwork.CurrentRoom.Name);
+        //Debug.Log("Join " + PhotonNetwork.CurrentRoom.Name);
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
         characterCreation.CharacterMenuSetup();

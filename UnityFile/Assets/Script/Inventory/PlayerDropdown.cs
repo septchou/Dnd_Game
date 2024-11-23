@@ -23,11 +23,11 @@ public class PlayerDropdown : MonoBehaviourPunCallbacks
           
             if (task.Result == DependencyStatus.Available)
             {
-                Debug.Log("Kuy");
+                //Debug.Log("Kuy");
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
                 LoadPlayerListFromFirebase();
-                Debug.Log("Firebase is ready to use(PlayerDropdown)");
+                //Debug.Log("Firebase is ready to use(PlayerDropdown)");
             }
             else
             {
@@ -47,7 +47,7 @@ public class PlayerDropdown : MonoBehaviourPunCallbacks
 
             if (playerList.TryGetValue(selectedPlayerName, out string selectedUserId))
             {
-                Debug.Log($"Selected Player: {selectedPlayerName}, User ID: {selectedUserId}");
+                //Debug.Log($"Selected Player: {selectedPlayerName}, User ID: {selectedUserId}");
                 inventoryUI.LoadInventoryFromFirebase(selectedUserId); // Load inventory for selected player
             }
             else
@@ -60,7 +60,7 @@ public class PlayerDropdown : MonoBehaviourPunCallbacks
 
     private void LoadPlayerListFromFirebase()
     {
-        Debug.Log("Loading player list from Firebase");
+        //Debug.Log("Loading player list from Firebase");
         databaseReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)

@@ -868,6 +868,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 45271987}
+  - component: {fileID: 45271988}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -890,6 +891,7 @@ RectTransform:
   - {fileID: 1576253420}
   - {fileID: 1459600066}
   - {fileID: 17540177}
+  - {fileID: 1140040663}
   m_Father: {fileID: 1646352051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -897,6 +899,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &45271988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45271986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b277aff11dc476408d557a8ca4abc4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: Inventory
+  open: 0
 --- !u!1 &68561910
 GameObject:
   m_ObjectHideFlags: 0
@@ -10267,7 +10283,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1140040662}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10277,7 +10293,7 @@ RectTransform:
   - {fileID: 384465433}
   - {fileID: 1398508362}
   - {fileID: 2086305720}
-  m_Father: {fileID: 1646352051}
+  m_Father: {fileID: 45271987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -11041,7 +11057,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMin.x
@@ -11049,15 +11065,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11089,11 +11105,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -130
       objectReference: {fileID: 0}
     - target: {fileID: 7739232002484243804, guid: 2f68c2c7843ab6e44865a1a7c68d1001, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14081,6 +14097,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1599135422}
+  - component: {fileID: 1599135423}
   m_Layer: 5
   m_Name: CharacterinfoUI
   m_TagString: Untagged
@@ -14100,6 +14117,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1924596628}
   - {fileID: 1177648503}
   - {fileID: 1074832801}
   - {fileID: 929716989}
@@ -14111,6 +14129,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1599135423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599135421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b277aff11dc476408d557a8ca4abc4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: CharacterInfo
+  open: 0
 --- !u!1 &1616046071
 GameObject:
   m_ObjectHideFlags: 0
@@ -14669,6 +14701,7 @@ GameObject:
   - component: {fileID: 1646352052}
   - component: {fileID: 1646352053}
   - component: {fileID: 1646352054}
+  - component: {fileID: 1646352055}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -14756,14 +14789,12 @@ RectTransform:
   - {fileID: 848136281}
   - {fileID: 1547478979}
   - {fileID: 786270578}
-  - {fileID: 1253721686}
   - {fileID: 2071874936}
   - {fileID: 976711878}
   - {fileID: 1599135422}
-  - {fileID: 1924596628}
-  - {fileID: 559397261}
   - {fileID: 45271987}
-  - {fileID: 1140040663}
+  - {fileID: 1253721686}
+  - {fileID: 559397261}
   - {fileID: 1430103432}
   - {fileID: 206325779}
   - {fileID: 1287288429}
@@ -14791,6 +14822,7 @@ MonoBehaviour:
   enemyListButton: {fileID: 2071874935}
   enemylistPanel: {fileID: 559397260}
   enemyList: {fileID: 3012738909285985870, guid: 6ad19e33e6d56bd4b8a6d466d3ccb71e, type: 3}
+  turnListUI: {fileID: 1657893673}
   enemyListContent: {fileID: 1093888029}
   isListopen: 0
   overlay: {fileID: 1646352054}
@@ -14832,6 +14864,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOverlayOn: 0
   selectedOverlay: {fileID: 0}
+--- !u!114 &1646352055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646352047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 970b00fe2af28394090705062dfc92a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menus:
+  - {fileID: 1854289207}
+  - {fileID: 1599135423}
+  - {fileID: 45271988}
 --- !u!1 &1646712768
 GameObject:
   m_ObjectHideFlags: 0
@@ -16439,7 +16487,6 @@ MonoBehaviour:
   message: {fileID: 1503374932232966023, guid: 24333c415e72b3c42acdb94619597cd4, type: 3}
   content: {fileID: 2105551503}
   chatBoxUI: {fileID: 1854289205}
-  isChatBoxOpen: 0
 --- !u!1 &1817126855
 GameObject:
   m_ObjectHideFlags: 0
@@ -16690,6 +16737,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1854289206}
+  - component: {fileID: 1854289207}
   m_Layer: 5
   m_Name: ChatBoxUI
   m_TagString: Untagged
@@ -16719,6 +16767,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1854289207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1854289205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b277aff11dc476408d557a8ca4abc4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: Chat
+  open: 0
 --- !u!1 &1858068033
 GameObject:
   m_ObjectHideFlags: 0
@@ -17323,14 +17385,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1924596627}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 234355466}
   - {fileID: 511841784}
-  m_Father: {fileID: 1646352051}
+  m_Father: {fileID: 1599135422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -17507,7 +17569,7 @@ MonoBehaviour:
   - {fileID: 1778288612}
   - {fileID: 192739251}
   - {fileID: 1621931027}
-  delay: 5
+  delay: 2
   isMyturn: 0
   normalAction: 1
   isCastMultiple: 0
@@ -17542,6 +17604,7 @@ MonoBehaviour:
   characterList: []
   isCombatActive: 0
   isTurnListOn: 0
+  enemyListUI: {fileID: 559397260}
   combatPhaseUI: {fileID: 1253721685}
   turnList: {fileID: 1657893673}
   turnListItemPrefab: {fileID: 3693649182699080533, guid: ac8d1aa4bc449e8498db9e5dc6925977, type: 3}

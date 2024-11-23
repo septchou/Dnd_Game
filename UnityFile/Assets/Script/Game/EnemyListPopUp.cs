@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 public class EnemyListPopUp : MonoBehaviourPun
 {
-    [SerializeField] GameObject enemyListButton, enemylistPanel, enemyList;
+    [SerializeField] GameObject enemyListButton, enemylistPanel, enemyList, turnListUI;
     [SerializeField] Transform enemyListContent;
     [SerializeField] bool isListopen = false;
     [SerializeField] OverloyOverMouse overlay;
@@ -24,9 +24,13 @@ public class EnemyListPopUp : MonoBehaviourPun
 
     public void PopEnemeyList()
     {
-        enemylistPanel.SetActive(!isListopen);
+        
         isListopen = !isListopen;
-
+        enemylistPanel.SetActive(!enemylistPanel.activeSelf);
+        if (enemylistPanel.activeSelf)
+        {
+            turnListUI.SetActive(false);
+        }
     }
 
     private void ListEnemy()

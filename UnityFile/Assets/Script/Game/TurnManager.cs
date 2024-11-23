@@ -32,6 +32,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [SerializeField] bool isTurnListOn = false;
 
     [Header("UI")]
+    [SerializeField] GameObject enemyListUI;
     [SerializeField] GameObject combatPhaseUI;
     [SerializeField] GameObject turnList;
     [SerializeField] GameObject turnListItemPrefab;
@@ -54,8 +55,11 @@ public class TurnManager : MonoBehaviourPunCallbacks
     public void SwitchTurnList()
     {
         isTurnListOn = !isTurnListOn;
-        turnList.SetActive(isTurnListOn);
-
+        turnList.SetActive(!turnList.activeSelf);
+        if (turnList.activeSelf)
+        {
+            enemyListUI.SetActive(false);
+        }
     }
     public void ChangePhase()
     {
@@ -178,7 +182,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
         turnNow = -1;
 
         CreateTurnListUI();
-
+        enemyListUI.SetActive(false);
         combatPhaseUI.SetActive(true);
         isTurnListOn = true;
 

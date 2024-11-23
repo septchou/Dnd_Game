@@ -219,8 +219,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, totalHeight);
 
         // Activate the popup UI
-        characterDetailPopup.SetActive(true);
-        
+        //characterDetailPopup.SetActive(true);
+        MenuManager.Instance.OpenMenu("CharacterInfo");
     }
 
     // Show skill details when button is pressed

@@ -11,11 +11,12 @@ public class Chat : MonoBehaviour
 {
     public TMP_InputField inputField;
     public GameObject message, content, chatBoxUI;
-    [SerializeField] bool isChatBoxOpen = false;
+    //[SerializeField] bool isChatOpen = false;
     public void OpenChatBox()
     {
-        chatBoxUI.SetActive(!isChatBoxOpen);
-        isChatBoxOpen = !isChatBoxOpen;
+        if (chatBoxUI.activeSelf) MenuManager.Instance.CloseAll();
+        else MenuManager.Instance.OpenMenu("Chat");
+        
     }
     public void SendMessage()
     {

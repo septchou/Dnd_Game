@@ -41,7 +41,7 @@ public class InventoryUI : MonoBehaviour
                 userId = auth.CurrentUser.UserId;
                 LoadInventoryFromFirebase();
                 playerInventory.InitializeFirebase(auth, databaseReference, userId);
-                Debug.Log("Firebase is ready to use(InventoryUI)");
+                //Debug.Log("Firebase is ready to use(InventoryUI)");
             }
             else
             {
@@ -73,16 +73,16 @@ public class InventoryUI : MonoBehaviour
                 foreach (DataSnapshot itemSnapshot in snapshot.Children)
                 {
                     string json = itemSnapshot.GetRawJsonValue();
-                    Debug.Log("json: " + json);
+                    //Debug.Log("json: " + json);
 
                     ItemData itemData = JsonUtility.FromJson<ItemData>(json);
-                    Debug.Log("item: " + itemData);
+                    //Debug.Log("item: " + itemData);
                     if (itemData != null)
                     {
                         Item item = itemData.ToItem();
-                        Debug.Log("item: " + item);
+                       // Debug.Log("item: " + item);
                         AddItemtoInventory(item, item.quantity);
-                        Debug.Log("Loaded item: " + item.itemName);
+                        //Debug.Log("Loaded item: " + item.itemName);
                     }
                     else
                     {
@@ -110,14 +110,15 @@ public class InventoryUI : MonoBehaviour
     public void ToggleInventory()
     {
         //Toggle the visibility of the inventory panel
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        if(inventoryPanel.activeSelf) MenuManager.Instance.CloseAll();
+        else MenuManager.Instance.OpenMenu("Inventory");
     }
 
     public void AddItemtoInventory(Item item, int quantity, string specifiedUserId = null)
     {
         //Debug.Log("playerInventory: " + playerInventory);
         //Debug.Log("testItem: " + item);
-        Debug.Log("userId: " + specifiedUserId);
+        //Debug.Log("userId: " + specifiedUserId);
         if (playerInventory != null && item != null)
         {
             if (specifiedUserId != null)
@@ -126,7 +127,7 @@ public class InventoryUI : MonoBehaviour
                 {
                     playerInventory.AddItem(item, specifiedUserId);
                 }
-                Debug.Log("Added item: " + item.itemName + "to" + specifiedUserId);
+               // Debug.Log("Added item: " + item.itemName + "to" + specifiedUserId);
             }
             else
             {
@@ -134,7 +135,7 @@ public class InventoryUI : MonoBehaviour
                 {
                     playerInventory.AddItem(item);
                 }
-                Debug.Log("Added item: " + item.itemName + "to your Self");
+                //Debug.Log("Added item: " + item.itemName + "to your Self");
             }
             UpdateInventoryUI(); // Update the inventory UI
         }
