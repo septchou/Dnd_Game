@@ -40,7 +40,7 @@ public class SaveHandler : Singleton<SaveHandler> {
 
                 InitTilemaps();
                 InitTileReferences();
-                Debug.Log("Firebase initialized successfully(Map).");
+                //Debug.Log("Firebase initialized successfully(Map).");
 
                 // Load map
                 OnLoadFromFirebase();
@@ -79,7 +79,7 @@ public class SaveHandler : Singleton<SaveHandler> {
             string key = map.name; // ใช้ชื่อ Tilemap เป็น Key
             if (!tilemaps.ContainsKey(key)) {
                 tilemaps.Add(key, map);
-                Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
+                //Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
             }
         }
     }
@@ -95,7 +95,7 @@ public class SaveHandler : Singleton<SaveHandler> {
             mapObj.Value.ClearAllTiles();//Clear all tiles
         }
 
-        Debug.Log("Map has been reset.");
+        //Debug.Log("Map has been reset.");
     }
 
 
@@ -110,14 +110,14 @@ public class SaveHandler : Singleton<SaveHandler> {
         selectedMapIndex = dropdownLoad.value;
         if (selectedMapIndex == 0) // "New map"
         {
-            Debug.Log("Creating new map...");
+            //Debug.Log("Creating new map...");
             ResetMap(); //Reset map
             inputSave.text = ""; // Clear input field
         }
         else
         {
             string selectedMapKey = mapNames[selectedMapIndex];
-            Debug.Log($"Loading map with key: {selectedMapKey}");
+            //Debug.Log($"Loading map with key: {selectedMapKey}");
             OnLoadMapFromFirebase(selectedMapKey);
             inputSave.text = dropdownLoad.options[selectedMapIndex].text;
         }
@@ -142,12 +142,12 @@ public class SaveHandler : Singleton<SaveHandler> {
         if (selectedMapIndex == 0) // "New map"
         {
             mapKey = GenerateUniqueKey();
-            Debug.Log("Generated new mapKey: " + mapKey);
+            //Debug.Log("Generated new mapKey: " + mapKey);
         }
         else 
         {
             mapKey = mapNames[selectedMapIndex];
-            Debug.Log("Updating existing mapKey: " + mapKey);
+            //Debug.Log("Updating existing mapKey: " + mapKey);
         }
 
         List<TilemapData> data = new List<TilemapData>();
@@ -190,7 +190,7 @@ public class SaveHandler : Singleton<SaveHandler> {
         {
             if (task.IsCompleted)
             {
-                Debug.Log($"Key '{mapKey}' with name '{mapName}' saved successfully to Firebase.");
+                //Debug.Log($"Key '{mapKey}' with name '{mapName}' saved successfully to Firebase.");
             }
             else
             {
@@ -202,7 +202,7 @@ public class SaveHandler : Singleton<SaveHandler> {
         {
             if (task.IsCompleted)
             {
-                Debug.Log($"Tilemap data saved successfully to Firebase with key: {mapKey}");
+                //Debug.Log($"Tilemap data saved successfully to Firebase with key: {mapKey}");
                 
             }
             else
@@ -240,7 +240,7 @@ public class SaveHandler : Singleton<SaveHandler> {
                     string mapKey = keySnapshot.Key;
                     string mapName = keySnapshot.Child("name").Value.ToString();
 
-                    Debug.Log($"Found map key: {mapKey}, name: {mapName}");
+                    //Debug.Log($"Found map key: {mapKey}, name: {mapName}");
 
                     dropdownLoad.options.Add(new TMP_Dropdown.OptionData(mapName));
 
@@ -287,7 +287,7 @@ public class SaveHandler : Singleton<SaveHandler> {
                     // if key does NOT exist in dictionary skip it
                     if (!tilemaps.ContainsKey(mapData.key))
                     {
-                        Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
+                        //Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
                         continue;
                     }
 
@@ -451,3 +451,4 @@ public class TilemapDataWrapper
         this.tilemapDataList = tilemapDataList;
     }
 }
+

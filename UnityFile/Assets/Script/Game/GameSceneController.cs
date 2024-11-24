@@ -27,6 +27,8 @@ public class GameSceneController : MonoBehaviourPunCallbacks
     [Header("Chat")]
     [SerializeField] Chat chat;
 
+    [Header("MapUI")]
+    [SerializeField] GameObject mapUIButton;
     void Start()
     {
         if (Instance == null)
@@ -51,6 +53,12 @@ public class GameSceneController : MonoBehaviourPunCallbacks
             {
                 Debug.LogError("CharacterManager instance not found!");
             }
+
+            mapUIButton.SetActive(false);
+        }
+        else
+        {
+            mapUIButton.SetActive(true);
         }
 
     }
