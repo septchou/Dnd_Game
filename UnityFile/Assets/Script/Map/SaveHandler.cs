@@ -294,40 +294,46 @@ public class SaveHandler : Singleton<SaveHandler> {
                 // Deserialize the JSON into a TilemapDataWrapper
                 TilemapDataWrapper wrapper = JsonUtility.FromJson<TilemapDataWrapper>(json);
 
-                GetComponent<PhotonView>().RPC("LoadMapPun", RpcTarget.All, json);
 
-                /*foreach (var mapData in wrapper.tilemapDataList)
+                if (isCombatScene)
                 {
-                    // if key does NOT exist in dictionary skip it
-                    if (!tilemaps.ContainsKey(mapData.key))
+                    GetComponent<PhotonView>().RPC("LoadMapPun", RpcTarget.All, json);
+                }
+                else
+                {
+                    foreach (var mapData in wrapper.tilemapDataList)
                     {
-                        //Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
-                        continue;
-                    }
-
-                    // get according map
-                    var map = tilemaps[mapData.key];
-
-                    // clear map
-                    map.ClearAllTiles();
-
-                    if (mapData.tiles != null && mapData.tiles.Count > 0)
-                    {
-                        foreach (var tile in mapData.tiles)
+                        // if key does NOT exist in dictionary skip it
+                        if (!tilemaps.ContainsKey(mapData.key))
                         {
+                            //Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
+                            continue;
+                        }
 
-                            if (guidToTileBase.ContainsKey(tile.guidForBuildable))
-                            {
-                                map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
-                            }
-                            else
-                            {
-                                Debug.LogError("Refernce " + tile.guidForBuildable + " could not be found.");
-                            }
+                        // get according map
+                        var map = tilemaps[mapData.key];
 
+                        // clear map
+                        map.ClearAllTiles();
+
+                        if (mapData.tiles != null && mapData.tiles.Count > 0)
+                        {
+                            foreach (var tile in mapData.tiles)
+                            {
+
+                                if (guidToTileBase.ContainsKey(tile.guidForBuildable))
+                                {
+                                    map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
+                                }
+                                else
+                                {
+                                    Debug.LogError("Refernce " + tile.guidForBuildable + " could not be found.");
+                                }
+
+                            }
                         }
                     }
-                }*/
+                }                
 
             }
             else

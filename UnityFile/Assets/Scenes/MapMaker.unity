@@ -3629,7 +3629,7 @@ Grid:
   m_GameObject: {fileID: 1762168144}
   m_Enabled: 1
   m_CellSize: {x: 1.28, y: 1.28, z: 0}
-  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellGap: {x: 0.04, y: 0.04, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
 --- !u!4 &1762168146
@@ -3849,6 +3849,7 @@ GameObject:
   - component: {fileID: 1900744052}
   - component: {fileID: 1900744054}
   - component: {fileID: 1900744055}
+  - component: {fileID: 1900744056}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -3949,6 +3950,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a167a17cc155943a5e4b00614aa9b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1900744056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900744049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1904630216
 GameObject:
   m_ObjectHideFlags: 0
