@@ -36,6 +36,9 @@ public class CharacterCreation : MonoBehaviourPun
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityScores;
 
+    [Header("Image Switcher")]
+    [SerializeField] CharacterImageSwitcher switcher;
+
     [Header("DataBase")]
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
@@ -60,8 +63,8 @@ public class CharacterCreation : MonoBehaviourPun
     [SerializeField] CharacterClass selectedClass;
 
     [Header("Scriptable Object")]
-    [SerializeField] List<Race> availableRaces;  
-    [SerializeField] List<CharacterClass> availableClasses;  
+    public List<Race> availableRaces;
+    public List<CharacterClass> availableClasses;  
 
     [Header("Character Selection")]
     [SerializeField] TMP_Dropdown characterDropdown;
@@ -73,7 +76,7 @@ public class CharacterCreation : MonoBehaviourPun
     [Header("Enemy Creation (For DM)")]
     [SerializeField] TMP_Dropdown enemySelectionDropDown;
     [SerializeField] Button enemyCreateButton, enemyDeleteButton, enemyEditButton;
-    
+
 
     private void Start()
     {
@@ -119,7 +122,7 @@ public class CharacterCreation : MonoBehaviourPun
         levelDownButton.onClick.AddListener(LevelDOWN);
         resetPointButton.onClick.AddListener(ResetAbilityPoints);
         raceDropdown.onValueChanged.AddListener(OnRaceChange);
-
+        classDropdown.onValueChanged.AddListener(OnClassChange);
         // Adding listeners for ability point buttons (increase and decrease)
         foreach (var abilityUI in abilityScores)
         {
@@ -253,6 +256,8 @@ public class CharacterCreation : MonoBehaviourPun
 
         CalculateHP();
 
+        ChangeCharacterImage(selectedClass.className, selectedRace.raceName);
+
     }
 
     private int CalculateModifier(int score)
@@ -305,6 +310,14 @@ public class CharacterCreation : MonoBehaviourPun
 
         // Recalculate HP and update
         CalculateHP();
+
+        ChangeCharacterImage(selectedClass.className, selectedRace.raceName);
+    }
+
+    private void OnClassChange(int index)
+    {
+        selectedClass = availableClasses[index];
+        ChangeCharacterImage(selectedClass.className, selectedRace.raceName);
     }
 
     private void CalculateHP()
@@ -1164,6 +1177,11 @@ public class CharacterCreation : MonoBehaviourPun
     public CharacterClass GetCharacterClassFromDropDown()
     {
         return availableClasses[classDropdown.value];
+    }
+
+    private void ChangeCharacterImage(string className, string raceName)
+    {
+        switcher.SetCharacterImage(className, raceName);
     }
 }
 
