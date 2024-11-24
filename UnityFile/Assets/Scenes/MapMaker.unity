@@ -1877,6 +1877,7 @@ GameObject:
   - component: {fileID: 803128891}
   - component: {fileID: 803128890}
   - component: {fileID: 803128889}
+  - component: {fileID: 803128893}
   - component: {fileID: 803128892}
   m_Layer: 0
   m_Name: Main Camera
@@ -1974,6 +1975,23 @@ MonoBehaviour:
   z_Player: {fileID: 1922657709}
   z_BoundX: 0.1
   z_BoundY: 0.2
+--- !u!114 &803128893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803128888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09ff0c980abe72f46b5507d7595c2a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panSpeed: 1
+  smoothSpeed: 0.2
+  zoomSpeed: 4
+  minSize: 5
+  maxSize: 20
 --- !u!1 &831640753
 GameObject:
   m_ObjectHideFlags: 0
@@ -4930,6 +4948,7 @@ MonoBehaviour:
   inputSave: {fileID: 759840103}
   dropdownLoad: {fileID: 850643258}
   loadButton: {fileID: 0}
+  isCombatScene: 0
 --- !u!1 &2096360691
 GameObject:
   m_ObjectHideFlags: 0
