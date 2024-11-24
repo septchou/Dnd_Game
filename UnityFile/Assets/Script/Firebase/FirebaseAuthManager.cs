@@ -137,7 +137,7 @@ public class FirebaseAuthManager : MonoBehaviour
 
             SaveUserToDatabase(user.UserId, user.DisplayName, email);
 
-            Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
+            //Debug.LogFormat("{0} You Are Successfully Logged In", user.DisplayName);
 
             //After login success, change scene to the game scene
             References.username = user.DisplayName;
@@ -272,7 +272,7 @@ public class FirebaseAuthManager : MonoBehaviour
         {
             if (task.IsCompleted)
             {
-                Debug.Log("User data saved successfully.");
+                //Debug.Log("User data saved successfully.");
             }
             else
             {
