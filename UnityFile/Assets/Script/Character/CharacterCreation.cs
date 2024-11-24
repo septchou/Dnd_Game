@@ -1011,7 +1011,7 @@ public class CharacterCreation : MonoBehaviourPun
                     // Convert CharacterData to Character
                     Character character = ConvertDataToCharacter(characterData);
                     character.firebaseKey = key;
-                    Debug.Log("Loaded enemy: " + character.characterName);
+                    //Debug.Log("Loaded enemy: " + character.characterName);
 
                     // Add the loaded character to the CharacterManager
                     CharacterManager.Instance.AddEnemy(character);

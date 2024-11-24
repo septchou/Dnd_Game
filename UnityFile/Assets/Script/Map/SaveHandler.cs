@@ -12,6 +12,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Xml.Serialization;
 using Google.MiniJSON;
+using Photon.Pun;
 
 public class SaveHandler : Singleton<SaveHandler> {
     Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
@@ -30,6 +31,7 @@ public class SaveHandler : Singleton<SaveHandler> {
     [SerializeField] TMP_InputField inputSave;
     [SerializeField] TMP_Dropdown dropdownLoad;
     [SerializeField] Button loadButton;
+    [SerializeField] bool isCombatScene;
 
     private void Start() {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
@@ -51,8 +53,11 @@ public class SaveHandler : Singleton<SaveHandler> {
                 Debug.LogError("Could not resolve all Firebase dependencies.");
             }
         });
-    
-        
+
+        /*if (isCombatScene)
+        {
+            dropdownLoad.options[0].text = "Reset";
+        }*/
     }
 
     private void InitTileReferences()
@@ -232,7 +237,14 @@ public class SaveHandler : Singleton<SaveHandler> {
                 dropdownLoad.ClearOptions();
                 mapNames.Clear();
 
-                dropdownLoad.options.Add(new TMP_Dropdown.OptionData("New map"));
+                if (isCombatScene)
+                {
+                    dropdownLoad.options.Add(new TMP_Dropdown.OptionData("Reset"));
+                }
+                else
+                {
+                    dropdownLoad.options.Add(new TMP_Dropdown.OptionData("New map"));
+                }
                 mapNames.Add("New map");
 
                 foreach (DataSnapshot keySnapshot in snapshot.Children)
@@ -282,7 +294,9 @@ public class SaveHandler : Singleton<SaveHandler> {
                 // Deserialize the JSON into a TilemapDataWrapper
                 TilemapDataWrapper wrapper = JsonUtility.FromJson<TilemapDataWrapper>(json);
 
-                foreach (var mapData in wrapper.tilemapDataList)
+                GetComponent<PhotonView>().RPC("LoadMapPun", RpcTarget.All, json);
+
+                /*foreach (var mapData in wrapper.tilemapDataList)
                 {
                     // if key does NOT exist in dictionary skip it
                     if (!tilemaps.ContainsKey(mapData.key))
@@ -313,7 +327,7 @@ public class SaveHandler : Singleton<SaveHandler> {
 
                         }
                     }
-                }
+                }*/
 
             }
             else
@@ -405,7 +419,44 @@ public class SaveHandler : Singleton<SaveHandler> {
             });
     }
 
+    [PunRPC]
+    public void LoadMapPun(string wrapperJson)
+    {
+        //if(PhotonNetwork.IsMasterClient) return;
+        TilemapDataWrapper wrapper = JsonUtility.FromJson<TilemapDataWrapper>(wrapperJson);
+        foreach (var mapData in wrapper.tilemapDataList)
+        {
+            // if key does NOT exist in dictionary skip it
+            if (!tilemaps.ContainsKey(mapData.key))
+            {
+                //Debug.LogError("Found saved data for tilemap called '" + mapData.key + "', but Tilemap does not exist in scene.");
+                continue;
+            }
 
+            // get according map
+            var map = tilemaps[mapData.key];
+
+            // clear map
+            map.ClearAllTiles();
+
+            if (mapData.tiles != null && mapData.tiles.Count > 0)
+            {
+                foreach (var tile in mapData.tiles)
+                {
+
+                    if (guidToTileBase.ContainsKey(tile.guidForBuildable))
+                    {
+                        map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
+                    }
+                    else
+                    {
+                        Debug.LogError("Refernce " + tile.guidForBuildable + " could not be found.");
+                    }
+
+                }
+            }
+        }
+    }
 
 }
 
@@ -438,6 +489,9 @@ public class TileInfo {
         position = pos;
         guidForBuildable = guid;
     }
+
+
+ 
 }
 
 [System.Serializable]
@@ -451,4 +505,6 @@ public class TilemapDataWrapper
         this.tilemapDataList = tilemapDataList;
     }
 }
+
+
 

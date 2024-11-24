@@ -52,7 +52,7 @@ public class TilemapGame : Singleton<TilemapGame>
         rb.bodyType = RigidbodyType2D.Static;
 
 
-        Debug.Log("Wall Tilemap with Collider and Rigidbody added: " + tilemapGameObject.name);
+        //Debug.Log("Wall Tilemap with Collider and Rigidbody added: " + tilemapGameObject.name);
     }
     
 }

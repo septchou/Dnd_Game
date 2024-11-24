@@ -59,6 +59,7 @@ MonoBehaviour:
   - RPC_useWariorSense
   - RPC_ApplyBlessing
   - RPC_PlayerApplyBlessing
+  - LoadMapPun
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
