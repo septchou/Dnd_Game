@@ -19308,6 +19308,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4ae8302a2376eff4e92fc16323d25497, type: 2}
   - {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
   - {fileID: 11400000, guid: 3fc9b9581d4a9b247a336ef44d34ddee, type: 2}
+  - {fileID: 11400000, guid: f08a506d6455f5c4fafa2c6bd6257969, type: 2}
   avaliableClass:
   - {fileID: 11400000, guid: 9bc5cf69ab0d8a549b87984b01ae1906, type: 2}
   - {fileID: 11400000, guid: 04bf32ede8b8d4d489a3cf929d28e72e, type: 2}

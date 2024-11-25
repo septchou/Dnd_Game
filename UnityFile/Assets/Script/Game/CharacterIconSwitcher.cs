@@ -35,6 +35,10 @@ public class CharacterIconSwitcher : MonoBehaviour
             foreach (CharacterClass characterClass in avaliableClass)
             {
                 string path = $"CharacterImages/{race.raceName}/{race.raceName}_{characterClass.className}_Circle";
+                if (race.raceName == "Zombie")
+                {
+                    path = $"CharacterImages/{race.raceName}/{race.raceName}_Circle";
+                }
                 Sprite sprite = Resources.Load<Sprite>(path);
                 if (sprite != null)
                 {
@@ -46,6 +50,10 @@ public class CharacterIconSwitcher : MonoBehaviour
                 }
 
                 path = $"CharacterImages/{race.raceName}/{race.raceName}_{characterClass.className}_Square";
+                if (race.raceName == "Zombie")
+                {
+                    path = $"CharacterImages/{race.raceName}/{race.raceName}_Square";
+                }
                 Texture texture = Resources.Load<Texture>(path);
                 if (texture != null)
                 {

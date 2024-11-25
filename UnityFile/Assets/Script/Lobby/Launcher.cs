@@ -25,7 +25,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] GameObject readyButton;
     [SerializeField] GameObject selectButton;
     [SerializeField] GameObject mapButton;
-    [SerializeField] TMP_Text readyButtonText;
     [SerializeField] CharacterCreation characterCreation;
 
     void Awake()
@@ -201,7 +200,15 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         // Toggle ready state
         isReady = !isReady;
-        readyButtonText.text = isReady ? "Ready" : "Not Ready";
+
+        Transform readyBGT = readyButton.transform.Find("ReadyBG");
+        GameObject readyBG = readyBGT.transform.gameObject;
+
+        Transform notReadyBGT = readyButton.transform.Find("NotReadyBG");
+        GameObject notReadyBG = notReadyBGT.transform.gameObject;
+
+        readyBG.SetActive(isReady);
+        notReadyBG.SetActive(!isReady);
 
         // Update the player's custom property for ready status
         Hashtable props = new Hashtable

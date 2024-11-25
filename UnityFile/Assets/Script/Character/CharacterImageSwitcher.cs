@@ -53,6 +53,10 @@ public class CharacterImageSwitcher : MonoBehaviour
             foreach(CharacterClass characterClass in avaliableClass)
             {
                 string path = $"CharacterImages/{race.raceName}/{race.raceName}_{characterClass.className}";
+                if(race.raceName == "Zombie")
+                {
+                    path = $"CharacterImages/{race.raceName}/{race.raceName}";
+                }
                 Texture texture = Resources.Load<Texture>(path);
                 if (texture != null)
                 {

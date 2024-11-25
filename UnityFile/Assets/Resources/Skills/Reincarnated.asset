@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc38c3a5630de564480df75eebb8910d, type: 3}
-  m_Name: Stupid
+  m_Name: Reincarnated
   m_EditorClassIdentifier: 
-  skillName: Stupid
+  skillName: Reincarnated
   skillType: 3
   hitDices: []
   damageDices: []
   associatedAbility: []
-  detail: You are slime you stupid
+  detail: You are reincarnated as slime

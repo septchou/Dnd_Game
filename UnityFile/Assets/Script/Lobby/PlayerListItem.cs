@@ -12,6 +12,10 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text playerNameText;
     [SerializeField] TMP_Text readyStatusText;
     [SerializeField] Button kickButton;
+    [SerializeField] GameObject readyFlag;
+    [SerializeField] GameObject notReadyFlag;
+    [SerializeField] GameObject playerBG;
+    [SerializeField] GameObject dmBG;
     Player player;
 
     // Set up the player's display information
@@ -44,10 +48,17 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
         if (player.IsMasterClient)
         {
             playerNameText.text = player.NickName + " (Host)";
+            playerNameText.color = Color.white;
             readyStatusText.text = "";
+            readyFlag.SetActive(false);
+            notReadyFlag.SetActive(false);
+            playerBG.SetActive(false);
+            dmBG.SetActive(true);
         }
         else
         {
+            playerBG.SetActive(true);
+            dmBG.SetActive(false);
             playerNameText.text = player.NickName;
         }
 
@@ -66,11 +77,23 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
         if (player.CustomProperties.ContainsKey("isReady"))
         {
             bool isReady = (bool)player.CustomProperties["isReady"];
-            readyStatusText.text = isReady ? "Ready" : "Not Ready"; // Update ready status text
+            if (isReady)
+            {
+                readyFlag.SetActive(true);
+                notReadyFlag.SetActive(false);
+            }
+            else
+            {
+                readyFlag.SetActive(false);
+                notReadyFlag.SetActive(true);
+            }
+            readyStatusText.text = isReady ? "Ready" : "Not Ready"; 
         }
         else
         {
-            readyStatusText.text = "Not Ready"; // Default if the property isn't set
+            readyFlag.SetActive(false);
+            notReadyFlag.SetActive(true);
+            readyStatusText.text = "Not Ready"; 
         }
     }
 
