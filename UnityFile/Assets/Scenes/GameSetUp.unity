@@ -16191,6 +16191,7 @@ GameObject:
   - component: {fileID: 1646352053}
   - component: {fileID: 1646352054}
   - component: {fileID: 1646352055}
+  - component: {fileID: 1646352056}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -16370,6 +16371,30 @@ MonoBehaviour:
   - {fileID: 1854289207}
   - {fileID: 1599135423}
   - {fileID: 45271988}
+--- !u!114 &1646352056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646352047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 261347a81fc58b344a2408ecde4e51ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avaliableRace:
+  - {fileID: 11400000, guid: b30fb62ac2e6c5c4aa0b9ad65257ef5d, type: 2}
+  - {fileID: 11400000, guid: af2a334ce465eae43b69d51842962991, type: 2}
+  - {fileID: 11400000, guid: 4ae8302a2376eff4e92fc16323d25497, type: 2}
+  - {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
+  - {fileID: 11400000, guid: 3fc9b9581d4a9b247a336ef44d34ddee, type: 2}
+  - {fileID: 11400000, guid: f08a506d6455f5c4fafa2c6bd6257969, type: 2}
+  avaliableClass:
+  - {fileID: 11400000, guid: 9bc5cf69ab0d8a549b87984b01ae1906, type: 2}
+  - {fileID: 11400000, guid: 04bf32ede8b8d4d489a3cf929d28e72e, type: 2}
+  - {fileID: 11400000, guid: 80f2e2044c742e54a8bc5c6ea7971921, type: 2}
+  - {fileID: 11400000, guid: e5e181d4d34d4c04889baf62d280c4d0, type: 2}
 --- !u!1 &1646712768
 GameObject:
   m_ObjectHideFlags: 0
@@ -19123,7 +19148,6 @@ GameObject:
   - component: {fileID: 1963756367}
   - component: {fileID: 1963756368}
   - component: {fileID: 1963756369}
-  - component: {fileID: 1963756370}
   m_Layer: 0
   m_Name: GameSceneManager
   m_TagString: Untagged
@@ -19290,30 +19314,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 83de8f777e1a05446b91c920c733e36e, type: 2}
   - {fileID: 11400000, guid: 64368a7216f954f4096f49d6ac7f6a3d, type: 2}
   grid: {fileID: 1376507227}
---- !u!114 &1963756370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1963756363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 261347a81fc58b344a2408ecde4e51ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  avaliableRace:
-  - {fileID: 11400000, guid: b30fb62ac2e6c5c4aa0b9ad65257ef5d, type: 2}
-  - {fileID: 11400000, guid: af2a334ce465eae43b69d51842962991, type: 2}
-  - {fileID: 11400000, guid: 4ae8302a2376eff4e92fc16323d25497, type: 2}
-  - {fileID: 11400000, guid: 8d8156e40ce44d04a852c929f2837a2a, type: 2}
-  - {fileID: 11400000, guid: 3fc9b9581d4a9b247a336ef44d34ddee, type: 2}
-  - {fileID: 11400000, guid: f08a506d6455f5c4fafa2c6bd6257969, type: 2}
-  avaliableClass:
-  - {fileID: 11400000, guid: 9bc5cf69ab0d8a549b87984b01ae1906, type: 2}
-  - {fileID: 11400000, guid: 04bf32ede8b8d4d489a3cf929d28e72e, type: 2}
-  - {fileID: 11400000, guid: 80f2e2044c742e54a8bc5c6ea7971921, type: 2}
-  - {fileID: 11400000, guid: e5e181d4d34d4c04889baf62d280c4d0, type: 2}
 --- !u!1 &1967052493
 GameObject:
   m_ObjectHideFlags: 0

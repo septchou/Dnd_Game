@@ -10,7 +10,7 @@ using ExitGames.Client.Photon;
 public class Launcher : MonoBehaviourPunCallbacks
 {
     public static Launcher Instance;
-
+    [SerializeField] TMP_InputField displayNameInputField;
     [SerializeField] TMP_InputField roomNameInputField;
     [SerializeField] TMP_Text errorText;
     [Header("FindRooom")]
@@ -64,6 +64,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         MenuManager.Instance.OpenMenu("Title");
+        displayNameInputField.interactable = false;
         //Debug.Log("Joined Lobby");
     }
 
@@ -166,7 +167,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             if (roomList[i].RemovedFromList)
                 continue;
 
-            // Skip the room if it already has the max number of players (4 in this case)
+            // Skip the room if it already has the max number of players
             if (roomList[i].PlayerCount >= roomList[i].MaxPlayers)
                 continue;
 

@@ -70,36 +70,38 @@ public class CharacterIconSwitcher : MonoBehaviour
 
     }
 
-    public void SetCharacterIcon(string characterClass, string characterRace, RawImage rawImage, SpriteRenderer image , bool isCircle)
+    public void SetCharacterIcon(string characterClass, string characterRace, RawImage rawImage, SpriteRenderer image, bool isCircle)
     {
+        Debug.Log($"Loaded {imageCircleDictionary.Count} circle icons and {imageSquareDictionary.Count} square textures.");
+
         string key = $"{characterRace}_{characterClass}";
 
         if (!isCircle)
         {
             if (imageSquareDictionary == null) LoadCharacterIcon();
 
-            if (imageSquareDictionary.TryGetValue(key, out Texture texture))
+            if (rawImage != null && imageSquareDictionary.TryGetValue(key, out Texture texture))
             {
                 rawImage.texture = texture;
             }
             else
             {
-                Debug.LogWarning($"No texture found for {key}, using default.");
+                Debug.LogWarning($"No texture found for {key}, or RawImage is null.");
             }
         }
         else
         {
             if (imageCircleDictionary == null) LoadCharacterIcon();
 
-            if (imageCircleDictionary.TryGetValue(key, out Sprite sprite))
+            if (image != null && imageCircleDictionary.TryGetValue(key, out Sprite sprite))
             {
                 image.sprite = sprite;
             }
             else
             {
-                Debug.LogWarning($"No sprite found for {key}, using default.");
+                Debug.LogWarning($"No sprite found for {key}, or SpriteRenderer is null.");
             }
         }
-        
     }
+
 }
