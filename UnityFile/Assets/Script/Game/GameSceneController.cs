@@ -8,6 +8,9 @@ using System.Collections;
 using System;
 using static Skill;
 using System.Reflection;
+using UnityEngine.SceneManagement;
+using Photon.Realtime;
+using UnityEngine.EventSystems;
 
 public class GameSceneController : MonoBehaviourPunCallbacks
 {
@@ -151,6 +154,49 @@ public class GameSceneController : MonoBehaviourPunCallbacks
         callback?.Invoke(result, dices);
 
 
+    }
+    public void LeaveGame()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        else
+        {
+            //Debug.LogWarning("Not in a room. Disconnecting...");
+            PhotonNetwork.Disconnect();
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        //Debug.Log("Left the room. Disconnecting...");
+        PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(Photon.Realtime.DisconnectCause cause)
+    {
+        //Debug.Log("Disconnected from Photon. Loading Lobby...");
+        EnsureSingleEventSystem();
+        CharacterManager.Instance.InitList();
+        SceneManager.LoadScene("Lobby");
+    }
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            //Debug.Log("Host left Leave the room");
+            LeaveGame();
+        }
+    }
+
+    private void EnsureSingleEventSystem()
+    {
+        EventSystem[] eventSystems = FindObjectsOfType<EventSystem>();
+        for (int i = 0; i < eventSystems.Length; i++)
+        {
+            Destroy(eventSystems[i].gameObject);
+        }
     }
 
 }

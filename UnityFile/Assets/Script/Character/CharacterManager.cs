@@ -14,7 +14,7 @@ public class CharacterManager : MonoBehaviourPunCallbacks
 
     // Singleton pattern to access this from anywhere in the game
     public static CharacterManager Instance;
-
+    [SerializeField] Character templateCharacter, templateEnemy;
     public Character selectedCharacter;
 
     [SerializeField] GameObject playerCharacterPrefab;
@@ -38,6 +38,10 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         }
     }
 
+    private void Start()
+    {
+        InitList();
+    }
     // Method to add a new character to the list
     public void AddCharacter(Character newCharacter)
     {
@@ -124,6 +128,12 @@ public class CharacterManager : MonoBehaviourPunCallbacks
         }
     }
 
-
+    public void InitList()
+    {
+        enemyList = new List<Character>();
+        enemyList.Add(templateEnemy);
+        characterList = new List<Character>();
+        characterList.Add(templateCharacter);
+    }
 
 }

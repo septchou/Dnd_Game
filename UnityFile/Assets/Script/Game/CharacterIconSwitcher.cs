@@ -72,7 +72,7 @@ public class CharacterIconSwitcher : MonoBehaviour
 
     public void SetCharacterIcon(string characterClass, string characterRace, RawImage rawImage, SpriteRenderer image, bool isCircle)
     {
-        Debug.Log($"Loaded {imageCircleDictionary.Count} circle icons and {imageSquareDictionary.Count} square textures.");
+        //Debug.Log($"Loaded {imageCircleDictionary.Count} circle icons and {imageSquareDictionary.Count} square textures.");
 
         string key = $"{characterRace}_{characterClass}";
 
