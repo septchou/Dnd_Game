@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
 public class CharacterDisplay : MonoBehaviourPun
 {
@@ -35,6 +36,7 @@ public class CharacterDisplay : MonoBehaviourPun
     [Header("GameObject")]
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text hpText;
+    [SerializeField] SpriteRenderer characterImage;
     [SerializeField] SpriteRenderer Outline;
     public Character characterData;
     [SerializeField] Chat chatlog;
@@ -80,6 +82,30 @@ public class CharacterDisplay : MonoBehaviourPun
         hpText.text = $"HP: {currentHP} / {maxHP}";
         UpdatehealthBar();
 
+        string hexColor = "#000000";
+        if (PhotonNetwork.IsMasterClient)
+        {
+            hexColor = "#76161C";
+            gameObject.tag = "Villain";
+
+        }
+        else
+        {
+            hexColor = "#298041";
+            gameObject.tag = "Hero";
+        }
+
+        if (UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out Color color))
+        {
+            Outline.color = color; // Assign the color to the sprite
+        }
+        else
+        {
+            Debug.LogError("Invalid Hexadecimal Color Code");
+        }
+
+        CharacterIconSwitcher.Instance.SetCharacterIcon(className, raceName,null, characterImage, true);
+
         // If this is the local player, activate the outline and sync with other players
         if (photonView.IsMine)
         {
@@ -88,19 +114,10 @@ public class CharacterDisplay : MonoBehaviourPun
             photonView.RPC("UpdateAbilityScores", RpcTarget.OthersBuffered, SerializeAbilityScoreData(abilityScoreData));
             photonView.RPC("UpdateSkills", RpcTarget.OthersBuffered, SerializeSkillData(skillData));
             photonView.RPC("SetFaction", RpcTarget.OthersBuffered);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                Outline.color = Color.red;
-                gameObject.tag = "Villain";
-                
-            }
-            else
-            {
-                Outline.color = Color.green;
-                gameObject.tag = "Hero";
-            }
+            photonView.RPC("SetCharacterImage", RpcTarget.OthersBuffered);
         }
+
+
     }
 
     private void UpdatehealthBar()
@@ -200,23 +217,32 @@ public class CharacterDisplay : MonoBehaviourPun
     [PunRPC]
     public void SetFaction()
     {
-
+        string hexColor = "#000000";
         if (photonView.IsMine && !PhotonNetwork.IsMasterClient)
         {
-            Outline.color = Color.green;
+            hexColor = "#298041";
             gameObject.tag = "Hero";
         }
 
         else if(!photonView.IsMine && photonView.Owner != PhotonNetwork.MasterClient)
         {
-            Outline.color = Color.blue;
+            hexColor = "#4F3F21";
             gameObject.tag = "Hero";
         }
 
         else if(photonView.Owner == PhotonNetwork.MasterClient)
         {
-            Outline.color = Color.red;
+            hexColor = "#76161C";
             gameObject.tag = "Villain";
+        }
+
+        if (UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out Color color))
+        {
+            Outline.color = color; // Assign the color to the sprite
+        }
+        else
+        {
+            Debug.LogError("Invalid Hexadecimal Color Code");
         }
     }
 
@@ -286,6 +312,12 @@ public class CharacterDisplay : MonoBehaviourPun
     private void RPC_useWariorSense()
     {
         isDodge = false;
+    }
+
+    [PunRPC]
+    private void SetCharacterImage()
+    {
+        CharacterIconSwitcher.Instance.SetCharacterIcon(className, raceName, null, characterImage, true);
     }
 
     public void UpdateAbilityFromBuff()

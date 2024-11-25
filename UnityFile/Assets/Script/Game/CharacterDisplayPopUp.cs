@@ -38,6 +38,7 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     [Header("Character Detail Panel")]
     [SerializeField] GameObject characterDetailPopup;
     [SerializeField] GameObject skillDetailPopup;
+    [SerializeField] RawImage characterImage;
     [SerializeField] TMP_Text characterNameText;
     [SerializeField] TMP_Text classNameText;
     [SerializeField] TMP_Text raceNameText;
@@ -182,6 +183,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         }
 
         List<SkillData> skillData = DeserializeSkillData(skillDataObj);
+        skillName.Clear();
+        skillDetail.Clear();
         // Populate skill text components
         for (int i = 0; i < skillData.Count; i++)
         {
@@ -217,6 +220,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         float totalHeight = prefabHeight * raceSkillList.Count;
         RectTransform panelRect = raceSkillPanel.GetComponent<RectTransform>();
         panelRect.sizeDelta = new Vector2(panelRect.sizeDelta.x, totalHeight);
+
+        CharacterIconSwitcher.Instance.SetCharacterIcon(className, raceName, characterImage,null, false);
 
         // Activate the popup UI
         //characterDetailPopup.SetActive(true);
