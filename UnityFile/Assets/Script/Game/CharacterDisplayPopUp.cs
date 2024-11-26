@@ -46,6 +46,7 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     [SerializeField] TMP_Text hpText;
     [SerializeField] List<abilityScoreUI> abilityUI;
     [SerializeField] List<TMP_Text> skillsText;
+    [SerializeField] List<RawImage> skillImage;
 
     [Header("Skill Detail Panel")]
     [SerializeField] TMP_Text skillnameText;
@@ -197,6 +198,8 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
                 skillsText[i].text = $"{skillData[i].skillName}";
                 skillName.Add(skillData[i].skillName);
                 skillDetail.Add(skillData[i].skillDetail);
+
+                CharacterIconSwitcher.Instance.SetSkillIcon(skillData[i].skillName, skillImage[i]);
             }
         }
 
@@ -354,4 +357,5 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
         GameSceneController.Instance.RollAnimation(abilityRollDice, callback);
 
     }
+
 }

@@ -130,16 +130,17 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.InRoom)
         {
-            Debug.Log("Host left Leave the room");
+            ErrorHandlerManager.Instance.ShowError("Host left Leave the room");
             PhotonNetwork.LeaveRoom();
         }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        errorText.text = "Room Creation Failed: " + message;
+        //errorText.text = "Room Creation Failed: " + message;
         Debug.LogError("Room Creation Failed: " + message);
-        MenuManager.Instance.OpenMenu("error");
+        ErrorHandlerManager.Instance.ShowError("Room Creation Failed: " + message);
+        //MenuManager.Instance.OpenMenu("error");
     }
 
     public void LeaveRoom()
@@ -190,7 +191,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (CharacterManager.Instance.selectedCharacter == null)
         {
-            Debug.Log("Can't ready select the character first");
+            //Debug.Log("Can't ready select the character first");
+            ErrorHandlerManager.Instance.ShowError("Can't ready select the character first");
             return;
         }
 
@@ -253,13 +255,13 @@ public class Launcher : MonoBehaviourPunCallbacks
                 if (!isReady)
                 {
                     allReady = false; // Found a player not ready
-                    Debug.Log(player.NickName + " is not ready."); // Log the name of the player not ready
+                    ErrorHandlerManager.Instance.ShowError(player.NickName + " is not ready.");
                 }
             }
             else
             {
                 allReady = false; // Player doesn't have the property, so they are not ready
-                Debug.Log(player.NickName + " is not ready."); // Log the name of the player not ready
+                ErrorHandlerManager.Instance.ShowError(player.NickName + " is not ready.");
             }
         }
 

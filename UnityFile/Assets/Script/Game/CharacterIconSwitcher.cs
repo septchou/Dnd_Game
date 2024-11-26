@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+using Debug = UnityEngine.Debug;
 public class CharacterIconSwitcher : MonoBehaviour
 {
     public static CharacterIconSwitcher Instance;
+
+    [SerializeField] Texture defaultIcon;
+
     [SerializeField] List<Race> avaliableRace;
     [SerializeField] List<CharacterClass> avaliableClass;
 
     private Dictionary<string, Sprite> imageCircleDictionary;
     private Dictionary<string, Texture> imageSquareDictionary;
+    private Dictionary<string, Texture> skillImageDictionary;
     private void Start()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
         LoadCharacterIcon();
@@ -30,6 +31,7 @@ public class CharacterIconSwitcher : MonoBehaviour
     {
         imageCircleDictionary = new Dictionary<string, Sprite>();
         imageSquareDictionary = new Dictionary<string, Texture>();
+        skillImageDictionary = new Dictionary<string, Texture>();
         foreach (Race race in avaliableRace)
         {
             foreach (CharacterClass characterClass in avaliableClass)
@@ -67,12 +69,29 @@ public class CharacterIconSwitcher : MonoBehaviour
             }
         }
 
-
+        foreach (CharacterClass characterClass in avaliableClass)
+        {
+            foreach (Skill skill in characterClass.classSkills)
+            {
+                if (!skillImageDictionary.ContainsKey(skill.skillName))
+                {
+                    string path = $"SkillImages/{skill.skillName}";
+                    Texture texture = Resources.Load<Texture>(path);
+                    if (texture != null)
+                    {
+                        skillImageDictionary.Add(skill.skillName, texture);
+                    }
+                    else
+                    {
+                        Debug.Log(path + " not found");
+                    }
+                }
+            }
+        }
     }
 
     public void SetCharacterIcon(string characterClass, string characterRace, RawImage rawImage, SpriteRenderer image, bool isCircle)
     {
-        //Debug.Log($"Loaded {imageCircleDictionary.Count} circle icons and {imageSquareDictionary.Count} square textures.");
 
         string key = $"{characterRace}_{characterClass}";
 
@@ -101,6 +120,22 @@ public class CharacterIconSwitcher : MonoBehaviour
             {
                 Debug.LogWarning($"No sprite found for {key}, or SpriteRenderer is null.");
             }
+        }
+    }
+
+    public void SetSkillIcon(string skillname, RawImage rawImage)
+    {
+        if (skillImageDictionary == null) LoadCharacterIcon();
+
+        string key = $"{skillname}";
+        if (rawImage != null && skillImageDictionary.TryGetValue(key, out Texture texture))
+        {
+            rawImage.texture = texture;
+        }
+        else
+        {
+            rawImage.texture = defaultIcon;
+            Debug.LogWarning($"No texture found for {key}, or RawImage is null.");
         }
     }
 

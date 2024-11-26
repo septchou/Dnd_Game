@@ -129,7 +129,8 @@ public class FirebaseAuthManager : MonoBehaviour
                     break;
             }
 
-            Debug.Log(failedMessage);
+            //Debug.Log(failedMessage);
+            ErrorHandlerManager.Instance.ShowError(failedMessage);
         }
         else
         {
@@ -197,7 +198,8 @@ public class FirebaseAuthManager : MonoBehaviour
                         break;
                 }
 
-                Debug.Log(failedMessage);
+                //Debug.Log(failedMessage);
+                ErrorHandlerManager.Instance.ShowError(failedMessage);
             }
             else
             {
@@ -240,13 +242,13 @@ public class FirebaseAuthManager : MonoBehaviour
                             failedMessage = "Profile update Failed";
                             break;
                     }
-
-                    Debug.Log(failedMessage);
+                    ErrorHandlerManager.Instance.ShowError(failedMessage);
+                   // Debug.Log(failedMessage);
                 }
                 else
                 {
                     SaveUserToDatabase(user.UserId, name, email);
-                    Debug.Log("Registration Sucessful Welcome " + user.DisplayName);
+                    //Debug.Log("Registration Sucessful Welcome " + user.DisplayName);
                     UIManager.Instance.OpenLoginPanel();
                 }
             }
