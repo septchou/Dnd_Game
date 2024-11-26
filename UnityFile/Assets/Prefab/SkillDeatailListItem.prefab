@@ -148,15 +148,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Bravo 6 going dark
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 75ece300216c06740a0b5e008f56435a, type: 2}
+  m_sharedMaterial: {fileID: 1318135827760245765, guid: 75ece300216c06740a0b5e008f56435a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -250,7 +250,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 88.9492}
+  m_SizeDelta: {x: 0, y: 126.936}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2392434943701223681
 CanvasRenderer:
@@ -280,21 +280,20 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\t\u0E43\u0E0A\u0E49 1 bonus action \u0E17\u0E33\u0E01\u0E32\u0E23\u0E40\u0E02\u0E49\u0E32\u0E2A\u0E39\u0E48\u0E42\u0E2B\u0E21\u0E14\u0E1A\u0E49\u0E32\u0E04\u0E25\u0E31\u0E48\u0E07\u0E40\u0E1B\u0E47\u0E19\u0E23\u0E30\u0E22\u0E30\u0E40\u0E27\u0E25\u0E32
-    2 \u0E23\u0E2D\u0E1A\u0E01\u0E32\u0E23\u0E40\u0E25\u0E48\u0E19 \u0E08\u0E32\u0E01\u0E19\u0E31\u0E49\u0E19\u0E44\u0E14\u0E49\u0E23\u0E31\u0E1A\u0E1C\u0E25\u0E08\u0E32\u0E01\u0E2A\u0E01\u0E34\u0E25\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E40\u0E15\u0E34\u0E21\u0E14\u0E31\u0E07\u0E19\u0E35\u0E49\r\n1.\t\u0E40\u0E21\u0E37\u0E48\u0E2D\u0E17\u0E33\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E42\u0E14\u0E19\u0E40\u0E1B\u0E49\u0E32\u0E2B\u0E21\u0E32\u0E22\u0E08\u0E30\u0E40\u0E1E\u0E34\u0E48\u0E21\u0E14\u0E32\u0E40\u0E21\u0E08\u0E17\u0E35\u0E48\u0E17\u0E33\u0E44\u0E14\u0E49\u0E40\u0E17\u0E48\u0E32\u0E01\u0E31\u0E1A
-    STR Modifier\r\n2.\t\u0E40\u0E21\u0E37\u0E48\u0E2D\u0E17\u0E33\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E08\u0E30\u0E17\u0E33\u0E01\u0E32\u0E23\u0E17\u0E2D\u0E22
-    Hit dice \u0E40\u0E1E\u0E34\u0E48\u0E21\u0E2D\u0E35\u0E01 1 \u0E25\u0E39\u0E01
-    \u0E42\u0E14\u0E22\u0E04\u0E33\u0E19\u0E27\u0E19\u0E15\u0E32\u0E21 Hit dice \u0E02\u0E2D\u0E07\u0E01\u0E32\u0E23\u0E42\u0E08\u0E21\u0E15\u0E35\u0E14\u0E31\u0E07\u0E01\u0E25\u0E48\u0E32\u0E27\r\n"
+  m_text: "\tUse 1 action to enter a frenzy mode for 2 turns. While in this mode,
+    gain the following additional effects:   \t1. When attacking and hitting a target,
+    add extra damage equal to your STR Modifier.   \t2. When attacking, roll an additional
+    Hit Dice based on the attack's Hit Dice and include it in the calculation.  "
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a555983832cfa59479d85d46895ee09b, type: 2}
-  m_sharedMaterial: {fileID: -6907463945311706947, guid: a555983832cfa59479d85d46895ee09b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 75ece300216c06740a0b5e008f56435a, type: 2}
+  m_sharedMaterial: {fileID: 1318135827760245765, guid: 75ece300216c06740a0b5e008f56435a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -317,7 +316,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
