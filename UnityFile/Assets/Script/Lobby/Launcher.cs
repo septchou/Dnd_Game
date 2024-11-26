@@ -45,7 +45,6 @@ public class Launcher : MonoBehaviourPunCallbacks
             {
                 OnJoinedRoom();
                 MapSwitch.Instance.isSwitchMap = false;
-                MapSwitch.Instance.ReassignButton();
             }
         }
 
@@ -55,7 +54,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         //Debug.Log("Connected to Photon Master Server");
-        PhotonNetwork.JoinLobby();  // Joins the default lobby
+        PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.EnableCloseConnection = true;
     }
@@ -65,6 +64,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         displayNameInputField.interactable = false;
         MenuManager.Instance.OpenMenu("Title");
+        
         //Debug.Log("Joined Lobby");
     }
 
@@ -91,6 +91,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("room");
+        MapSwitch.Instance.ReassignButton();
         //Debug.Log("Join " + PhotonNetwork.CurrentRoom.Name);
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 
@@ -116,6 +117,7 @@ public class Launcher : MonoBehaviourPunCallbacks
             mapButton.SetActive(false);
         }
         else {
+            MapSwitch.Instance.ReassignButton();
             startGameButton.SetActive(true);
             readyButton.SetActive(false);
             mapButton.SetActive(true);

@@ -80,7 +80,7 @@ public class SaveHandler : Singleton<SaveHandler> {
             string key = map.name;
             if (!tilemaps.ContainsKey(key)) {
                 tilemaps.Add(key, map);
-                Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
+                //Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
             }
         }
     }
