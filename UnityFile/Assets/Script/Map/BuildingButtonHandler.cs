@@ -20,7 +20,7 @@ public class BuildingButtonHandler : MonoBehaviour {
     }
 
     private void ButtonClicked() {
-        Debug.Log("Button was clicked: " + item.name);
+        //Debug.Log("Button was clicked: " + item.name);
         buildingCreator.ObjectSelected(item);
     }
 

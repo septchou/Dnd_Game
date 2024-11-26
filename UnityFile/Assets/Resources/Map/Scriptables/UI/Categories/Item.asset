@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Item
   m_EditorClassIdentifier: 
   siblingIndex: 4
-  backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
