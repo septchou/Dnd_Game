@@ -43,6 +43,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             if (MapSwitch.Instance.isSwitchMap)
             {
+                CharacterManager.Instance.InitList();
                 OnJoinedRoom();
                 MapSwitch.Instance.isSwitchMap = false;
             }
