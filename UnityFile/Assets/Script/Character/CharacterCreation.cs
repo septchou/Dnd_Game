@@ -249,10 +249,10 @@ public class CharacterCreation : MonoBehaviourPun
         }
 
         selectedAbilityPoint = defaultCharacter.abilityPoint;
-        abilityScorePointText.text = $"Ability point : {defaultCharacter.abilityPoint}";
+        abilityScorePointText.text = $"Ability Point : {defaultCharacter.abilityPoint}";
 
         selectedLevel = defaultCharacter.level;
-        levelText.text = $"Level : {defaultCharacter.level}";
+        levelText.text = $"Level :   {defaultCharacter.level}";
 
         CalculateHP();
 
@@ -348,7 +348,7 @@ public class CharacterCreation : MonoBehaviourPun
     private void LevelUP()
     {
         selectedLevel++;
-        levelText.text = $"Level : {selectedLevel}";
+        levelText.text = $"Level :   {selectedLevel}";
         CalculateHP();
     }
     private void LevelDOWN()
@@ -359,7 +359,7 @@ public class CharacterCreation : MonoBehaviourPun
         }
 
         // Update UI level text if necessary
-        levelText.text = $"Level : {selectedLevel}";
+        levelText.text = $"Level :   {selectedLevel}";
 
         // Recalculate HP after leveling down
         CalculateHP();
