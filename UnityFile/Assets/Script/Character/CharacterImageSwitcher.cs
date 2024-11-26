@@ -18,9 +18,6 @@ public class CharacterImageSwitcher : MonoBehaviour
 
     private void Start()
     {
-        // Initialize the dictionary
-        imageDictionary = new Dictionary<string, Texture>();
-
         // Preload textures (you can add these manually or load them dynamically)
         LoadCharacterImages();
     }
@@ -29,7 +26,7 @@ public class CharacterImageSwitcher : MonoBehaviour
     public void SetCharacterImage(string characterClass, string characterRace)
     {
         string key = $"{characterRace}_{characterClass}";
-
+        if (imageDictionary == null) LoadCharacterImages();
         if (imageDictionary.TryGetValue(key, out Texture texture))
         {
             // Set the RawImage's texture
@@ -46,6 +43,7 @@ public class CharacterImageSwitcher : MonoBehaviour
     // Preload all character images into the dictionary
     private void LoadCharacterImages()
     {
+        imageDictionary = new Dictionary<string, Texture>();
         List<Race> avaliableRace = characterCreation.availableRaces;
         List<CharacterClass> avaliableClass = characterCreation.availableClasses;
         foreach (Race race in avaliableRace)
