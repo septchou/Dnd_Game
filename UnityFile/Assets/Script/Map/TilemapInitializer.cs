@@ -15,8 +15,10 @@ public class TilemapInitializer : Singleton<TilemapInitializer> {
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        Initialize();
-        OnInitialized?.Invoke(); // Notify when initialization is complete
+      if (scene.name == "MapMaker") {
+            Initialize();
+            OnInitialized?.Invoke(); // Notify when initialization is complete
+        }
     }
 
     private void OnDestroy() {

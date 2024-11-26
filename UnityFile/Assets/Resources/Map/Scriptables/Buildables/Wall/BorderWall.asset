@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0ad55fb94aee144b908cf07f80b1ff, type: 3}
   m_Name: BorderWall
   m_EditorClassIdentifier: 
-  category: {fileID: 0}
-  uiCategory: {fileID: 0}
-  tileBase: {fileID: 0}
+  category: {fileID: 11400000, guid: 52106b0e9f9b9ae4d8fed551beacde7a, type: 2}
+  uiCategory: {fileID: 11400000, guid: ec973207c6fdc66479e908f31954c7a8, type: 2}
+  tileBase: {fileID: 11400000, guid: a065d9642fd222d4a862058a1ee7b8df, type: 2}
   placeType: 0
   usePlacementRestrictions: 0
   placementRestrictions: []

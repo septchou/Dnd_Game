@@ -8,6 +8,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine.Timeline;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 using System.Xml.Serialization;
@@ -40,10 +41,8 @@ public class SaveHandler : Singleton<SaveHandler> {
             {
                 auth = FirebaseAuth.DefaultInstance;
                 databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-
                 InitTilemaps();
                 InitTileReferences();
-
                 
                 // Load map
                 OnLoadFromFirebase();

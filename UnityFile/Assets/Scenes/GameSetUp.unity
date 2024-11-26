@@ -8473,8 +8473,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounds:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 0, y: 0, z: 0}
+    m_Position: {x: -50, y: -50, z: 0}
+    m_Size: {x: 100, y: 100, z: 0}
   mapNames: []
   selectedMapIndex: 0
   inputSave: {fileID: 1489939389}
@@ -19001,7 +19001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 502.8, y: -34.8}
+  m_AnchoredPosition: {x: 502.8, y: -34.80005}
   m_SizeDelta: {x: 180, y: 33.401}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1903163094

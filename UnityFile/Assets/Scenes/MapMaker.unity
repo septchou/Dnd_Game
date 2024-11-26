@@ -4964,8 +4964,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounds:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 0, y: 0, z: 0}
+    m_Position: {x: -50, y: -50, z: 0}
+    m_Size: {x: 100, y: 100, z: 0}
   mapNames: []
   selectedMapIndex: 0
   inputSave: {fileID: 759840103}
