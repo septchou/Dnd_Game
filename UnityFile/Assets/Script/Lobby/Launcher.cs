@@ -63,8 +63,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     // Callback when joined the lobby
     public override void OnJoinedLobby()
     {
-        MenuManager.Instance.OpenMenu("Title");
         displayNameInputField.interactable = false;
+        MenuManager.Instance.OpenMenu("Title");
         //Debug.Log("Joined Lobby");
     }
 
@@ -282,5 +282,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         SceneManager.LoadScene(sceneName);
     }
 
+    public void BackToLogin()
+    {
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("Sign-in");
+    }
 
 }

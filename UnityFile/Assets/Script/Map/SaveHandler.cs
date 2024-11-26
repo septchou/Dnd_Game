@@ -34,6 +34,7 @@ public class SaveHandler : Singleton<SaveHandler> {
     [SerializeField] bool isCombatScene;
 
     private void Start() {
+        
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             if (task.Result == DependencyStatus.Available)
             {
@@ -42,8 +43,8 @@ public class SaveHandler : Singleton<SaveHandler> {
 
                 InitTilemaps();
                 InitTileReferences();
-                //Debug.Log("Firebase initialized successfully(Map).");
 
+                
                 // Load map
                 OnLoadFromFirebase();
 
@@ -53,11 +54,7 @@ public class SaveHandler : Singleton<SaveHandler> {
                 Debug.LogError("Could not resolve all Firebase dependencies.");
             }
         });
-
-        /*if (isCombatScene)
-        {
-            dropdownLoad.options[0].text = "Reset";
-        }*/
+        
     }
 
     private void InitTileReferences()
@@ -81,10 +78,10 @@ public class SaveHandler : Singleton<SaveHandler> {
     private void InitTilemaps() {
         Tilemap[] maps = FindObjectsOfType<Tilemap>();
         foreach (var map in maps) {
-            string key = map.name; // ใช้ชื่อ Tilemap เป็น Key
+            string key = map.name;
             if (!tilemaps.ContainsKey(key)) {
                 tilemaps.Add(key, map);
-                //Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
+                Debug.Log($"Added Tilemap to dictionary: Key = {key}, Name = {map.name}");
             }
         }
     }
@@ -243,6 +240,7 @@ public class SaveHandler : Singleton<SaveHandler> {
                 }
                 else
                 {
+
                     dropdownLoad.options.Add(new TMP_Dropdown.OptionData("New map"));
                 }
                 mapNames.Add("New map");
