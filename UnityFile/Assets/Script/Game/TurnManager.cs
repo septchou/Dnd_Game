@@ -40,6 +40,7 @@ public class TurnManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject changePhaseButtonGameObject;
     [SerializeField] GameObject endTurnButtonGameObject;
     [SerializeField] List<TurnListItem> existTurnList = new List<TurnListItem>();
+    [SerializeField] GameObject combatFlag,exploreFlag;
 
     [Header("Combat")]
     [SerializeField] Combat combat;
@@ -49,6 +50,9 @@ public class TurnManager : MonoBehaviourPunCallbacks
         {
             changePhaseButtonGameObject.SetActive(true);
         }
+
+        exploreFlag.SetActive(true);
+        combatFlag.SetActive(false);
     }
 
     
@@ -67,12 +71,12 @@ public class TurnManager : MonoBehaviourPunCallbacks
         if (isCombatActive == false)
         {
             EndCombat();
-            changePhaseButtonGameObject.GetComponentInChildren<TMP_Text>().text = "Phase: Exploration";
+            //changePhaseButtonGameObject.GetComponentInChildren<TMP_Text>().text = "Phase: Exploration";
         }
         else
         {
             StartTurn();
-            changePhaseButtonGameObject.GetComponentInChildren<TMP_Text>().text = "Phase: Combat";
+            //changePhaseButtonGameObject.GetComponentInChildren<TMP_Text>().text = "Phase: Combat";
         }
         
     }
@@ -184,6 +188,10 @@ public class TurnManager : MonoBehaviourPunCallbacks
         CreateTurnListUI();
         enemyListUI.SetActive(false);
         combatPhaseUI.SetActive(true);
+
+        exploreFlag.SetActive(false);
+        combatFlag.SetActive(true);
+
         isTurnListOn = true;
 
         if (PhotonNetwork.IsMasterClient)
@@ -244,6 +252,8 @@ public class TurnManager : MonoBehaviourPunCallbacks
 
         isTurnListOn = false;
         combatPhaseUI.SetActive(false);
+        combatFlag.SetActive(false);
+        exploreFlag.SetActive(true);
         endTurnButtonGameObject.SetActive(false);
 
         isCombatActive = false;

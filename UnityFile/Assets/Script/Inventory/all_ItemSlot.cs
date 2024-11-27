@@ -27,12 +27,12 @@ public class all_ItemSlot : MonoBehaviour
             if (!string.IsNullOrEmpty(selectedUserID))
             {
                 inventoryUI.AddItemtoInventory(item, 1, selectedUserID);
-                Debug.Log("Added item: " + item.itemName + "to" + selectedUserID);
+                //Debug.Log("Added item: " + item.itemName + "to" + selectedUserID);
             }
             else
             {
                 inventoryUI.AddItemtoInventory(item, 1);
-                Debug.Log("Added item: " + item.itemName + "to your Self");
+                //Debug.Log("Added item: " + item.itemName + "to your Self");
             }
         });
 

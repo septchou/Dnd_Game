@@ -45,6 +45,7 @@ public class MapSwitch : MonoBehaviour
             isSwitchMap = true;
 
             SceneManager.LoadScene(sceneName);
+            MenuManager.Instance.OpenMenu("loading");
         }
         else
         {

@@ -66,7 +66,6 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
     [Header("GameplayUI")]
     [SerializeField] CharacterDisplay clickedCharacter;
     [SerializeField] GameObject changeHPGameobject;
-    [SerializeField] GameObject hpChangeInputGameobject;
     [SerializeField] GameObject removeCharacterButtonObject;
     [SerializeField] Button changeHPButton;
     [SerializeField] TMP_InputField hpChangeInput;
@@ -251,7 +250,6 @@ public class CharacterDisplayPopUp : MonoBehaviourPun
             abilityUI[i].abilityRollCheckButton.SetActive(isShow);
         }
         changeHPGameobject.SetActive(isShow);
-        hpChangeInputGameobject.SetActive(isShow);
 
 
     }
