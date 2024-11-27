@@ -48,8 +48,8 @@ public class CharacterDisplay : MonoBehaviourPun
 
         // Set character basic data
         characterName = character.characterName;
-        className = character.characterClass.name;
-        raceName = character.race.name;
+        className = character.characterClass.className;
+        raceName = character.race.raceName;
         level = character.level;
         maxHP = character.HP;
         currentHP = maxHP;
