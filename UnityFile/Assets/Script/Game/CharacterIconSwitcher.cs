@@ -51,10 +51,10 @@ public class CharacterIconSwitcher : MonoBehaviour
                     Debug.Log(path + " not found");
                 }
 
-                path = $"CharacterImages/{race.raceName}/{race.raceName}_{characterClass.className}_Square";
+                path = $"CharacterImages/{race.raceName}/{race.raceName}_{characterClass.className}_Circle";
                 if (race.raceName == "Zombie")
                 {
-                    path = $"CharacterImages/{race.raceName}/{race.raceName}_Square";
+                    path = $"CharacterImages/{race.raceName}/{race.raceName}_Circle";
                 }
                 Texture texture = Resources.Load<Texture>(path);
                 if (texture != null)
