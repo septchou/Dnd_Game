@@ -1,56 +1,108 @@
-# Unity Project Setup with Firebase
 
-This project uses Firebase to manage authentication and real-time database functionality. Follow the steps below to set up Firebase in your local environment.
+# 🌟 Another Story Another Legacy (ASAL) 🌟  
+**🎲 A New Adventure for the New Normal 🎮**  
 
-## Prerequisites
+"Another Story Another Legacy" (ASAL) is a project designed for board game enthusiasts who face challenges gathering in person in the New Normal era. This game recreates the TTRPG (Tabletop Role-Playing Game) experience online, allowing players to create characters, strategize, and embark on thrilling adventures with their friends in a virtual world!  
 
+---
+
+## 🚀 Features  
+
+### 🎭 **Character Creation System**  
+- Customize your **Class**, **Race**, and **Abilities** to fit your unique playstyle.  
+
+### 🎲 **Dice Rolling System**  
+- Simulate outcomes with a virtual dice mechanic.  
+
+### ✍️ **Story Design System**  
+- Empower Dungeon Masters (DMs) to craft custom maps and scenarios.  
+
+### 🔐 **Sign-in and Register System**  
+- Seamlessly manage user accounts.  
+
+### 💾 **Save System**  
+- Save essential game data like characters, inventory, and custom maps using **Realtime Firebase**.  
+
+### ⚔️ **Combat System**  
+- Engage in thrilling and strategic battles.  
+
+### 🌐 **Multiplayer System**  
+- Play collaboratively with friends in real-time.  
+
+### 💬 **Chat and Game Log System**  
+- Communicate and track in-game events effortlessly.  
+
+### 🖥️ **Platform**  
+- Built for **PC (.exe file)** for an optimized gaming experience.  
+
+---
+
+## 🛠️ Installation Guides
+
+### 👥 **For General Players**  
+1. Download the **Built folder** 
+2. Extract the **.zip** file.  
+3. Double-click the **.exe** file to start the game.  
+
+---
+
+### 👨‍💻 **For Developers**  
+
+#### Prerequisites
 - Unity Editor (Compatible with your project version)
 - Firebase SDK for Unity, Version 12.4
 - A Firebase account with access to Firebase Console
 
-## Installation Guide
+#### 1️⃣ **Install Unity**  
+- Download Unity Hub from [Unity Download](https://unity.com/download).  
+- Use Unity Version: **<2022.3.46f1>**.  
 
-### 1. Download Firebase SDK for Unity
+#### 2️⃣ **Set Up Firebase SDK**  
+- Download the **Firebase Unity SDK** from [Firebase Unity SDK](https://firebase.google.com/docs/unity/setup).  
+- Download version **12.4** of the SDK.
+- Choose the `.unitypackage` files for **Firebase Auth** and **Firebase Database** from the SDK package.
+- nsure all necessary files are selected and click **Import**.
 
-1. Go to the [Firebase Unity SDK](https://firebase.google.com/docs/unity/setup) download page.
-2. Download version **12.4** of the SDK.
+#### 3️⃣ **Configure Realtime Database and Authentication**  
+1. Access the **Firebase Console**.  
+2. Enable **Realtime Database**:  
+   - Go to Database > Create Database.  
+3. Enable **Authentication**:  
+   - Go to Authentication > "Sign-in Method" > Enable Email/Password.  
 
-### 2. Import Firebase SDK into Unity
+#### 4️⃣ **Add Config Files to Unity**  
+- Download `google-services.json` (for Android) and `GoogleService-Info.plist` (for iOS).  
+- Place these files in the **Assets/Firebase** directory.  
 
-1. Open your Unity project.
-2. Import the Firebase SDK by selecting `Assets > Import Package > Custom Package...`.
-3. Choose the `.unitypackage` files for **Firebase Auth** and **Firebase Database** from the SDK package.
-4. Ensure all necessary files are selected and click **Import**.
+---
 
-### 3. Add Firebase to Your Unity Project
+## 👥 Project Members  
 
-1. Go to the [Firebase Console](https://console.firebase.google.com/), create a new project, or open your existing project.
-2. For **Android**:
-   - In the Firebase Console, add an Android app and register it with your project.
-   - Download the `google-services.json` file and place it in your Unity project under `Assets`.
-3. For **iOS**:
-   - In the Firebase Console, add an iOS app and register it with your project.
-   - Download the `GoogleService-Info.plist` file and place it in your Unity project under `Assets`.
+| Name                        | Student ID      |  
+|-----------------------------|-----------------|  
+| Jarukit Pan-Iam             | 65070501006     |  
+| Jirapat Dola                | 65070501007     |  
+| Thanyamon Rachaviang        | 65070501027     |  
+| Thichanon Sittisomboon      | 65070501028     |  
+| Nanthikarn  Sakulnet        | 65070501034     |  
+| Rozene Mokem                | 65070501047     |  
+| Suwijak Reawrangboony       | 65070501058     |  
+| Kanas Suwannaratt           | 65070501068     |  
 
-### 4. Set Up Authentication and Database
+---
 
-- Go to the **Firebase Console > Authentication** and enable the sign-in methods you need (e.g., Email/Password, Google, etc.).
-- Go to the **Firebase Console > Database** and set up a new Realtime Database.
-  - Configure the rules and security settings as per your project requirements.
+## 📢 Additional Information  
+### 🎯 Why ASAL Stands Out  
+- **Inclusive Gameplay**: Designed to bring players together despite physical distances.  
+- **Customizable Experience**: Adaptable for both casual players and hardcore TTRPG enthusiasts.  
 
-### 5. Import Firebase Packages in Unity Scripts
+Feel free to contribute, suggest new features, or report bugs in the repository!  
 
-To use Firebase Authentication and Database in your scripts, include the following imports at the top of each script where you need Firebase functionality:
+---
 
-```csharp
-using Firebase.Auth;
-using Firebase.Database;
-```
+## 🎓 Credits  
+This project, "Another Story Another Legacy," is part of the **Software Engineering** course at **King Mongkut's University of Technology Thonburi (KMUTT)**. It showcases our collaborative efforts in applying software engineering principles to create an engaging and innovative gaming experience.  
 
-### 6.Additional Notes
-- Ensure that you have added
-  ```
-  Assets/Firebase
-  Assets/Editor Default Resources/Firebase
-  ```
-  to your .gitignore to keep Firebase files secure.
+We are grateful for the guidance and support provided by our instructors and peers throughout this journey. 🌟
+
+**✨ Embark on your journey with Another Story Another Legacy today! ✨**  
