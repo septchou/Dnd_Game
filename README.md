@@ -101,7 +101,11 @@ Feel free to contribute, suggest new features, or report bugs in the repository!
 ---
 
 ## 🎓 Credits  
-This project, "Another Story Another Legacy," is part of the **Software Engineering** course at **King Mongkut's University of Technology Thonburi (KMUTT)**. It showcases our collaborative efforts in applying software engineering principles to create an engaging and innovative gaming experience.  
+This project, "Another Story Another Legacy," is part of the **Software Engineering** course at **King Mongkut's University of Technology Thonburi (KMUTT)**. It showcases our collaborative efforts in applying software engineering principles to create an engaging and
+innovative gaming experience.  
+
+- Tiny Texture Pack 1-3 From Screaming Brain Studios For Wall and Floor Texture
+- Pixel Art Platformer - Village Props From Cainos For Chest Texture
 
 We are grateful for the guidance and support provided by our instructors and peers throughout this journey. 🌟
 
