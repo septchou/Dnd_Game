@@ -77,7 +77,7 @@ public class CharacterCreation : MonoBehaviourPun
     [SerializeField] TMP_Dropdown enemySelectionDropDown;
     [SerializeField] Button enemyCreateButton, enemyDeleteButton, enemyEditButton;
 
-
+    #region SetUp UI
     private void Start()
     {
         CharacterMenuSetup();
@@ -259,6 +259,7 @@ public class CharacterCreation : MonoBehaviourPun
         ChangeCharacterImage(selectedClass.className, selectedRace.raceName);
 
     }
+    #endregion
 
     private int CalculateModifier(int score)
     {
@@ -785,7 +786,7 @@ public class CharacterCreation : MonoBehaviourPun
         }
     }
 
-
+    #region Save and Load
     public void SaveCharacterToFile(Character character)
     {
         if (character == null)
@@ -1038,6 +1039,7 @@ public class CharacterCreation : MonoBehaviourPun
         });
     }
 
+    #endregion
 
     // Convert CharacterData to Character
     private Character ConvertDataToCharacter(CharacterData data)
