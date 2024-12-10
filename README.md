@@ -40,7 +40,7 @@
 ## 🛠️ Installation Guides
 
 ### 👥 **For General Players**  
-1. Download the **Built folder** 
+1. Download the **Build folder** 
 2. Extract the **.zip** file.  
 3. Double-click the **.exe** file to start the game.  
 
