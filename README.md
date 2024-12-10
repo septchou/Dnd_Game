@@ -40,7 +40,7 @@
 ## 🛠️ Installation Guides
 
 ### 👥 **For General Players**  
-1. Download the **Build folder** 
+1. Download the **Build folder** [here](https://github.com/Jarukit-PM/Dnd_Game/releases/tag/v1.0.0)
 2. Extract the **.zip** file.  
 3. Double-click the **.exe** file to start the game.  
 
