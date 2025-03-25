@@ -94,7 +94,8 @@
 ## 📢 Additional Information  
 ### 🎯 Why ASAL Stands Out  
 - **Inclusive Gameplay**: Designed to bring players together despite physical distances.  
-- **Customizable Experience**: Adaptable for both casual players and hardcore TTRPG enthusiasts.  
+- **Customizable Experience**: Adaptable for both casual players and hardcore TTRPG enthusiasts.
+- **Reports**: https://onedrive.live.com/edit?id=616EADD46015737D!521908&resid=616EADD46015737D!521908&ithint=file%2cdocx&authkey=!AFYNhxWvJ5ahFJU&wdLOR=c59994FD6-4AC3-4410-884A-1BE5A8A29EF6&wdo=2&cid=616eadd46015737d
 
 Feel free to contribute, suggest new features, or report bugs in the repository!  
 
